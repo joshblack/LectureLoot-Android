@@ -6,6 +6,8 @@
     
     <string name="schedule_title">Schedule</string>
     <string name="dashboard_title">Dashboard</string>
+    
     <string name="wager_title">Wagers</string>
+    <string name="create_wager">Create a Wager</string>
 
 </resources>
