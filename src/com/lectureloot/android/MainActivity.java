@@ -13,12 +13,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.app.ActionBar;
 
+
+
+
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private static final String TAG = "Main";
 	private ViewPager mViewPager;
 	private TabsPagerAdapter mAdapter;
 	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
 	//private String[] nTabNames = {"schedule_title", "dashboard_title", "wager_title"};
+	
+	
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +68,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
 		}
 		Log.d(TAG, "done");
+	
+		
+		
 	}
 
 	@Override
@@ -84,5 +93,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
+	
+
 
 }
