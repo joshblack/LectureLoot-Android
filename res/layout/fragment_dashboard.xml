@@ -1,15 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff8400" >
+    android:orientation="vertical" >
     
-    <TextView 
+    <LinearLayout 
+    	android:layout_height="75dp"
+    	android:layout_width="match_parent"
+    	android:orientation="horizontal"
+    	android:paddingLeft="24dp"
+    	android:paddingRight="24dp"
+    	android:paddingTop="12dp"
+    	android:paddingBottom="12dp" >
+    	
+        <ImageView 
+            android:id="@+id/user_profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="14dp"
+            android:src="@drawable/profile_pic"/>
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" >
+
+	        <TextView
+	            android:id="@+id/user_full_name"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/user_name"
+	            android:textSize="14sp" />
+
+	        <TextView
+	            android:id="@+id/user_points"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="18sp"
+	            android:text="500 points" />
+
+        </LinearLayout>
+    </LinearLayout>
+    
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/dashboard_title"
-        android:textSize="20sp"
-        android:layout_centerInParent="true"/>
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/progress_gradient"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/red_green_gradient" />
+
+        <LinearLayout
+            android:id="@+id/progress_animation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0dp"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="0dp"
+                android:src="@drawable/progress_triangle" />
+
+            <TextView
+                android:id="@+id/points_got_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30"
+                android:textColor="#FFb32b01"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/total_points_wagered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:textColor="#FF008f05"
+                android:textSize="24dp" />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <RelativeLayout 
+        android:id="@+id/next_class_display"
+        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:background="#FFFFFFFF"
+        >
+        
+        <TextView
+            android:id="@+id/time_left"
+            android:text="30 mins"
+            android:textSize="44sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</LinearLayout>

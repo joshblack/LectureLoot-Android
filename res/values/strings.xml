@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TabsTakeTwo</string>
+    <string name="app_name">LectureLoot</string>
     <string name="action_settings">Settings</string>
     
     <string name="schedule_title">This is the Schedule</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="wager_title">Wagers</string>
+    
+    <string name="user_name">User\'s Name</string>
 
 </resources>
