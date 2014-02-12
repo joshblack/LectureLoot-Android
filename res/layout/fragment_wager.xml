@@ -3,13 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#17df0d" >
-    
-    <TextView 
+
+    <Button
+        android:id="@+id/create_wager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="79dp"
+        android:text="@string/create_wager" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="31dp"
         android:gravity="center"
         android:text="@string/wager_title"
-        android:textSize="20sp"
-        android:layout_centerInParent="true"/>
-
+        android:textSize="20sp" />
+    
 </RelativeLayout>
