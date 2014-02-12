@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 public class ScheduleFragment extends Fragment {
 	
-    private ExpandableListAdapter listAdapter;
+    private ExpandableListCourseAdapter listAdapter;
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<Course>> listDataChild;
@@ -42,7 +42,7 @@ public class ScheduleFragment extends Fragment {
 //        // preparing list data
         prepareListData();
 // 
-        listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+        listAdapter = new ExpandableListCourseAdapter(getActivity(), listDataHeader, listDataChild);
 // 
 //        // setting list adapter
         expListView.setAdapter(listAdapter);

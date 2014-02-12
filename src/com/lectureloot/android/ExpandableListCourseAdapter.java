@@ -15,14 +15,14 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 	private Context _context;
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Course>> _listDataChild;
 
-	public ExpandableListAdapter(Context context, List<String> listDataHeader,HashMap<String, List<Course>> listChildData) {
+	public ExpandableListCourseAdapter(Context context, List<String> listDataHeader,HashMap<String, List<Course>> listChildData) {
 		this._context = context;
 		this._listDataHeader = listDataHeader;
 		this._listDataChild = listChildData;
