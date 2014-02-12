@@ -1,18 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+
+<!--  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#000000"
+    android:id="@+id/relLayout">
+    <TextView
+        android:id="@+id/courseCode"
+		android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="left"
+        android:textSize="17sp"
+        android:textColor="#f9f93d"
+        android:text="courseCode" />
+    
+   <TextView
+       android:id="@+id/sectionNumber"		
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_toRightOf="@id/courseCode"
+       android:gravity="center"
+       android:layout_centerVertical="true"
+       android:textColor="#f9f93d"
+       android:textSize="17sp"
+       android:text="sectionNumber" />
+   
+   <TextView
+       android:id="@+id/credits"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_toRightOf="@id/sectionNumber"
+       android:layout_alignParentRight="true"
+       android:gravity="right"
+       android:textColor="#f9f93d"
+       android:textSize="17sp"
+       android:text="credits" />
+    
+    
+</RelativeLayout> -->
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:padding="8dp"
     android:background="#000000">
- 
- 
+    
     <TextView
-        android:id="@+id/lblListHeader"
-        android:layout_width="fill_parent"
+        android:id="@+id/courseCode"
+		android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:layout_weight="1"
         android:textSize="17sp"
-        android:textColor="#f9f93d" />
- 
+        android:textColor="#f9f93d"
+        android:text="courseCode" />
+    
+   <TextView
+       android:id="@+id/sectionNumber"		
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:textColor="#f9f93d"
+       android:textSize="17sp"
+       android:text="sectionNumber" />
+   
+   <TextView
+       android:id="@+id/credits"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="#f9f93d"
+       android:textSize="17sp"
+       android:text="credits" />
+   
+   
+    
 </LinearLayout>
