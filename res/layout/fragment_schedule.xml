@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6699FF" >
+    android:background="#6699FF"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/username"
@@ -10,13 +11,24 @@
         android:layout_height="wrap_content"
         android:text="User&apos;s Schedule"
         android:textColor="#000000"
-        android:textSize="25sp" />
-
+        android:textSize="25sp"></TextView>
+    
+    
     <ExpandableListView
         android:id="@+id/lvExp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/username" 
-        android:layout_alignLeft="@id/username"/>
+        android:layout_weight="1"
+        /> 
+    <Button
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add a Course"
+            android:layout_gravity="center_vertical"
+            android:textSize="30dp"
+            
+             />     
+    
 
-</RelativeLayout>
+</LinearLayout>

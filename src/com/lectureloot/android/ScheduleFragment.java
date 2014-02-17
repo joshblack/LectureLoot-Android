@@ -7,14 +7,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 
 public class ScheduleFragment extends Fragment {
@@ -23,6 +32,13 @@ public class ScheduleFragment extends Fragment {
     private ExpandableListView expListView;
     private List<String> listDataHeader;
     private HashMap<String, List<Course>> listDataChild;
+    
+//    //add a new course expandablelistview and corresponding adapter
+//    private ExpandableListView addNewCourseListView;
+//    private List<String> addNewCourseDataHeader;
+//    private HashMap<String,List<NewCourse>> addNewCourseDataChild;
+//    private ExpandableListNewCourseAdapter addNewCourseAdapter;
+    
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +62,77 @@ public class ScheduleFragment extends Fragment {
 // 
 //        // setting list adapter
         expListView.setAdapter(listAdapter);
+        
+        
+        
+        // add new course adapter setup
+//        addNewCourseListView = (ExpandableListView) rootView.findViewById(R.id.addCourse);
+//        
+//        prepareAddNewCourseListData();
+//        
+//        addNewCourseAdapter = new ExpandableListNewCourseAdapter(getActivity(), addNewCourseDataHeader, addNewCourseDataChild);
+//        
+//        addNewCourseListView.setAdapter(addNewCourseAdapter);
+        
+        Button addNewCourseButton;
+        addNewCourseButton = (Button)rootView.findViewById(R.id.addButton);
+        addNewCourseButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
+			
+			final Dialog dialog = new Dialog(getActivity());
+			dialog.setContentView(R.layout.dialog_add_course);
+			dialog.setTitle("Select Course");
+			
+			Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
+			dialogButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Toast.makeText(getActivity(), "Error: Course Not Added", Toast.LENGTH_LONG).show();
+					dialog.dismiss();
+					
+				}
+			});
+			
+			dialog.show();
+			
+			
+			String[] deptCodes = {"CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP"};
+			Spinner deptCodeSpinner = (Spinner)dialog.findViewById(R.id.deptCodeSpinner);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,deptCodes); 
+			deptCodeSpinner.setAdapter(adapter);
+			
+			String[] courseCodes = {"1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456"};
+			Spinner courseCodeSpinner = (Spinner)dialog.findViewById(R.id.courseCodeSpinner);
+			ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,courseCodes); 
+			courseCodeSpinner.setAdapter(adapter2);
+			
+			String[] sectionNumbers = {"12AB","5678","85H7","12AB","5678","85H7","12AB","5678","85H7"};
+			Spinner sectionNumberSpinner = (Spinner)dialog.findViewById(R.id.sectionNumberSpinner);
+			ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,sectionNumbers); 
+			sectionNumberSpinner.setAdapter(adapter3);
+			}
+		});
 		
 		return rootView;
 	}
 	
+//	private void prepareAddNewCourseListData() {
+//		addNewCourseDataHeader = new ArrayList<String>();
+//		addNewCourseDataChild = new HashMap<String, List<NewCourse>>();
+//		
+//		addNewCourseDataHeader.add("Add a Course");
+//		
+//		List<NewCourse> addNewCourseDataList = new ArrayList<NewCourse>();
+//		NewCourse newCourse = new NewCourse();
+//		addNewCourseDataList.add(newCourse);
+//		addNewCourseDataChild.put(addNewCourseDataHeader.get(0), addNewCourseDataList);
+//	}
+//	
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<Course>>();
@@ -92,13 +175,55 @@ public class ScheduleFragment extends Fragment {
         listDataHeader.add(cen3031.getCourseCode());
         listDataHeader.add(cap4053.getCourseCode());
         listDataHeader.add(egn4641.getCourseCode());
-        listDataHeader.add(newCourse.getCourseCode());
+//        listDataHeader.add(newCourse.getCourseCode());
  
 
         listDataChild.put(listDataHeader.get(0), cen3031List); // Header, Child data
         listDataChild.put(listDataHeader.get(1), cap4053List);
         listDataChild.put(listDataHeader.get(2), egn4641List);
-        listDataChild.put(listDataHeader.get(3), newCourseList);
+//        listDataChild.put(listDataHeader.get(3), newCourseList);
         
+    }
+    
+    //TODO figure out how meetings are stored, maybe have to create meeting model
+    private Course jsonObjectsToCourse(JSONObject jsonCourse, JSONArray jsonMeetings) {
+    
+    	Course course = new Course();
+    	try{
+    		course.setCourseId((Integer)jsonCourse.get("id"));
+    		
+    		String deptCode = (String)jsonCourse.getString("deptCode");
+    		String courseNumber = (String)jsonCourse.getString("courseNumber");
+    		String courseCode = deptCode + courseNumber;
+    		course.setCourseCode(courseCode);
+    		
+    		course.setSectionNumber((String)jsonCourse.getString("sectionNumber"));
+    		course.setCredits((String)jsonCourse.getString("credits"));
+    		course.setInstructor((String)jsonCourse.getString("instructor"));
+    		course.setCourseTitle((String)jsonCourse.getString("courseTitle"));
+    		
+    		
+    	} catch (Exception e){
+    		
+    	}
+    	return new Course();
+    }
+    
+    private ArrayList<Course> jsonArrayToCourses(JSONArray jsonCourses) {
+    	ArrayList<Course>  courses = new ArrayList<Course>();
+    	
+    	try {
+    		JSONObject jsonCourse;
+    		Course course;
+    		for(int i = 0; i < jsonCourses.length(); i++) {
+    			jsonCourse = jsonCourses.getJSONObject(i);
+    			course = jsonObjectsToCourse(jsonCourse, null);
+    			courses.add(course);
+    		}
+    	} catch (Exception e) {
+    		
+    	}
+    	
+    	return courses;
     }
 }

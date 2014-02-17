@@ -45,7 +45,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.list_item, null);
+			convertView = infalInflater.inflate(R.layout.course_list_item, null);
 		}
 
 		TextView courseTitle = (TextView) convertView.findViewById(R.id.courseTitle);
@@ -127,7 +127,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.list_group, null);
+			convertView = infalInflater.inflate(R.layout.course_list_group, null);
 		}
 
 		TextView courseCode = (TextView) convertView.findViewById(R.id.courseCode);

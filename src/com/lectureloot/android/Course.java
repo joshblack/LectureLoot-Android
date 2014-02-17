@@ -7,6 +7,7 @@ package com.lectureloot.android;
 
 public class Course {
 	
+	private int courseId;
 	private String courseCode;
 	private String courseTitle;
 	private String sectionNumber;
@@ -45,7 +46,36 @@ public class Course {
 		this.room2 = room2;
 		this.room3 = room3;
 	}
+	
+	public Course(int courseId, String courseCode, String courseTitle, String sectionNumber, String credits,
+			String instructor, String meetingDays1, String meetingDays2,
+			String meetingDays3, String period1, String period2,
+			String period3, String room1, String room2, String room3) {
+		this.courseId = courseId;
+		this.courseCode = courseCode;
+		this.courseTitle = courseTitle;
+		this.sectionNumber = sectionNumber;
+		this.credits = credits;
+		this.instructor = instructor;
+		this.meetingDays1 = meetingDays1;
+		this.meetingDays2 = meetingDays2;
+		this.meetingDays3 = meetingDays3;
+		this.period1 = period1;
+		this.period2 = period2;
+		this.period3 = period3;
+		this.room1 = room1;
+		this.room2 = room2;
+		this.room3 = room3;
+	}
 
+
+	public int getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
 
 	public String getCourseCode() {
 		return courseCode;
