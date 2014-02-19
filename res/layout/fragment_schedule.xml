@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6699FF"
+    android:background="#FF454545"
     android:orientation="vertical" >
 
     <TextView
@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User&apos;s Schedule"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="25sp"></TextView>
     
     
@@ -27,6 +27,7 @@
             android:text="Add a Course"
             android:layout_gravity="center_vertical"
             android:textSize="30dp"
+            android:textColor="#FFFFFF"
             
              />     
     

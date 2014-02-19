@@ -1,4 +1,4 @@
-package com.lectureloot.android;
+package com.lectureloot.android.adapter;
 /**
  * ExpandableListAdapter for Schedule Viewing
  * @author Austin Bruch, Justin Rafanan
@@ -6,6 +6,11 @@ package com.lectureloot.android;
 
 import java.util.HashMap;
 import java.util.List;
+
+import com.lectureloot.android.Course;
+import com.lectureloot.android.R;
+import com.lectureloot.android.R.id;
+import com.lectureloot.android.R.layout;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -64,15 +69,27 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 		final String courseText = (String) ((Course)getChild(groupPosition,childPosition)).getCourseTitle();
 		final String instructorText = (String) ((Course)getChild(groupPosition,childPosition)).getInstructor();
-		final String meeting1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays1();
-		final String meeting2Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays2();
-		final String meeting3Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays3();
-		final String period1Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod1();
-		final String period2Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod2();
-		final String period3Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod3();
-		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom1();
-		final String room2Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom2();
-		final String room3Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom3();
+		final String meeting1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(0).getMeetingDay().toUpperCase();
+		final String meeting2Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 1 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(1).getMeetingDay().toUpperCase() : null;
+		final String meeting3Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 2 ) ?(String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(2).getMeetingDay().toUpperCase() : null;
+		final String period1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(0).getPeriod();
+		final String period2Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 1 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(1).getPeriod() : null;
+		final String period3Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 2 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(2).getPeriod() : null;
+		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(0).getRoomNumber();
+		final String room2Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 1 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(1).getRoomNumber() : null;
+		final String room3Text = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 2 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(2).getRoomNumber() : null;
+		final String buildingCode1 = (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(0).getBuildingCode().toUpperCase();
+		final String buildingCode2 = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 1 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(1).getBuildingCode().toUpperCase() : null;
+		final String buildingCode3 = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 2 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(2).getBuildingCode().toUpperCase() : null;
+//		final String meeting1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays1();
+//		final String meeting2Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays2();
+//		final String meeting3Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays3();
+//		final String period1Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod1();
+//		final String period2Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod2();
+//		final String period3Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod3();
+//		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom1();
+//		final String room2Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom2();
+//		final String room3Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom3();
 
 		courseTitle.setText(courseText);
 		instructor.setText("Instructor: " + instructorText);
@@ -91,9 +108,18 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		//    		period1.setText(period1Text);
 		//    		period2.setText(period2Text);
 		//    		period3.setText(period3Text);
-		room1.setText(room1Text);
-		room2.setText(room2Text);
-		room3.setText(room3Text);
+		
+		room1.setText(buildingCode1 + " " + room1Text);
+		if (buildingCode2 != null && room2Text != null) {
+			room2.setText(buildingCode2 + " " + room2Text);
+		} else {
+			room2.setText("");
+		}
+		if (buildingCode3 != null && room3Text != null) {
+		room3.setText(buildingCode3 + " " + room3Text);
+		} else {
+			room3.setText("");
+		}
 		return convertView;
 	}
 
@@ -120,7 +146,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		String courseText = (String) getGroup(groupPosition);
+		String courseText = (String) ((Course)getChild(groupPosition, 0)).getCourseCode();//getGroup(groupPosition);
 		String sectionText = (String) ((Course)getChild(groupPosition, 0)).getSectionNumber();
 		String creditsText = (String) ((Course)getChild(groupPosition, 0)).getCredits();
 

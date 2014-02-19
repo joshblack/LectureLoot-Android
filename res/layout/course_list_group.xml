@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:gravity="left"
         android:textSize="17sp"
-        android:textColor="#f9f93d"
+        android:textColor="#FFFFFF"
         android:text="courseCode" />
     
    <TextView
@@ -24,7 +24,7 @@
        android:layout_toRightOf="@id/courseCode"
        android:gravity="center"
        android:layout_centerVertical="true"
-       android:textColor="#f9f93d"
+       android:textColor="#FFFFFF"
        android:textSize="17sp"
        android:text="sectionNumber" />
    
@@ -35,7 +35,7 @@
        android:layout_toRightOf="@id/sectionNumber"
        android:layout_alignParentRight="true"
        android:gravity="right"
-       android:textColor="#f9f93d"
+       android:textColor="#FFFFFF"
        android:textSize="17sp"
        android:text="credits" />
     
@@ -47,7 +47,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="#000000">
+    android:background="#39B54A">
     
     <TextView
         android:id="@+id/courseCode"
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="17sp"
-        android:textColor="#f9f93d"
+        android:textColor="#FFFFFF"
         android:text="courseCode" />
     
    <TextView
@@ -63,7 +63,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_weight="1"
-       android:textColor="#f9f93d"
+       android:textColor="#FFFFFF"
        android:textSize="17sp"
        android:text="sectionNumber" />
    
@@ -71,7 +71,7 @@
        android:id="@+id/credits"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:textColor="#f9f93d"
+       android:textColor="#FFFFFF"
        android:textSize="17sp"
        android:text="credits" />
    
