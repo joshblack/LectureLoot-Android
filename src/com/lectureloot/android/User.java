@@ -3,12 +3,60 @@ package com.lectureloot.android;
 public class User {
 	private String mName;
 	private int mPoints;
-	//private ArrayList<Wager> mWagers;
-	//private ArrayList<Course> mCourses;
-	//private ArrayList<Meetings> mMeetings;
+	private int mWageredPoints;
+	private ArrayList<Wager> mWagers;
+	private ArrayList<Course> mCourses;
+	private ArrayList<Meetings> mMeetings;
 	
 	public User(String name){
 		mName = name;
+	}
+	
+	public void checkIn(){
+		//get the user's location with gps
+		//double check that with the location of the meeting
+		
+		//if it's close enough, check the user into the a meeting
+	}
+	
+	public void addWager(Wager newWager){
+		
+	}
+	
+	public void addCourse(Course newCourse){
+		
+	}
+	
+	public void addMeeting(Meeting newMeeting){
+		
+	}
+	
+	public void addToPoints(int newPoints){
+		mPoints += newPoints;
+	}
+
+	public String getName() {
+		return mName;
+	}
+
+	public int getPoints() {
+		return mPoints;
+	}
+
+	public int getWageredPoints() {
+		return mWageredPoints;
+	}
+
+	public ArrayList<Wager> getWagers() {
+		return mWagers;
+	}
+
+	public ArrayList<Course> getCourses() {
+		return mCourses;
+	}
+
+	public ArrayList<Meetings> getMeetings() {
+		return mMeetings;
 	}
 
 }
