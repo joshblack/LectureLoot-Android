@@ -6,7 +6,22 @@
     
     <string name="schedule_title">Schedule</string>
     <string name="dashboard_title">Dashboard</string>
+    
     <string name="wager_title">Wagers</string>
+
     <string name="department_code">DEPT</string>
+
+	<string name="user_name">User\'s Name</string>
+
+    <string name="create_wager">Create a Wager</string>
+    <string name="check_in_button">Check In</string>
+    <string name="user_total_points">800pts</string>
+    <string name="course_code">CAP3032 \nCSE E221</string>
+    <string name="time_before_class">15:00</string>
+    <string name="user_streak1">I\'ve attended </string>
+    <string name="user_streak2"> consecutive lectures</string>
+    <string name="user_lectures_remaining_notice">Lectures Remain</string>
+    <string name="user_statistics">User Statistics</string>
+
 
 </resources>
