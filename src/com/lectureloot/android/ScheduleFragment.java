@@ -37,12 +37,12 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 	private ExpandableListView expListView;
 	private List<String> listDataHeader = null;
 	private HashMap<String, List<Course>> listDataChild = null;
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		System.out.println("onCreateView enter");
 
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
@@ -64,8 +64,8 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		HttpGetCourses getter = new HttpGetCourses();
 		getter.setHttpGetFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
-		
-		
+
+
 
 		Button addNewCourseButton;
 		addNewCourseButton = (Button)rootView.findViewById(R.id.addButton);
@@ -78,7 +78,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_course);
 				dialog.setTitle("Select Course");
-//				dialog.setTi
+				//				dialog.setTi
 
 				Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
 				dialogButton.setOnClickListener(new OnClickListener() {
@@ -145,19 +145,19 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			oneCourseList = new ArrayList<Course>();
 			oneCourseList.add(course);
 			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
-			
-			
-//			System.out.println("onHttpGetCoursesReady 5");
-//			System.out.println("course:" + course.toString());
+
+
+			//			System.out.println("onHttpGetCoursesReady 5");
+			//			System.out.println("course:" + course.toString());
 
 		}
-		
+
 		for (String courseId : listDataHeader) {
-		HttpGetMeetings meetingsGetter = new HttpGetMeetings();
-		String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
-		System.out.println(meetingsUrl);
-		meetingsGetter.setHttpGetFinishedListener(this);
-		meetingsGetter.execute(new String[] {meetingsUrl});
+			HttpGetMeetings meetingsGetter = new HttpGetMeetings();
+			String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
+			System.out.println(meetingsUrl);
+			meetingsGetter.setHttpGetFinishedListener(this);
+			meetingsGetter.execute(new String[] {meetingsUrl});
 		}
 
 		listAdapter = new ExpandableListCourseAdapter(getActivity(), listDataHeader, listDataChild);
@@ -165,8 +165,8 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		expListView.setAdapter(listAdapter);
 		System.out.println("onHttpGetCoursesReady exit");
 	}
-	
-	
+
+
 	@Override
 	public void onHttpGetMeetingsReady(String output) {
 		System.out.println("onHttpGetMeetingsReady enter");
@@ -178,77 +178,77 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		List<Course> oneCourseList = null;
 		try {
 			array = (JSONArray) tokener.nextValue();
-						System.out.println("array printstring" + array.toString());
+			System.out.println("array printstring" + array.toString());
 			System.out.println("onHttpGetMeetingsReady 2");
 
-		System.out.println("onHttpGetMeetingsReady 3");
+			System.out.println("onHttpGetMeetingsReady 3");
 
-		ArrayList<Meeting> meetings = jsonArrayToMeetings(array);
-		System.out.println("onHttpGetMeetingsReady 4");
-		course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
-		course.setMeetings(meetings);
-		
-		oneCourseList = new ArrayList<Course>();
-		oneCourseList.add(course);
-		listDataChild.remove(course.getCourseId());
-		listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
-		
+			ArrayList<Meeting> meetings = jsonArrayToMeetings(array);
+			System.out.println("onHttpGetMeetingsReady 4");
+			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
+			course.setMeetings(meetings);
+
+			oneCourseList = new ArrayList<Course>();
+			oneCourseList.add(course);
+			listDataChild.remove(course.getCourseId());
+			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
+
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
 	}
 
-////	private void prepareListData() {
-//		listDataHeader = new ArrayList<String>();
-//		listDataChild = new HashMap<String, List<Course>>();
-//
-//		Course cen3031 = new Course();
-//		cen3031.setCourseCode("CEN3031");
-//		cen3031.setCourseTitle("INTRO SOFTWARE ENGR");
-//		cen3031.setSectionNumber(Integer.toString(5842));
-//		cen3031.setCredits(Integer.toString(3));
-//		cen3031.setInstructor("Bermudez, Manuel E");
-//		cen3031.setMeetingDays1("MWF");
-//		cen3031.setPeriod1(Integer.toString(6));
-//		cen3031.setRoom1("LIT 109");
-//		cen3031.setMeetingDays2("W");
-//		cen3031.setPeriod2(Integer.toString(7));
-//		cen3031.setRoom2("CSE E116");
-//		cen3031.setMeetingDays3(null);
-//		cen3031.setPeriod3(null);
-//		cen3031.setRoom3(null);
-//
-//		List<Course> cen3031List = new ArrayList<Course>();
-//		cen3031List.add(cen3031);
-//
-//		// Adding child data for CAP4053
-//		Course cap4053 = new Course("CAP4053", "AI FOR COMPUTER GAMES","133E","3","Anthony,Lisa, Dankel,Douglas D,II","MWF",null,null,"5", null, null, "CSE E119", null, null);
-//		List<Course> cap4053List = new ArrayList<Course>();
-//		cap4053List.add(cap4053);
-//
-//		// Adding child data for EGN4641
-//		Course egn4641 = new Course("EGN4641", "ENG ENTREPRENEURSHIP","11AF","3","Sander, Erik J","R",null,null,"3-5", null, null, "NEB 0102", null, null);
-//		List<Course> egn4641List = new ArrayList<Course>();
-//		egn4641List.add(egn4641);
-//
-//		Course newCourse = new Course();
-//		newCourse.setCourseCode("Add a Course");
-//		List<Course> newCourseList = new ArrayList<Course>();
-//		newCourseList.add(newCourse);
-//
-//		// Adding child data 
-//		listDataHeader.add(cen3031.getCourseCode());
-//		listDataHeader.add(cap4053.getCourseCode());
-//		listDataHeader.add(egn4641.getCourseCode());
-//		//        listDataHeader.add(newCourse.getCourseCode());
-//
-//
-//		listDataChild.put(listDataHeader.get(0), cen3031List); // Header, Child data
-//		listDataChild.put(listDataHeader.get(1), cap4053List);
-//		listDataChild.put(listDataHeader.get(2), egn4641List);
-//		//        listDataChild.put(listDataHeader.get(3), newCourseList);
-//
-//	}
+	////	private void prepareListData() {
+	//		listDataHeader = new ArrayList<String>();
+	//		listDataChild = new HashMap<String, List<Course>>();
+	//
+	//		Course cen3031 = new Course();
+	//		cen3031.setCourseCode("CEN3031");
+	//		cen3031.setCourseTitle("INTRO SOFTWARE ENGR");
+	//		cen3031.setSectionNumber(Integer.toString(5842));
+	//		cen3031.setCredits(Integer.toString(3));
+	//		cen3031.setInstructor("Bermudez, Manuel E");
+	//		cen3031.setMeetingDays1("MWF");
+	//		cen3031.setPeriod1(Integer.toString(6));
+	//		cen3031.setRoom1("LIT 109");
+	//		cen3031.setMeetingDays2("W");
+	//		cen3031.setPeriod2(Integer.toString(7));
+	//		cen3031.setRoom2("CSE E116");
+	//		cen3031.setMeetingDays3(null);
+	//		cen3031.setPeriod3(null);
+	//		cen3031.setRoom3(null);
+	//
+	//		List<Course> cen3031List = new ArrayList<Course>();
+	//		cen3031List.add(cen3031);
+	//
+	//		// Adding child data for CAP4053
+	//		Course cap4053 = new Course("CAP4053", "AI FOR COMPUTER GAMES","133E","3","Anthony,Lisa, Dankel,Douglas D,II","MWF",null,null,"5", null, null, "CSE E119", null, null);
+	//		List<Course> cap4053List = new ArrayList<Course>();
+	//		cap4053List.add(cap4053);
+	//
+	//		// Adding child data for EGN4641
+	//		Course egn4641 = new Course("EGN4641", "ENG ENTREPRENEURSHIP","11AF","3","Sander, Erik J","R",null,null,"3-5", null, null, "NEB 0102", null, null);
+	//		List<Course> egn4641List = new ArrayList<Course>();
+	//		egn4641List.add(egn4641);
+	//
+	//		Course newCourse = new Course();
+	//		newCourse.setCourseCode("Add a Course");
+	//		List<Course> newCourseList = new ArrayList<Course>();
+	//		newCourseList.add(newCourse);
+	//
+	//		// Adding child data 
+	//		listDataHeader.add(cen3031.getCourseCode());
+	//		listDataHeader.add(cap4053.getCourseCode());
+	//		listDataHeader.add(egn4641.getCourseCode());
+	//		//        listDataHeader.add(newCourse.getCourseCode());
+	//
+	//
+	//		listDataChild.put(listDataHeader.get(0), cen3031List); // Header, Child data
+	//		listDataChild.put(listDataHeader.get(1), cap4053List);
+	//		listDataChild.put(listDataHeader.get(2), egn4641List);
+	//		//        listDataChild.put(listDataHeader.get(3), newCourseList);
+	//
+	//	}
 
 	//TODO figure out how meetings are stored, maybe have to create meeting model
 	private Course jsonObjectToCourse(JSONObject jsonCourse/*,JSONArray jsonMeetings*/) {
@@ -266,15 +266,15 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			course.setCredits((String)jsonCourse.getString("credits"));
 			course.setInstructor((String)jsonCourse.getString("instructor"));
 			course.setCourseTitle((String)jsonCourse.getString("courseTitle"));
-//			course.setMeetingDays1("");
-//			course.setMeetingDays2("");
-//			course.setMeetingDays3("");
-//			course.setPeriod1("");
-//			course.setPeriod2("");
-//			course.setPeriod3("");
-//			course.setRoom1("");
-//			course.setRoom2("");
-//			course.setRoom3("");
+			//			course.setMeetingDays1("");
+			//			course.setMeetingDays2("");
+			//			course.setMeetingDays3("");
+			//			course.setPeriod1("");
+			//			course.setPeriod2("");
+			//			course.setPeriod3("");
+			//			course.setRoom1("");
+			//			course.setRoom2("");
+			//			course.setRoom3("");
 
 
 		} catch (Exception e){
@@ -300,8 +300,8 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 
 		return courses;
 	}
-	
-	
+
+
 	private Meeting jsonObjectToMeeting(JSONObject jsonMeeting) {
 
 		Meeting meeting = new Meeting();
