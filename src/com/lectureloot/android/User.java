@@ -19,6 +19,11 @@ public class User {
 		//if it's close enough, check the user into the a meeting
 	}
 	
+	public Meeting getUpcomingMeeting(){
+		//go through the meetings arraylist and get the next meeting
+		//based on the current time and checked in courses
+	}
+	
 	public void addWager(Wager newWager){
 		
 	}
