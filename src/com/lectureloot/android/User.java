@@ -1,12 +1,14 @@
 package com.lectureloot.android;
 
+import java.util.ArrayList;
+
 public class User {
 	private String mName;
 	private int mPoints;
 	private int mWageredPoints;
-	private ArrayList<Wager> mWagers;
+	//private ArrayList<Wager> mWagers;
 	private ArrayList<Course> mCourses;
-	private ArrayList<Meetings> mMeetings;
+	private ArrayList<Meeting> mMeetings;
 	
 	public User(String name){
 		mName = name;
@@ -22,11 +24,12 @@ public class User {
 	public Meeting getUpcomingMeeting(){
 		//go through the meetings arraylist and get the next meeting
 		//based on the current time and checked in courses
+		return new Meeting();
 	}
 	
-	public void addWager(Wager newWager){
-		
-	}
+//	public void addWager(Wager newWager){
+//		
+//	}
 	
 	public void addCourse(Course newCourse){
 		
@@ -52,15 +55,15 @@ public class User {
 		return mWageredPoints;
 	}
 
-	public ArrayList<Wager> getWagers() {
-		return mWagers;
-	}
+//	public ArrayList<Wager> getWagers() {
+//		return mWagers;
+//	}
 
 	public ArrayList<Course> getCourses() {
 		return mCourses;
 	}
 
-	public ArrayList<Meetings> getMeetings() {
+	public ArrayList<Meeting> getMeetings() {
 		return mMeetings;
 	}
 
