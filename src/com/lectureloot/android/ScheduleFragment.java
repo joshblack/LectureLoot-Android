@@ -80,7 +80,6 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_course);
 				dialog.setTitle("Select Course");
-				//				dialog.setTi
 
 				Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
 				dialogButton.setOnClickListener(new OnClickListener() {
@@ -245,8 +244,6 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			groupedMeetingsDays.addAll(meetings);
 		}
 		
-		
-		
 		for (int i = 0; i < groupedMeetingsDays.size(); i++) {
 			Meeting groupedMeeting = groupedMeetingsDays.get(i);
 			String meet = groupedMeeting.getMeetingDay().toUpperCase();
@@ -274,7 +271,6 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 				sortedMeet.trim();
 				
 				groupedMeeting.setMeetingDay(sortedMeet);
-//				groupedMeetingsDays.remove(i);
 				groupedMeetingsDays.set(i,groupedMeeting);
 		}
 		return groupedMeetingsDays;

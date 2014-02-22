@@ -125,13 +125,32 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 			room3.setText("");
 		}
 		
+		
+		//http://campusmap.ufl.edu/?sched=EEL4712C,MWF,2,MAEA,303,R,9-11,NEB,281;CEN3031,MWF,6,LIT,109,W,7,CSE,E116;MAS4203,MWF,4,LIT,217;EEL3135,TR,7-8,NEB,202;
 		Button mapButton;
 		mapButton = (Button)convertView.findViewById(R.id.mapButton);
 		mapButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Uri uri = Uri.parse("http://m.ufl.edu/map/");
+				String scheduleMapUri = "http://campusmap.ufl.edu/?sched=";
+				scheduleMapUri+=courseText+",";
+				scheduleMapUri+=meeting1Text.trim()+",";
+				scheduleMapUri+=period1Text.trim()+",";
+				scheduleMapUri+=buildingCode1.trim()+",";
+				scheduleMapUri+=room1Text.trim()+",";
+				boolean meet2 = (meeting2Text != null) ? true : false;
+				scheduleMapUri+=(meet2) ? meeting2Text.trim()+"," : "";
+				scheduleMapUri+=(meet2) ? period2Text.trim()+"," : "";
+				scheduleMapUri+=(meet2) ? buildingCode2.trim()+"," : "";
+				scheduleMapUri+=(meet2) ? room2Text.trim()+"," : "";
+				boolean meet3 = (meeting3Text != null) ? true : false;
+				scheduleMapUri+=(meet3) ? meeting3Text.trim()+"," : "";
+				scheduleMapUri+=(meet3) ? period3Text.trim()+"," : "";
+				scheduleMapUri+=(meet3) ? buildingCode3.trim()+"," : "";
+				scheduleMapUri+=(meet3) ? room3Text.trim()+"," : "";
+				scheduleMapUri+=";";
+				Uri uri = Uri.parse(scheduleMapUri);
                 Intent campusMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
                 //campusMap.setData(Uri.parse("campusmap.ufl.edu"));
                 v.getContext().startActivity(campusMap);
