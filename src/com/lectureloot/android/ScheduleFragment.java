@@ -4,6 +4,8 @@ package com.lectureloot.android;
  * @author Austin Bruch, Justin Rafanan
  */
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -184,6 +186,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			System.out.println("onHttpGetMeetingsReady 3");
 
 			ArrayList<Meeting> meetings = jsonArrayToMeetings(array);
+			meetings = groupMeetingsDays(meetings);
 			System.out.println("onHttpGetMeetingsReady 4");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
 			course.setMeetings(meetings);
@@ -196,6 +199,85 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
+	}
+
+	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetings) {
+		ArrayList<Meeting> groupedMeetingsDays = new ArrayList<Meeting>();
+
+		Meeting comparedAgainstMeeting = null;
+		Meeting testMeeting = null;
+		Meeting compareTestMeeting = null;
+		for(int i = 0; i < meetings.size(); i++) {
+			comparedAgainstMeeting = meetings.get(i);
+			compareTestMeeting = meetings.get(i);
+			boolean flag = false;
+			for(int j = i+1; j < meetings.size(); j++) {
+				testMeeting = meetings.get(j);
+				if (comparedAgainstMeeting.getPeriod().equalsIgnoreCase(testMeeting.getPeriod()) 
+						&& comparedAgainstMeeting.getBuildingCode().equalsIgnoreCase(testMeeting.getBuildingCode()) 
+						&& comparedAgainstMeeting.getRoomNumber().equalsIgnoreCase(testMeeting.getRoomNumber())  && i != j) {
+					boolean contains = false;
+					comparedAgainstMeeting.setMeetingDay(comparedAgainstMeeting.getMeetingDay().concat(testMeeting.getMeetingDay()));
+					for(Meeting groupedMeeting : groupedMeetingsDays) {
+						if (groupedMeeting.getMeetingDay().contains(comparedAgainstMeeting.getMeetingDay())) {
+							contains = true;
+						}
+					}
+					if (contains == false) {
+						groupedMeetingsDays.add(comparedAgainstMeeting);
+					}
+				}
+			}
+			if (comparedAgainstMeeting.getMeetingDay().length() == 1) {
+				for(Meeting grouped : groupedMeetingsDays) {
+					if (comparedAgainstMeeting.getPeriod().equalsIgnoreCase(grouped.getPeriod()) 
+							&& comparedAgainstMeeting.getBuildingCode().equalsIgnoreCase(grouped.getBuildingCode()) 
+							&& comparedAgainstMeeting.getRoomNumber().equalsIgnoreCase(grouped.getRoomNumber())) {
+						flag = true;
+					}
+				}
+				if (flag == false) {
+					groupedMeetingsDays.add(comparedAgainstMeeting);
+				}
+			}
+		}
+		if (groupedMeetingsDays.size() == 0) {
+			groupedMeetingsDays.addAll(meetings);
+		}
+		
+		
+		
+		for (int i = 0; i < groupedMeetingsDays.size(); i++) {
+			Meeting groupedMeeting = groupedMeetingsDays.get(i);
+			String meet = groupedMeeting.getMeetingDay().toUpperCase();
+			String sortedMeet = " ";
+			
+				if (meet.indexOf("M") != -1) {
+					sortedMeet+=("M");
+				}
+				if (meet.indexOf("T") != -1) {
+					sortedMeet+=("T");
+				}
+				if (meet.indexOf("W") != -1) {
+					sortedMeet+=("W");
+				}
+				if (meet.indexOf("R") != -1) {
+					sortedMeet+=("R");
+				}
+				if (meet.indexOf("F") != -1) {
+					sortedMeet+=("F");
+				}
+				if (meet.indexOf("S") != -1) {
+					sortedMeet+=("S");
+				}
+				
+				sortedMeet.trim();
+				
+				groupedMeeting.setMeetingDay(sortedMeet);
+//				groupedMeetingsDays.remove(i);
+				groupedMeetingsDays.set(i,groupedMeeting);
+		}
+		return groupedMeetingsDays;
 	}
 
 	////	private void prepareListData() {
@@ -250,8 +332,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 	//
 	//	}
 
-	//TODO figure out how meetings are stored, maybe have to create meeting model
-	private Course jsonObjectToCourse(JSONObject jsonCourse/*,JSONArray jsonMeetings*/) {
+	private Course jsonObjectToCourse(JSONObject jsonCourse) {
 
 		Course course = new Course();
 		try{
