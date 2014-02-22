@@ -7,18 +7,22 @@ package com.lectureloot.android.adapter;
 import java.util.HashMap;
 import java.util.List;
 
-import com.lectureloot.android.Course;
-import com.lectureloot.android.R;
-import com.lectureloot.android.R.id;
-import com.lectureloot.android.R.layout;
-
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.lectureloot.android.Course;
+import com.lectureloot.android.R;
 
 public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
@@ -120,6 +124,59 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		} else {
 			room3.setText("");
 		}
+		
+		Button mapButton;
+		mapButton = (Button)convertView.findViewById(R.id.mapButton);
+		mapButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Uri uri = Uri.parse("http://m.ufl.edu/map/");
+                Intent campusMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                //campusMap.setData(Uri.parse("campusmap.ufl.edu"));
+                v.getContext().startActivity(campusMap);
+				
+			}
+		});
+		
+		Button dropCourseButton;
+		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
+		dropCourseButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				System.out.println("Drop Course Button Clicked");
+				
+				final Dialog dialog = new Dialog(_context);
+				dialog.setContentView(R.layout.dialog_drop_course);
+				dialog.setTitle("Drop Course?");
+				
+				Button confirmButton = (Button) dialog.findViewById(R.id.dialogDropConfirmButton);
+				confirmButton.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
+						dialog.dismiss();
+
+					}
+				});
+				
+				Button denyButton = (Button) dialog.findViewById(R.id.dialogDropDenyButton);
+				denyButton.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(_context, "Course Not Dropped", Toast.LENGTH_LONG).show();
+						dialog.dismiss();
+
+					}
+				});
+
+				dialog.show();
+			}
+		});
+				
 		return convertView;
 	}
 

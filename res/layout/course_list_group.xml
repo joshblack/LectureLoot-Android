@@ -46,8 +46,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="25dp"
+    android:paddingLeft="30dp"
     android:paddingRight="8dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:background="#39B54A">
     
     <TextView
