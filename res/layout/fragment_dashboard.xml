@@ -8,18 +8,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:paddingBottom="24dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="28dp" >
+        android:padding="12dp" >
 
         <ImageView
             android:id="@+id/user_profile_pic"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_marginRight="14dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="4dp"
             android:src="@drawable/user_circle" />
 
         <LinearLayout
@@ -35,6 +34,7 @@
                 android:text="@string/user_total_points"
                 android:textColor="#FFFFFFFF"
                 android:textSize="50sp" />
+
         </LinearLayout>
     </LinearLayout>
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:text="@string/user_statistics"
             android:textColor="#FFFFFFFF"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <GridLayout
@@ -189,11 +189,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFF5555"
-            android:gravity="top|center"
-            android:height="44dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:height="48dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingTop="12dp"
             android:text="@string/check_in_button"
             android:textAlignment="gravity"
             android:textColor="#FFFFFFFF"
@@ -207,26 +206,27 @@
             android:weightSum="1" >
 
             <TextView
+                android:id="@+id/nextMeeting"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|left"
+                android:layout_height="match_parent"
                 android:layout_weight=".5"
-                android:paddingBottom="12dp"
+                android:gravity="bottom|left"
                 android:text="@string/course_code"
                 android:textColor="#FFFFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:paddingBottom="10dp" />
 
             <TextView
+                android:id="@+id/timeLeft"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_height="match_parent"
                 android:layout_weight=".5"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:gravity="bottom|right"
                 android:text="@string/time_before_class"
                 android:textColor="#FFFF5555"
-                android:textSize="50sp"
+                android:textSize="62sp"
                 android:textStyle="bold" />
+
         </LinearLayout>
     </LinearLayout>
 

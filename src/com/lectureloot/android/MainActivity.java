@@ -17,17 +17,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private static final String TAG = "Main";
 	private ViewPager mViewPager;
 	private TabsPagerAdapter mAdapter;
-	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
-	//private String[] nTabNames = {"schedule_title", "dashboard_title", "wager_title"};
+	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "on Create");
 		setContentView(R.layout.activity_main);
 		
 		//Initialization of the tabs
-		Log.d(TAG, "initializing tabs");
 		mViewPager = (ViewPager)findViewById(R.id.pager);
 		final ActionBar actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -56,12 +53,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		});
 		
 		//add Tabs
-		Log.d(TAG, "adding the tabs");
 		for(int tab_name : nTabNames){
-			Log.d(TAG, "adding tab "+tab_name);
 			actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
 		}
-		Log.d(TAG, "done");
+		
+		//set the middle tab to be the default
+		mViewPager.setCurrentItem(1, false);
 	}
 
 	@Override
@@ -84,5 +81,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
+	
+
 
 }

@@ -8,6 +8,9 @@
     <string name="dashboard_title">Dashboard</string>
     
     <string name="wager_title">Wagers</string>
+
+    <string name="department_code">DEPT</string>
+
 	<string name="user_name">User\'s Name</string>
 
     <string name="create_wager">Create a Wager</string>
@@ -19,5 +22,6 @@
     <string name="user_streak2"> consecutive lectures</string>
     <string name="user_lectures_remaining_notice">Lectures Remain</string>
     <string name="user_statistics">User Statistics</string>
+
 
 </resources>
