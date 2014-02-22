@@ -3,6 +3,7 @@
 
     <string name="app_name">LectureLoot</string>
     <string name="action_settings">Settings</string>
+    <string name="action_stats">Statistics</string>
     
     <string name="schedule_title">Schedule</string>
     <string name="dashboard_title">Dashboard</string>
@@ -22,6 +23,7 @@
     <string name="user_streak2"> consecutive lectures</string>
     <string name="user_lectures_remaining_notice">Lectures Remain</string>
     <string name="user_statistics">User Statistics</string>
-
+    
+    <string name="dialog_drop_course_text">Are you sure you want to drop this course?</string>
 
 </resources>
