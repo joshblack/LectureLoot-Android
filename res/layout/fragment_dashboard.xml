@@ -56,48 +56,58 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:background="#FFFFFFFF"
+        
+        android:rowCount="1" 
         android:columnCount="5"
+        
         android:height="44dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:rowCount="1" >
+        >
 
-        <LinearLayout
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="17dp"
-            android:background="#FF00FF00"
-            android:orientation="vertical"
-            android:paddingTop="14dp" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_gravity="fill_horizontal"
-            android:background="#FFFFFF00"
-            android:orientation="vertical"
-            android:paddingTop="4dp" >
-        </LinearLayout>
-
-                <LinearLayout
-            android:layout_gravity="fill_horizontal"
-            android:background="#FF00FF00"
-            android:orientation="vertical"
-            android:paddingTop="10dp" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_gravity="fill_horizontal"
-            android:background="#FFFFFF00"
-            android:orientation="vertical"
-            android:paddingTop="4dp" >
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+			android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_circle" />
+        <ImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+			android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_circle" />
+        <ImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+			android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_circle" />
+        <ImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+			android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_circle" />
+        <ImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+			android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_circle" />
         
+        
+                
     </GridLayout>
 
     <LinearLayout
