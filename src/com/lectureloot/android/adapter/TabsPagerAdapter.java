@@ -13,7 +13,7 @@ import android.util.Log;
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 	//this class is an adapter - it provides views for the Fragments (activities) for the Tab thing to display
 	private static final String TAG = "TabPagerAdapter";
-	
+
 	public TabsPagerAdapter(FragmentManager fm) {
 		super(fm);
 		Log.d(TAG, "instantiation");
@@ -42,10 +42,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		//we have three tabs
 		return 3;
 	}
-	
-//	@Override
-//	public CharSequence getPageTitle(int position) {
-//		return "Section "+(position+1);
-//	}
+
+	//	@Override
+	//	public CharSequence getPageTitle(int position) {
+	//		return "Section "+(position+1);
+	//	}
 
 }

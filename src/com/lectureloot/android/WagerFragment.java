@@ -134,7 +134,7 @@ public class WagerFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 
-						Toast.makeText(getActivity(), "Error: Wager could not be editted", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 
 					}
@@ -145,7 +145,7 @@ public class WagerFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(getActivity(), "Error: Wager cannot be deleted", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 
 					}
@@ -225,7 +225,7 @@ public class WagerFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 
 					}

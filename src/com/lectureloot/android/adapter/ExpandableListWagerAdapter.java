@@ -19,29 +19,29 @@ import android.widget.TextView;
 
 public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
-    private Context _context;
-    private List<String> _listDataHeader; // header titles
-    // child data in format of header title, child title
-    private HashMap<String, List<Wager>> _listDataChild;
- 
-    public ExpandableListWagerAdapter(Context context, List<String> wagerListDataHeader, HashMap<String, List<Wager>> wagerListChildData) {
-        this._context = context;
-        this._listDataHeader = wagerListDataHeader;
-        this._listDataChild = wagerListChildData;
-    }
- 
-    public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .get(childPosititon);
-    }
- 
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
- 
-    public View getChildView(int groupPosition, final int childPosition,
-            boolean isLastChild, View convertView, ViewGroup parent) {
- 
+	private Context _context;
+	private List<String> _listDataHeader; // header titles
+	// child data in format of header title, child title
+	private HashMap<String, List<Wager>> _listDataChild;
+
+	public ExpandableListWagerAdapter(Context context, List<String> wagerListDataHeader, HashMap<String, List<Wager>> wagerListChildData) {
+		this._context = context;
+		this._listDataHeader = wagerListDataHeader;
+		this._listDataChild = wagerListChildData;
+	}
+
+	public Object getChild(int groupPosition, int childPosititon) {
+		return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+				.get(childPosititon);
+	}
+
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	public View getChildView(int groupPosition, final int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+
 
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -63,35 +63,35 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		wagerPerMeeting.setText("Wager Per Meeting: " + wagerPerMeetingText);
 		totalMeetings.setText("Total Meetings: "+ totalMeetingsText);
 		totalWager.setText("Total Wager: "+ totalWagerText);
-		
+
 		return convertView;
-    }
- 
+	}
 
-    public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .size();
-    }
- 
-    public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
-    }
- 
 
-    public int getGroupCount() {
-        return this._listDataHeader.size();
-    }
- 
+	public int getChildrenCount(int groupPosition) {
+		return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+				.size();
+	}
 
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
- 
+	public Object getGroup(int groupPosition) {
+		return this._listDataHeader.get(groupPosition);
+	}
 
-    public View getGroupView(int groupPosition, boolean isExpanded,
-            View convertView, ViewGroup parent) {
-    	
-    	String wagerSessionCodeText = (String) getGroup(groupPosition);
+
+	public int getGroupCount() {
+		return this._listDataHeader.size();
+	}
+
+
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
+
+		String wagerSessionCodeText = (String) getGroup(groupPosition);
 
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -105,15 +105,15 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		wagerSessionCode.setText(wagerSessionCodeText);
 
 		return convertView;
-    }
- 
+	}
 
-    public boolean hasStableIds() {
-        return false;
-    }
 
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-		
+	public boolean hasStableIds() {
+		return false;
+	}
+
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
+	}
+
 }

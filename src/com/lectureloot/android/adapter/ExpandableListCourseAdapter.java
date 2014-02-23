@@ -85,15 +85,15 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		final String buildingCode1 = (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(0).getBuildingCode().toUpperCase();
 		final String buildingCode2 = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 1 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(1).getBuildingCode().toUpperCase() : null;
 		final String buildingCode3 = (((Course)getChild(groupPosition,childPosition)).getMeetings().size() > 2 ) ? (String) ((Course)getChild(groupPosition,childPosition)).getMeetings().get(2).getBuildingCode().toUpperCase() : null;
-//		final String meeting1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays1();
-//		final String meeting2Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays2();
-//		final String meeting3Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays3();
-//		final String period1Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod1();
-//		final String period2Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod2();
-//		final String period3Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod3();
-//		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom1();
-//		final String room2Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom2();
-//		final String room3Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom3();
+		//		final String meeting1Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays1();
+		//		final String meeting2Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays2();
+		//		final String meeting3Text = (String) ((Course)getChild(groupPosition,childPosition)).getMeetingDays3();
+		//		final String period1Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod1();
+		//		final String period2Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod2();
+		//		final String period3Text = (String) ((Course)getChild(groupPosition,childPosition)).getPeriod3();
+		//		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom1();
+		//		final String room2Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom2();
+		//		final String room3Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom3();
 		final String courseCode = (String) ((Course)getChild(groupPosition,childPosition)).getCourseCode().toUpperCase();
 
 		courseTitle.setText(courseText);
@@ -113,7 +113,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 		//    		period1.setText(period1Text);
 		//    		period2.setText(period2Text);
 		//    		period3.setText(period3Text);
-		
+
 		room1.setText(buildingCode1 + " " + room1Text);
 		if (buildingCode2 != null && room2Text != null) {
 			room2.setText(buildingCode2 + " " + room2Text);
@@ -121,22 +121,22 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 			room2.setText("");
 		}
 		if (buildingCode3 != null && room3Text != null) {
-		room3.setText(buildingCode3 + " " + room3Text);
+			room3.setText(buildingCode3 + " " + room3Text);
 		} else {
 			room3.setText("");
 		}
-		
-		
+
+
 		//http://campusmap.ufl.edu/?sched=EEL4712C,MWF,2,MAEA,303,R,9-11,NEB,281;CEN3031,MWF,6,LIT,109,W,7,CSE,E116;MAS4203,MWF,4,LIT,217;EEL3135,TR,7-8,NEB,202;
 		Button mapButton;
 		mapButton = (Button)convertView.findViewById(R.id.mapButton);
 		mapButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String scheduleMapUri = "http://campusmap.ufl.edu/?sched=";
-				
-				
+
+
 				scheduleMapUri+=courseCode.trim()+",";
 				scheduleMapUri+=meeting1Text.trim()+",";
 				scheduleMapUri+=period1Text.trim()+",";
@@ -155,37 +155,37 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 				scheduleMapUri = scheduleMapUri.substring(0, scheduleMapUri.length()-1);
 				scheduleMapUri+=";";
 				Uri uri = Uri.parse(scheduleMapUri);
-                Intent campusMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
-                //campusMap.setData(Uri.parse("campusmap.ufl.edu"));
-                v.getContext().startActivity(campusMap);
-				
+				Intent campusMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
+				//campusMap.setData(Uri.parse("campusmap.ufl.edu"));
+				v.getContext().startActivity(campusMap);
+
 			}
 		});
-		
+
 		Button dropCourseButton;
 		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
 		dropCourseButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				System.out.println("Drop Course Button Clicked");
-				
+
 				final Dialog dialog = new Dialog(_context);
 				dialog.setContentView(R.layout.dialog_drop_course);
 				dialog.setTitle("Drop Course?");
-				
+
 				Button confirmButton = (Button) dialog.findViewById(R.id.dialogDropConfirmButton);
 				confirmButton.setOnClickListener(new View.OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
-//						mNeedsToCheckIn.setVisibility(View.GONE);
+						//						mNeedsToCheckIn.setVisibility(View.GONE);
 						dialog.dismiss();
 
 					}
 				});
-				
+
 				Button denyButton = (Button) dialog.findViewById(R.id.dialogDropDenyButton);
 				denyButton.setOnClickListener(new View.OnClickListener() {
 
@@ -200,12 +200,12 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 				dialog.show();
 			}
 		});
-				
-		
+
+
 		return convertView;
 	}
-	
-//	private void disableChild
+
+	//	private void disableChild
 
 	@Override
 	public int getChildrenCount(int groupPosition) {

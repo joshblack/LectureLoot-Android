@@ -2,11 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:gravity="center"
-    android:orientation="vertical" 
-     >
+    android:gravity="center"
+    android:orientation="vertical" >
 
-        <Button
+    <Button
         android:id="@+id/decrementEditPerMeetingWager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,30 +61,29 @@
         android:inputType="date"
         android:text="2/22/14" />
 
-	<TextView 
-	    android:id="@+id/WagerdialogCurrentSessionTitle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@+id/CurrentWagerSessionStartDate"
-	    android:layout_centerHorizontal="true"
-		android:text="Session Dates:"
-		android:textSize="20dp"	    
-	    />
+    <TextView
+        android:id="@+id/WagerdialogCurrentSessionTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/CurrentWagerSessionStartDate"
+        android:layout_centerHorizontal="true"
+        android:text="Session Dates:"
+        android:textSize="20dp" />
 
-	<Button
-	    android:id="@+id/DeleteWagerButton"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignParentLeft="true"
-	    android:text="Remove Wager" />
+    <Button
+        android:id="@+id/DeleteWagerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Remove Wager" />
 
-	<Button
-	    android:id="@+id/dialogEditWagerButton"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_above="@+id/DeleteWagerButton"
-	    android:layout_alignParentLeft="true"
-	    android:text="Edit a Wager" />
+    <Button
+        android:id="@+id/dialogEditWagerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/DeleteWagerButton"
+        android:layout_alignParentLeft="true"
+        android:text="Edit a Wager" />
 
 </RelativeLayout>
