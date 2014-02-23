@@ -30,104 +30,104 @@ import android.widget.Toast;
 
 
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
-import com.lectureloot.background.HttpGetWagers;
-import com.lectureloot.background.HttpGetSession;
+//import com.lectureloot.background.HttpGetWagers;
+//import com.lectureloot.background.HttpGetSession;
 
 
 public class WagerFragment extends Fragment {
-	
-    private ExpandableListWagerAdapter wagerListAdapter;
-    private ExpandableListView wagerExpListView;
-    private List<String> wagerListDataHeader;
-    private HashMap<String, List<Wager>> wagerListDataChild;
-	
+
+	private ExpandableListWagerAdapter wagerListAdapter;
+	private ExpandableListView wagerExpListView;
+	private List<String> wagerListDataHeader;
+	private HashMap<String, List<Wager>> wagerListDataChild;
+
 	private int tempPerClassWager;
 	private String displayTempPerClassWager;
 	private TextView DisplayCurrentWager;
-    
-	
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		View rootView = inflater.inflate(R.layout.fragment_wager, container, false);
-		
+
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.userWager);
 		//TODO: Set Display name dynamically based on Singleton User Model
 		userDisplay.setText("LectureLoot's Wager");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
-		
-//        // get the listview
-       wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
-       prepareWagerListData();
-       wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
+
+		//        // get the listview
+		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
+		prepareWagerListData();
+		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
 
 		// setting list adapter
-       wagerExpListView.setAdapter(wagerListAdapter);
-       
-       
-       Button editWagerButton;
+		//wagerExpListView.setAdapter(wagerListAdapter);
+
+
+		Button editWagerButton;
 		editWagerButton = (Button)rootView.findViewById(R.id.editWagerButton);
 		editWagerButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_edit_wager);
 				dialog.setTitle("Edit a Wager");
 				tempPerClassWager = 10;	
-				
+
 				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
 				dialogDecrementButton.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
-						
+
 						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
-							{
-								tempPerClassWager--;
-							}
+						{
+							tempPerClassWager--;
+						}
 
-						
-					displayTempPerClassWager = String.valueOf(tempPerClassWager);
-						
 
-					DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-					DisplayCurrentWager.setText(displayTempPerClassWager);
-						// changes the original Per Class Wager value to the updated incremented value
-					
-					}
-
-					// temp solution, don't remember if needed
-					
-				});
-				
-				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
-				dialogIncrementButton.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-
-						
-						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
-							{
-								tempPerClassWager++;
-							}
 						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-						
+
+
 						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
 						DisplayCurrentWager.setText(displayTempPerClassWager);
 						// changes the original Per Class Wager value to the updated incremented value
-						
-						
+
+					}
+
+					// temp solution, don't remember if needed
+
+				});
+
+				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
+				dialogIncrementButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+
+						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
+						{
+							tempPerClassWager++;
+						}
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+
+
 					}
 
 					// temp solution don't remember if needed
 
 				});
-				
+
 				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
 				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
 
@@ -139,7 +139,7 @@ public class WagerFragment extends Fragment {
 
 					}
 				});
-				
+
 				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
 				dialogDeleteButton.setOnClickListener(new OnClickListener() {
 
@@ -154,92 +154,92 @@ public class WagerFragment extends Fragment {
 				dialog.show();       
 			}
 		});
-       
-        Button addNewWagerButton;
-        addNewWagerButton = (Button)rootView.findViewById(R.id.addWagerButton);
-        addNewWagerButton.setOnClickListener(new OnClickListener() {
-		
-        	
+
+		Button addNewWagerButton;
+		addNewWagerButton = (Button)rootView.findViewById(R.id.addWagerButton);
+		addNewWagerButton.setOnClickListener(new OnClickListener() {
+
+
 
 			@Override
 			public void onClick(View v) {
-//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
-			
-			final Dialog dialog = new Dialog(getActivity());
-			dialog.setContentView(R.layout.dialog_add_wager);
-			dialog.setTitle("Make A Wager");
-			
-			tempPerClassWager = 10;
-			
-			Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementPerMeetingWager);
-			dialogDecrementButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
+				//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
+
+				final Dialog dialog = new Dialog(getActivity());
+				dialog.setContentView(R.layout.dialog_add_wager);
+				dialog.setTitle("Make A Wager");
+
+				tempPerClassWager = 10;
+
+				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementPerMeetingWager);
+				dialogDecrementButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
 						{
 							tempPerClassWager--;
 						}
 
-					
-				displayTempPerClassWager = String.valueOf(tempPerClassWager);
-					
 
-				DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-				DisplayCurrentWager.setText(displayTempPerClassWager);
-					// changes the original Per Class Wager value to the updated incremented value
-				
-				}
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
 
-				// temp solution, don't remember if needed
-				
-			});
-			
-			Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementPerMeetingWager);
-			dialogIncrementButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					
-					if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
+
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+
+					}
+
+					// temp solution, don't remember if needed
+
+				});
+
+				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementPerMeetingWager);
+				dialogIncrementButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
 						{
 							tempPerClassWager++;
 						}
-					displayTempPerClassWager = String.valueOf(tempPerClassWager);
-					
-					DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-					DisplayCurrentWager.setText(displayTempPerClassWager);
-					// changes the original Per Class Wager value to the updated incremented value
-					
-					
-				}
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
 
-				// temp solution don't remember if needed
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
 
-			});
-			
-			Button dialogCreateButton = (Button) dialog.findViewById(R.id.dialogCreateWagerButton);
-			dialogCreateButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_LONG).show();
-					dialog.dismiss();
-					
-				}
-			});
-			
-			dialog.show();
+
+					}
+
+					// temp solution don't remember if needed
+
+				});
+
+				Button dialogCreateButton = (Button) dialog.findViewById(R.id.dialogCreateWagerButton);
+				dialogCreateButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_LONG).show();
+						dialog.dismiss();
+
+					}
+				});
+
+				dialog.show();
 			}
 		});
-        
+
 
 		return rootView;
 	}
 
-/*	public void onHttpGetWagerReady(String output) {
+	/*	public void onHttpGetWagerReady(String output) {
 		System.out.println("onHttpGetCoursesReady enter");
 
 		wagerListDataHeader = new ArrayList<String>();
@@ -288,10 +288,10 @@ public class WagerFragment extends Fragment {
 		wagerExpListView.setAdapter((ListAdapter) wagerListAdapter);
 		System.out.println("onHttpGetCoursesReady exit");
 	}
-	
-	*/
-	
-/*	public void onHttpGetSessionsReady(String output) {
+
+	 */
+
+	/*	public void onHttpGetSessionsReady(String output) {
 		System.out.println("onHttpGetMeetingsReady enter");
 
 		JSONTokener tokener = new JSONTokener(output);
@@ -320,12 +320,12 @@ public class WagerFragment extends Fragment {
 			System.out.println("Exception: " + e.getMessage());
 		}
 	}
-*/	
-	
+	 */	
+
 	//TODO figure out how meetings are stored, maybe have to create meeting model
-	
-//	private Wager jsonObjectToWager(JSONObject jsonWager/*,JSONArray jsonMeetings*/) {
-/*
+
+	//	private Wager jsonObjectToWager(JSONObject jsonWager/*,JSONArray jsonMeetings*/) {
+	/*
 		Wager wager = new Wager();
 		try{
 			wager.setWagerSessionCode((Integer)jsonWager.get("id"));
@@ -335,45 +335,45 @@ public class WagerFragment extends Fragment {
 			int wagerUnitValue = (int)jsonWager.getInt("wagerUnitValue");
 			int wagerTotalValue = (int)jsonWager.getInt("wagerTotalValue");
 			int totalMeetings = wagerTotalValue/wagerUnitValue;
-			
-			
+
+
 //			String courseCode = deptCode + courseNumber;
 			wager.setWagerPerMeeting(wagerUnitValue);
 			wager.setTotalWager(wagerTotalValue);
 			wager.setTotalMeetings(totalMeetings);
-			
+
 		} catch (Exception e){
 
 		}
 		return wager;
 	}
-	*/
-	
-    private void prepareWagerListData() {
-        wagerListDataHeader = new ArrayList<String>();
-        wagerListDataChild = new HashMap<String, List<Wager>>();
-        
-        Wager Session1 = new Wager();
-        Session1.setWagerSessionCode(1);
-        Session1.setWagerPerMeeting(5);
-        Session1.setTotalMeetings(10);
-        Session1.setTotalWager(50);
-        
-        List<Wager> Session1List = new ArrayList<Wager>();
-        Session1List.add(Session1);
-         
-        Wager newWager = new Wager();
-        newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
-        List<Wager> newWagerList = new ArrayList<Wager>();
-        newWagerList.add(newWager);
-        
-        // Adding child data 
-        wagerListDataHeader.add(Session1.getWagerSessionCodeString());
+	 */
 
-        wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
+	private void prepareWagerListData() {
+		wagerListDataHeader = new ArrayList<String>();
+		wagerListDataChild = new HashMap<String, List<Wager>>();
 
-    }
-/*    
+		Wager Session1 = new Wager();
+		Session1.setWagerSessionCode(1);
+		Session1.setWagerPerMeeting(5);
+		Session1.setTotalMeetings(10);
+		Session1.setTotalWager(50);
+
+		List<Wager> Session1List = new ArrayList<Wager>();
+		Session1List.add(Session1);
+
+		Wager newWager = new Wager();
+		newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
+		List<Wager> newWagerList = new ArrayList<Wager>();
+		newWagerList.add(newWager);
+
+		// Adding child data 
+		wagerListDataHeader.add(Session1.getWagerSessionCodeString());
+
+		wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
+
+	}
+	/*    
 	private ArrayList<Wager> jsonArrayToWagers(JSONArray jsonWagers) {
 		ArrayList<Wager>  wagers = new ArrayList<Wager>();
 
@@ -391,8 +391,8 @@ public class WagerFragment extends Fragment {
 
 		return wagers;
 	}
-*/
-/*
+	 */
+	/*
 	private Sessions jsonObjectToSession(JSONObject jsonSession) {
 
 		Sessions session = new Sessions();
@@ -400,7 +400,7 @@ public class WagerFragment extends Fragment {
 			session.setSessionId((Integer)jsonSession.get("id"));
 			session.setStartDate((Date)jsonSession.get("startDate"));
 			session.setEndDate((Date)jsonSession.get("endDate"));
-			
+
 		} catch (Exception e){
 
 		}
@@ -424,5 +424,5 @@ public class WagerFragment extends Fragment {
 
 		return session;
 	}
-	*/
+	 */
 }

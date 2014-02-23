@@ -33,7 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="103dp"
         android:text="Create a Wager" />
 
     <TextView
@@ -48,7 +47,7 @@
     </TextView>
 
 
-    <EditText
+    <TextView
         android:id="@+id/CurrentWagerSessionStartDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +59,7 @@
         android:inputType="date"
         android:text="2/17/14" />
 
-    <EditText
+    <TextView
         android:id="@+id/CurrentWagerSessionEndDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
