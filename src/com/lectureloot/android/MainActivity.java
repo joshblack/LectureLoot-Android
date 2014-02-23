@@ -1,17 +1,23 @@
 package com.lectureloot.android;
 
-import com.lectureloot.android.adapter.TabsPagerAdapter;
-import com.lectureloot.android.R;
+import java.net.URL;
 
-import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
-import android.app.ActionBar;
+import android.view.MenuItem;
+
+import com.lectureloot.android.adapter.TabsPagerAdapter;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	private static final String TAG = "Main";
@@ -72,6 +78,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		//handle item selection
+		switch(item.getItemId()){
+		case R.id.action_settings:
+			//something?
+			return true;
+		case R.id.test_notification:
+			//notify
+			Intent intent = new Intent();
+			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+			Notification noti = new Notification.Builder(this)
+			.setTicker("Get Your Ass to Class!")
+			.setContentTitle("You have class in 15 minutes")
+			.setContentText("Clock's ticking...")
+			.setSmallIcon(R.drawable.ic_launcher)
+			.setContentIntent(pIntent).getNotification();
+			noti.flags=Notification.FLAG_AUTO_CANCEL;
+			noti.sound = Uri.parse("android.resource://"
+		            + this.getPackageName() + "/" + R.raw.coin);
+			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			notificationManager.notify(0, noti);
+			
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
 	}

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,10 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private TextView mUserPointsTextView;
 	private TextView mTimeLeftTextView;
 	private TextView mUpcomingMeetingTextView;
+	private LinearLayout mNeedsToCheckIn;
+	private LinearLayout mUserCheckedIn;
+	private Button mCheckedInButton;
+
 	private enum CheckInStates{
 		UserNeedsToCheckIn,
 		UserHasUpcomingMeeting,
@@ -36,7 +41,12 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		//this is called when the view is displayed when the app launches
+		
 		View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
+		mNeedsToCheckIn = (LinearLayout)v.findViewById(R.id.next_class_display);
+		mUserCheckedIn = (LinearLayout)v.findViewById(R.id.checked_in_display);
+		mUserCheckedIn.setVisibility(View.GONE);
+		
 		
 		mCheckInButton = (Button)v.findViewById(R.id.check_in_button);
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +55,13 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			public void onClick(View v) {
 				//get the current location
 				double[] latLong = getLocation();
+
+				if(currentCheckInState == CheckInStates.UserNeedsToCheckIn){	
+					currentCheckInState = CheckInStates.UserIsDoneForTheDay;
+				}
+				if(currentCheckInState == CheckInStates.UserIsDoneForTheDay){
+//					currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+				} 
 				
 				//compare with the ideal location
 				//TODO
@@ -65,7 +82,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		});
 		
 		mUserPointsTextView = (TextView)v.findViewById(R.id.user_points);
-		//userPoints.setText(mCurrentUser.getPoints()+"pts");
+		mCheckedInButton = (Button)v.findViewById(R.id.checked_in_button);
 		
 		mTimeLeftTextView = (TextView)v.findViewById(R.id.timeLeft);
 		mUpcomingMeetingTextView = (TextView)v.findViewById(R.id.nextMeeting);
@@ -105,34 +122,43 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	}
 	
 	private void refreshUpcomingMeetingViews(){
+		//TODO
 		//mUpcomingMeeting = mCurrentUser.getUpcomingMeeting();
 		
 		
 		//set the state of currentCheckInState to be whatever is associated with this. 
 		//So if there's no upcoming meeting for the day, then 
 	}
+
 	
 	private void toggleCheckInBackgroundState(){
 		switch(currentCheckInState){
 			case UserNeedsToCheckIn:
-				//change the state to red
-				//mCheckIn.setVisibility(View.VISIBLE);
-				
+				mCheckInButton.setVisibility(View.VISIBLE);
+				mNeedsToCheckIn.setVisibility(View.VISIBLE);
+
 				break;
+				
 			case UserHasUpcomingMeeting:
 				//change state to white for upcoming meeting
 				//disable the checkIn button entirely
-				//mCheckIn.setVisibility(View.GONE);
+				mCheckInButton.setVisibility(View.GONE);
+				
+				//or should we just do as Damien did with setting a new linear layout? 
+				//TODO
 				
 				break;
+				
 			case UserIsDoneForTheDay:
-				//change state to congrats and happy day
-				//disable the check in button
-				
+				//disable the needs-to-check-in linear layout
+				mNeedsToCheckIn.setVisibility(View.GONE);
+				mUserCheckedIn.setVisibility(View.VISIBLE);
 				break;
+				
 			case UserIsDoneForTheWager:
 				//maybe we dont need this
 				//disable the check in button
+				//TODO
 				
 				break;
 		}
