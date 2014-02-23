@@ -94,6 +94,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 //		final String room1Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom1();
 //		final String room2Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom2();
 //		final String room3Text = (String) ((Course)getChild(groupPosition,childPosition)).getRoom3();
+		final String courseCode = (String) ((Course)getChild(groupPosition,childPosition)).getCourseCode().toUpperCase();
 
 		courseTitle.setText(courseText);
 		instructor.setText("Instructor: " + instructorText);
@@ -134,7 +135,9 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				String scheduleMapUri = "http://campusmap.ufl.edu/?sched=";
-				scheduleMapUri+=courseText+",";
+				
+				
+				scheduleMapUri+=courseCode.trim()+",";
 				scheduleMapUri+=meeting1Text.trim()+",";
 				scheduleMapUri+=period1Text.trim()+",";
 				scheduleMapUri+=buildingCode1.trim()+",";
@@ -149,6 +152,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 				scheduleMapUri+=(meet3) ? period3Text.trim()+"," : "";
 				scheduleMapUri+=(meet3) ? buildingCode3.trim()+"," : "";
 				scheduleMapUri+=(meet3) ? room3Text.trim()+"," : "";
+				scheduleMapUri = scheduleMapUri.substring(0, scheduleMapUri.length()-1);
 				scheduleMapUri+=";";
 				Uri uri = Uri.parse(scheduleMapUri);
                 Intent campusMap = new Intent(android.content.Intent.ACTION_VIEW, uri);
@@ -176,6 +180,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 					@Override
 					public void onClick(View v) {
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
+//						mNeedsToCheckIn.setVisibility(View.GONE);
 						dialog.dismiss();
 
 					}
@@ -196,8 +201,11 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 			}
 		});
 				
+		
 		return convertView;
 	}
+	
+//	private void disableChild
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
