@@ -83,7 +83,7 @@
             android:paddingTop="4dp" >
         </LinearLayout>
 
-                <LinearLayout
+        <LinearLayout
             android:layout_gravity="fill_horizontal"
             android:background="#FF00FF00"
             android:orientation="vertical"
