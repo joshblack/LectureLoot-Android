@@ -36,18 +36,17 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		UserIsDoneForTheWager;
 	}
 	private CheckInStates currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		//this is called when the view is displayed when the app launches
-		
+
 		View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
 		mNeedsToCheckIn = (LinearLayout)v.findViewById(R.id.next_class_display);
 		mUserCheckedIn = (LinearLayout)v.findViewById(R.id.checked_in_display);
 		mUserCheckedIn.setVisibility(View.GONE);
-		
-		
+
 		mCheckInButton = (Button)v.findViewById(R.id.check_in_button);
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
 			//handles the click event
@@ -70,7 +69,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 				//if the user is in the right place, will display "Yay checked in!"
 				//else display "invalid location, try again"
 				if(response){
-					Toast.makeText(getActivity(), "SCheck-in Successful", Toast.LENGTH_SHORT);
+					Toast.makeText(getActivity(), "Check-in Successful", Toast.LENGTH_SHORT);
 				}
 				else{
 					Toast.makeText(getActivity(), "Check-in Unsuccessful, Try Again", Toast.LENGTH_SHORT);
@@ -89,14 +88,18 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		
 		//get location manager
 		mLocationManager = (LocationManager)this.getActivity().getSystemService(Context.LOCATION_SERVICE);
-		
+
+
+		mCheckedInButton = (Button)v.findViewById(R.id.checked_in_button);
+
 		//refresh all the values of the current view, like upcoming meeting, stats, and the times
 		refreshUpcomingMeetingViews();
 		toggleCheckInBackgroundState();
-		
+
 		return v;
-	
+
 	}
+
 	
 	private double[] getLocation(){
 		//define the criteria for selecting the location provider
@@ -124,13 +127,9 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private void refreshUpcomingMeetingViews(){
 		//TODO
 		//mUpcomingMeeting = mCurrentUser.getUpcomingMeeting();
-		
-		
-		//set the state of currentCheckInState to be whatever is associated with this. 
-		//So if there's no upcoming meeting for the day, then 
 	}
 
-	
+
 	private void toggleCheckInBackgroundState(){
 		switch(currentCheckInState){
 			case UserNeedsToCheckIn:
@@ -184,6 +183,5 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		
 	}
-	
-	
+
 }

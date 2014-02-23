@@ -62,7 +62,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		//AsyncTask testing
 
 		//		prepareListData();
-		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
+		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses";
 		HttpGetCourses getter = new HttpGetCourses();
 		getter.setHttpGetFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
@@ -243,35 +243,35 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		if (groupedMeetingsDays.size() == 0) {
 			groupedMeetingsDays.addAll(meetings);
 		}
-		
+
 		for (int i = 0; i < groupedMeetingsDays.size(); i++) {
 			Meeting groupedMeeting = groupedMeetingsDays.get(i);
 			String meet = groupedMeeting.getMeetingDay().toUpperCase();
 			String sortedMeet = " ";
-			
-				if (meet.indexOf("M") != -1) {
-					sortedMeet+=("M");
-				}
-				if (meet.indexOf("T") != -1) {
-					sortedMeet+=("T");
-				}
-				if (meet.indexOf("W") != -1) {
-					sortedMeet+=("W");
-				}
-				if (meet.indexOf("R") != -1) {
-					sortedMeet+=("R");
-				}
-				if (meet.indexOf("F") != -1) {
-					sortedMeet+=("F");
-				}
-				if (meet.indexOf("S") != -1) {
-					sortedMeet+=("S");
-				}
-				
-				sortedMeet.trim();
-				
-				groupedMeeting.setMeetingDay(sortedMeet);
-				groupedMeetingsDays.set(i,groupedMeeting);
+
+			if (meet.indexOf("M") != -1) {
+				sortedMeet+=("M");
+			}
+			if (meet.indexOf("T") != -1) {
+				sortedMeet+=("T");
+			}
+			if (meet.indexOf("W") != -1) {
+				sortedMeet+=("W");
+			}
+			if (meet.indexOf("R") != -1) {
+				sortedMeet+=("R");
+			}
+			if (meet.indexOf("F") != -1) {
+				sortedMeet+=("F");
+			}
+			if (meet.indexOf("S") != -1) {
+				sortedMeet+=("S");
+			}
+
+			sortedMeet.trim();
+
+			groupedMeeting.setMeetingDay(sortedMeet);
+			groupedMeetingsDays.set(i,groupedMeeting);
 		}
 		return groupedMeetingsDays;
 	}
