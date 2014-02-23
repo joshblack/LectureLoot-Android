@@ -41,8 +41,9 @@ public class WagerFragment extends Fragment {
     private List<String> wagerListDataHeader;
     private HashMap<String, List<Wager>> wagerListDataChild;
 	
-	private int tempPerClassWager = 10;
+	private int tempPerClassWager;
 	private String displayTempPerClassWager;
+	private TextView DisplayCurrentWager;
     
 	
 	@Override
@@ -72,13 +73,61 @@ public class WagerFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-// No funcionality
-// Buttons do not do anything				
 				
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_edit_wager);
 				dialog.setTitle("Edit a Wager");
+				tempPerClassWager = 10;	
+				
+				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
+				dialogDecrementButton.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						
+						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
+							{
+								tempPerClassWager--;
+							}
 
+						
+					displayTempPerClassWager = String.valueOf(tempPerClassWager);
+						
+
+					DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+					DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+					
+					}
+
+					// temp solution, don't remember if needed
+					
+				});
+				
+				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
+				dialogIncrementButton.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+
+						
+						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
+							{
+								tempPerClassWager++;
+							}
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+						
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+						
+						
+					}
+
+					// temp solution don't remember if needed
+
+				});
+				
 				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
 				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
 
@@ -120,6 +169,7 @@ public class WagerFragment extends Fragment {
 			dialog.setContentView(R.layout.dialog_add_wager);
 			dialog.setTitle("Make A Wager");
 			
+			tempPerClassWager = 10;
 			
 			Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementPerMeetingWager);
 			dialogDecrementButton.setOnClickListener(new OnClickListener() {
@@ -133,12 +183,13 @@ public class WagerFragment extends Fragment {
 						}
 
 					
-/*					displayTempPerClassWager = String.valueOf(tempPerClassWager);
+				displayTempPerClassWager = String.valueOf(tempPerClassWager);
 					
-					TextView DecrementPerClassWagerText =(TextView)convertView.findViewById(R.id.DisplayCurrentWagerPerClass);
-					DecrementPerClassWagerText.setText(displayTempPerClassWager);
+
+				DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+				DisplayCurrentWager.setText(displayTempPerClassWager);
 					// changes the original Per Class Wager value to the updated incremented value
-*/					
+				
 				}
 
 				// temp solution, don't remember if needed
@@ -151,15 +202,15 @@ public class WagerFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					
-					if(tempPerClassWager> 20) // might have the valid capped differently for easy demo
+					if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
 						{
 							tempPerClassWager++;
 						}
-/*					displayTempPerClassWager = String.valueOf(tempPerClassWager);
+					displayTempPerClassWager = String.valueOf(tempPerClassWager);
 					
-					TextView IncrementPerClassWagerText =(TextView)findViewById(R.id.DisplayCurrentWagerPerClass);
-					IncrementPerClassWagerText.setText(displayTempPerClassWager);
-*/					// changes the original Per Class Wager value to the updated incremented value
+					DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+					DisplayCurrentWager.setText(displayTempPerClassWager);
+					// changes the original Per Class Wager value to the updated incremented value
 					
 					
 				}
