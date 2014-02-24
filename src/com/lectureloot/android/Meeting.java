@@ -8,9 +8,15 @@ public class Meeting {
 	private String roomNumber;
 	private String meetingDay;
 	private String period;
+	private long time;
 	
 	public Meeting(){
 		
+	}
+	
+	//this can be deleted later
+	public Meeting(long timeInMillis){
+		this.time = timeInMillis;
 	}
 	
 	public int getMeetingId() {
@@ -48,6 +54,15 @@ public class Meeting {
 	}
 	public void setPeriod(String period) {
 		this.period = period;
+	}
+	
+	//this can be deleted later, for testing purposes
+	public void setTime(long timeInMillis){
+		this.time = timeInMillis;
+	}
+	
+	public long getTimeInMillis(){
+		return this.time;
 	}
 
 }
