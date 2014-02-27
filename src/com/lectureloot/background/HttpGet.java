@@ -13,6 +13,11 @@ import java.net.URLConnection;
 public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	protected HttpGetFinishedListener listener;
+	protected String authorizationToken;
+	
+	public HttpGet(String authToken) {
+		this.authorizationToken = authToken;
+	}
 
 	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
 		this.listener = listener;
@@ -52,7 +57,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		try {
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
 			httpConnection.setRequestMethod("GET");
-			httpConnection.setRequestProperty("Authorization", "unxWwUVNngaIc114DAW0thZAWJPmrDOhiiISHBwK"); //HEADER for access token
+			httpConnection.setRequestProperty("Authorization", authorizationToken); //HEADER for access token
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
 
