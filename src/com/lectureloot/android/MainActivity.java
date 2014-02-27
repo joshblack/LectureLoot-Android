@@ -34,6 +34,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
+		mViewPager.setOffscreenPageLimit(3);
 		final ActionBar actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
