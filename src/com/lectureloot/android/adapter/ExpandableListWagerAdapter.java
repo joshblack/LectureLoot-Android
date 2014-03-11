@@ -11,6 +11,7 @@ import com.lectureloot.android.Wager;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,12 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		totalMeetings.setText("  " + totalMeetingsText);
 		totalWager.setText("  " + totalWagerText);
 
+		wagerPerMeeting.setTypeface(null, Typeface.BOLD);
+		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
+		totalMeetings.setTypeface(null,Typeface.BOLD);
+		totalMeetings.setTextColor(Color.parseColor("#FFFFFF"));
+		totalWager.setTypeface(null, Typeface.BOLD);
+		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
 		
 //		Button dropCourseButton;
 //		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
