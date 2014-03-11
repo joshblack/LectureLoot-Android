@@ -64,7 +64,7 @@ public class WagerFragment extends Fragment {
 		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
 
 		// setting list adapter
-		//wagerExpListView.setAdapter(wagerListAdapter);
+		wagerExpListView.setAdapter(wagerListAdapter);
 
 
 		Button editWagerButton;
@@ -114,6 +114,7 @@ public class WagerFragment extends Fragment {
 						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
 						{
 							tempPerClassWager++;
+							System.out.println(tempPerClassWager);
 						}
 						displayTempPerClassWager = String.valueOf(tempPerClassWager);
 
@@ -163,14 +164,19 @@ public class WagerFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
+			//System.out.println("print");
+			//Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
+			//System.out.println("toast");
 
 				final Dialog dialog = new Dialog(getActivity());
+				System.out.println("toast1");
 				dialog.setContentView(R.layout.dialog_add_wager);
+				System.out.println("toast2");
 				dialog.setTitle("Make A Wager");
-
+				System.out.println("toast3");
 				tempPerClassWager = 10;
-
+				System.out.println("toast");
+				
 				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementPerMeetingWager);
 				dialogDecrementButton.setOnClickListener(new OnClickListener() {
 
