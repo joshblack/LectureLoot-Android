@@ -57,17 +57,17 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 			convertView = infalInflater.inflate(R.layout.wager_list_items, null);
 		}
 
-		TextView wagerSessionCode = (TextView) convertView.findViewById(R.id.wagerSessionCode);
+		//TextView wagerSessionCode = (TextView) convertView.findViewById(R.id.wagerSessionCode);
 		TextView wagerPerMeeting = (TextView) convertView.findViewById(R.id.wagerPerMeeting);
 		TextView totalMeetings = (TextView) convertView.findViewById(R.id.totalMeetings);
 		TextView totalWager = (TextView) convertView.findViewById(R.id.totalWager);
 
-		final String wagerSessionCodeText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode());
+		//final String wagerSessionCodeText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode());
 		final String wagerPerMeetingText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerPerMeeting());
 		final String totalMeetingsText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalMeetings());
 		final String totalWagerText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalWager());
 
-		wagerSessionCode.setText("  " + wagerSessionCodeText); // wagerSessionCode --- wagerSessionCodeText
+		//wagerSessionCode.setText("  " + wagerSessionCodeText); // wagerSessionCode --- wagerSessionCodeText
 		wagerPerMeeting.setText("  " + wagerPerMeetingText);
 		totalMeetings.setText("  " + totalMeetingsText);
 		totalWager.setText("  " + totalWagerText);
