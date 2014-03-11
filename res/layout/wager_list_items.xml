@@ -2,100 +2,102 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical"
+    android:padding="8dp" >
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-         >
-   
-       <TextView
-        android:id="@+id/wagerSessionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Session Number:"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
+        android:orientation="horizontal" >
 
-       <TextView
-           android:id="@+id/wagerSessionCode"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:gravity="center"
-           android:text="Session#" />
-	</LinearLayout>
-	
-    <LinearLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-       
-    <TextView
-        android:id="@+id/wagerPerMeetingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wager Per Meeting:"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
-    
         <TextView
-        android:id="@+id/wagerPerMeeting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Unit Value" />
-    
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <TextView
-        android:id="@+id/totalMeetingsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Total Meetings in Session:"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
+            android:id="@+id/wagerSessionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Session Number:"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
 
-    	<TextView
-        android:id="@+id/totalMeetings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Meeting Sum" />
-    
-    
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <TextView
-        android:id="@+id/totalWagerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Wager:"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
-    
         <TextView
-        android:id="@+id/totalWager"
+            android:id="@+id/wagerSessionCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Session#" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Total Wager" />
-    
-	</LinearLayout>
-    
-    
-    
-    
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/wagerPerMeetingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wager Per Meeting:"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/wagerPerMeeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Unit Value" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/totalMeetingsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Total Meetings in Session:"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/totalMeetings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Meeting Sum" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/totalWagerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Wager:"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/totalWager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Total Wager" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editWagerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Wager"
+        android:textColor="#FFFFFF" />
+
 </LinearLayout>

@@ -22,15 +22,7 @@
         android:layout_weight="1"
         /> 
         
-        <Button
-            android:id="@+id/editWagerButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit a Wager"
-            android:layout_gravity="center_vertical"
-            android:textSize="30dp"
-            android:textColor="#FFFFFF"
-             />     
+
     
     <Button
             android:id="@+id/addWagerButton"
@@ -38,8 +30,7 @@
             android:layout_height="wrap_content"
             android:text="Create a Wager"
             android:layout_gravity="center_vertical"
-
-            android:textSize="30dp"
+            android:textSize="30sp"
 			android:textColor="#FFFFFF"            
              />     
 

@@ -9,13 +9,17 @@ import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
 import com.lectureloot.android.Wager;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
@@ -23,6 +27,10 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Wager>> _listDataChild;
+	
+	private int tempPerClassWager;
+	private String displayTempPerClassWager;
+	private TextView DisplayCurrentWager;
 
 	public ExpandableListWagerAdapter(Context context, List<String> wagerListDataHeader, HashMap<String, List<Wager>> wagerListChildData) {
 		this._context = context;
@@ -64,6 +72,135 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		totalMeetings.setText("  " + totalMeetingsText);
 		totalWager.setText("  " + totalWagerText);
 
+		
+//		Button dropCourseButton;
+//		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
+//		dropCourseButton.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				System.out.println("Drop Course Button Clicked");
+//
+//				final Dialog dialog = new Dialog(_context);
+//				dialog.setContentView(R.layout.dialog_drop_course);
+//				dialog.setTitle("Drop Course?");
+//
+//				Button confirmButton = (Button) dialog.findViewById(R.id.dialogDropConfirmButton);
+//				confirmButton.setOnClickListener(new View.OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
+//						//						mNeedsToCheckIn.setVisibility(View.GONE);
+//						dialog.dismiss();
+//
+//					}
+//				});
+//
+//				Button denyButton = (Button) dialog.findViewById(R.id.dialogDropDenyButton);
+//				denyButton.setOnClickListener(new View.OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						Toast.makeText(_context, "Course Not Dropped", Toast.LENGTH_LONG).show();
+//						dialog.dismiss();
+//
+//					}
+//				});
+//
+//				dialog.show();
+//			}
+//		});
+//		
+		
+		Button editWagerButton;
+		editWagerButton = (Button)convertView.findViewById(R.id.editWagerButton);
+		editWagerButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				final Dialog dialog = new Dialog(_context);
+				dialog.setContentView(R.layout.dialog_edit_wager);
+				dialog.setTitle("Edit a Wager");
+				tempPerClassWager = 10;	
+
+				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
+				dialogDecrementButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
+						{
+							tempPerClassWager--;
+						}
+
+
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+
+
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+
+					}
+
+					// temp solution, don't remember if needed
+
+				});
+
+				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
+				dialogIncrementButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+
+						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
+						{
+							tempPerClassWager++;
+							System.out.println(tempPerClassWager);
+						}
+						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+
+						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+						DisplayCurrentWager.setText(displayTempPerClassWager);
+						// changes the original Per Class Wager value to the updated incremented value
+
+
+					}
+
+					// temp solution don't remember if needed
+
+				});
+
+				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
+				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						Toast.makeText(_context, "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
+						dialog.dismiss();
+
+					}
+				});
+
+				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
+				dialogDeleteButton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(_context, "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
+						dialog.dismiss();
+
+					}
+				});
+
+				dialog.show();       
+			}
+		});
 		return convertView;
 	}
 

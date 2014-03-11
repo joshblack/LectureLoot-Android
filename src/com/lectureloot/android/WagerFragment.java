@@ -67,94 +67,94 @@ public class WagerFragment extends Fragment {
 		wagerExpListView.setAdapter(wagerListAdapter);
 
 
-		Button editWagerButton;
-		editWagerButton = (Button)rootView.findViewById(R.id.editWagerButton);
-		editWagerButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				final Dialog dialog = new Dialog(getActivity());
-				dialog.setContentView(R.layout.dialog_edit_wager);
-				dialog.setTitle("Edit a Wager");
-				tempPerClassWager = 10;	
-
-				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
-				dialogDecrementButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
-						{
-							tempPerClassWager--;
-						}
-
-
-						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-
-
-						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-						DisplayCurrentWager.setText(displayTempPerClassWager);
-						// changes the original Per Class Wager value to the updated incremented value
-
-					}
-
-					// temp solution, don't remember if needed
-
-				});
-
-				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
-				dialogIncrementButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-
-						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
-						{
-							tempPerClassWager++;
-							System.out.println(tempPerClassWager);
-						}
-						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-
-						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-						DisplayCurrentWager.setText(displayTempPerClassWager);
-						// changes the original Per Class Wager value to the updated incremented value
-
-
-					}
-
-					// temp solution don't remember if needed
-
-				});
-
-				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
-				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-						Toast.makeText(getActivity(), "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-
-					}
-				});
-
-				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
-				dialogDeleteButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(getActivity(), "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-
-					}
-				});
-
-				dialog.show();       
-			}
-		});
+//		Button editWagerButton;
+//		editWagerButton = (Button)rootView.findViewById(R.id.editWagerButton);
+//		editWagerButton.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//
+//				final Dialog dialog = new Dialog(getActivity());
+//				dialog.setContentView(R.layout.dialog_edit_wager);
+//				dialog.setTitle("Edit a Wager");
+//				tempPerClassWager = 10;	
+//
+//				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
+//				dialogDecrementButton.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//
+//						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
+//						{
+//							tempPerClassWager--;
+//						}
+//
+//
+//						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+//
+//
+//						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+//						DisplayCurrentWager.setText(displayTempPerClassWager);
+//						// changes the original Per Class Wager value to the updated incremented value
+//
+//					}
+//
+//					// temp solution, don't remember if needed
+//
+//				});
+//
+//				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
+//				dialogIncrementButton.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//
+//
+//						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
+//						{
+//							tempPerClassWager++;
+//							System.out.println(tempPerClassWager);
+//						}
+//						displayTempPerClassWager = String.valueOf(tempPerClassWager);
+//
+//						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
+//						DisplayCurrentWager.setText(displayTempPerClassWager);
+//						// changes the original Per Class Wager value to the updated incremented value
+//
+//
+//					}
+//
+//					// temp solution don't remember if needed
+//
+//				});
+//
+//				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
+//				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//
+//						Toast.makeText(getActivity(), "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
+//						dialog.dismiss();
+//
+//					}
+//				});
+//
+//				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
+//				dialogDeleteButton.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						Toast.makeText(getActivity(), "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
+//						dialog.dismiss();
+//
+//					}
+//				});
+//
+//				dialog.show();       
+//			}
+//		});
 
 		Button addNewWagerButton;
 		addNewWagerButton = (Button)rootView.findViewById(R.id.addWagerButton);
