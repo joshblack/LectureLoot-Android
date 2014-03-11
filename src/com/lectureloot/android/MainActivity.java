@@ -24,6 +24,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private static final String TAG = "Main";
 	private ViewPager mViewPager;
 	private TabsPagerAdapter mAdapter;
+	private User mCurrentUser;
 	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};	
 
 	@Override
@@ -33,6 +34,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
+		mViewPager.setOffscreenPageLimit(3);
 		final ActionBar actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -66,6 +68,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		//set the middle tab to be the default
 		mViewPager.setCurrentItem(1, false);
+		
+		//create the User, for now it'll just be static
+		mCurrentUser = mCurrentUser.getInstance("Sydney");
 	}
 
 	@Override
@@ -123,6 +128,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
 
-
+	
 
 }
