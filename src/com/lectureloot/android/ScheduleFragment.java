@@ -414,4 +414,10 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 
 		return meetings;
 	}
+
+	@Override
+	public void onHttpGetWagersReady(String output) {
+		// TODO Auto-generated method stub
+		
+	}
 }

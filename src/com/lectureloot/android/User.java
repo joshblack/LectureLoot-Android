@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -146,26 +147,24 @@ public class User {
 			}
 			this.mWagers = wagers;
 			
+			doLogin();
+			
 			in.close();
 			fis.close();
 			
 		//If the file doesn't exist, get data from server then make it
 		} catch (FileNotFoundException e){
 			login();	//login to server (generate auth token)
-			//grab data from server I HAVE NO IDEA HOW TO DO THIS
-			//block until done		WRITE THIS TOO (not as hard)
-			writeToFile();
+			loadUserData();	//(probably in seperate thread)
 		} catch (NumberFormatException e) {
 			//Add soemthing for this if I feel like it
-			e.printStackTrace();
 		} catch (IOException e) {
 			//Add soemthing for this if I feel like it
-			e.printStackTrace();
 		}
 	}
 
-	public boolean writeToFile(){
-		//try to open file. If it exists, load the data
+	public synchronized boolean writeToFile(){
+		/* method will write the user class to the file, only one write allowed at a time */
 		try{
 			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", 0);	
 			
@@ -216,8 +215,8 @@ public class User {
 		return true;
 	}
 	
-	public boolean login(String Name, String password){
-		/*automaticly log the user in and generate authToken*/
+	public boolean doLogin(){
+		/*automaticly log the user in and generate authToken (will block)*/
 		
 		//TODO: display some sort of 'logging in' popup here (currently just blocking)
 		
@@ -253,7 +252,12 @@ public class User {
 		
 		//TODO: Throw to UI element to get Username/Password
 		
-		return login("username", "password");	//call login method
+		return doLogin();	//call login method
+	}
+	
+	public void loadUserData(){
+				
+		writeToFile();
 	}
 	
 	public void checkIn(){
@@ -340,26 +344,57 @@ public class User {
 
 }
 
-//class for synchronous locking (basically semaphores)
-class UserLock{
-	private boolean locked;
-	
-	UserLock(){
-		locked = false;
+class UserListner implements HttpGetFinishedListener{
+	User user;
+	ArrayList<Course> courses;
+	ArrayList<Meeting> meetings;
+	UserListner(){
+		user = User.getInstance();
+		courses = new ArrayList<Course>();
+		meetings = new ArrayList<Meeting>();
 	}
 	
-	//lock the object and wait (block) until unlocked
-	protected void lock(){
-		locked = true;
-		while(locked) {
-	        try {
-	            wait();
-	        } catch (InterruptedException e) {}
-	    }
+	public void onHttpGetCoursesReady(String output) {
+		ArrayList<Course> courses = new ArrayList<Course>();
+		try {
+			//parse the JSON;
+		} catch (JSONException e) {
+			//Toast
+		}
+		
+		user.setCourses(courses);
 	}
-	
-	protected void unlock(){
-		locked = false;
-		notify();
+
+	public void onHttpGetMeetingsReady(String output) {
 	}
+
+	public void onHttpGetWagersReady(String output) {
+		try {
+			JSONTokener tokener = new JSONTokener(output);
+			JSONArray array = null;
+			array = (JSONArray) tokener.nextValue();
+			JSONObject jsonCourse;
+			Course course;
+			for(int i = 0; i < array.length(); i++) {
+				jsonCourse = array.getJSONObject(i);
+				
+				course = new Course(	
+				(Integer)jsonCourse.get("id"),
+				((String)jsonCourse.getString("deptCode") + (String)jsonCourse.getString("courseNumber")),
+				(String)jsonCourse.getString("courseTitle"),
+				(String)jsonCourse.getString("sectionNumber"),
+				(String)jsonCourse.getString("credits"),
+				(String)jsonCourse.getString("instructor")
+				);
+				
+				//grab meetings (Holy Lots of URL calls)
+				
+				courses.add(course);
+			}
+		} catch (Exception e) {
+			//Toast
+		}
+		user.setCourses(courses);
+		user.setMeetings(meetings);
+	}	
 }

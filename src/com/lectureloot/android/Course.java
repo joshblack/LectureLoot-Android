@@ -72,7 +72,17 @@ public class Course {
 		//		this.room3 = room3;
 	}
 
-
+	/* constructor for current course setpu */
+	public Course(int courseID, String courseCode, String courseTitle, String sectionNumber, String credits,
+			String instructor) {
+		this.courseId = courseID;
+		this.courseCode = courseCode;
+		this.courseTitle = courseTitle;
+		this.sectionNumber = sectionNumber;
+		this.credits = credits;
+		this.instructor = instructor;
+	}
+	
 	public int getCourseId() {
 		return courseId;
 	}
