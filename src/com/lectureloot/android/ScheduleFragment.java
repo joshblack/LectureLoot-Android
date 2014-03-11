@@ -201,7 +201,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			System.out.println("Exception: " + e.getMessage());
 		}
 	}
-
+	
 	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetings) {
 		ArrayList<Meeting> groupedMeetingsDays = new ArrayList<Meeting>();
 

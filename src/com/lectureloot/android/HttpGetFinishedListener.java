@@ -5,5 +5,4 @@ public interface HttpGetFinishedListener {
 	public void onHttpGetCoursesReady(String output);
 
 	public void onHttpGetMeetingsReady(String output);
-
 }

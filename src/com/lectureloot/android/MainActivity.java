@@ -25,13 +25,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ViewPager mViewPager;
 	private TabsPagerAdapter mAdapter;
 	private User mCurrentUser;
-	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};	
+	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
+	public static Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		mContext = this;	//get application context
+		
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
 		mViewPager.setOffscreenPageLimit(3);
@@ -70,7 +72,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mViewPager.setCurrentItem(1, false);
 		
 		//create the User, for now it'll just be static
-		mCurrentUser = mCurrentUser.getInstance("Sydney");
+		mCurrentUser = mCurrentUser.getInstance();
 	}
 
 	@Override
@@ -128,6 +130,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
 
-	
+	protected void onStop(){
+		//write data on app close
+		if(mCurrentUser != null)
+			mCurrentUser.writeToFile();
+	}
 
 }
