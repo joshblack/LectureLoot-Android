@@ -63,7 +63,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 
 		//		prepareListData();
 		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses";
-		String authToken = "unxWwUVNngaIc114DAW0thZAWJPmrDOhiiISHBwK";
+		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
 		HttpGetCourses getter = new HttpGetCourses(authToken);
 		getter.setHttpGetFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
