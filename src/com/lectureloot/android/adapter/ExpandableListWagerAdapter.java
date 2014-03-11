@@ -91,8 +91,9 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 
-		String wagerSessionCodeText = (String) getGroup(groupPosition);
-
+		int wagerSessionCodeText = (int)((Wager)getChild(groupPosition, 0)).getWagerSessionCode();
+		String wagerSessionCodeString = String.valueOf(wagerSessionCodeText);
+		
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -102,8 +103,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		TextView wagerSessionCode = (TextView) convertView.findViewById(R.id.wagerSessionCode);
 
 		wagerSessionCode.setTypeface(null, Typeface.BOLD);
-		wagerSessionCode.setText(wagerSessionCodeText);
-
+		wagerSessionCode.setText(wagerSessionCodeString);
+			
 		return convertView;
 	}
 

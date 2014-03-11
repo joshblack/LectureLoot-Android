@@ -64,7 +64,7 @@ public class WagerFragment extends Fragment {
 		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
 
 		// setting list adapter
-		//wagerExpListView.setAdapter(wagerListAdapter);
+		wagerExpListView.setAdapter(wagerListAdapter);
 
 
 		Button editWagerButton;
@@ -362,10 +362,12 @@ public class WagerFragment extends Fragment {
 		List<Wager> Session1List = new ArrayList<Wager>();
 		Session1List.add(Session1);
 
-		Wager newWager = new Wager();
-		newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
-		List<Wager> newWagerList = new ArrayList<Wager>();
-		newWagerList.add(newWager);
+		
+		// no longer need newWager
+		//Wager newWager = new Wager();
+		//newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
+		//List<Wager> newWagerList = new ArrayList<Wager>();
+		//newWagerList.add(newWager);
 
 		// Adding child data 
 		wagerListDataHeader.add(Session1.getWagerSessionCodeString());
