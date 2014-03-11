@@ -64,7 +64,7 @@ public class WagerFragment extends Fragment {
 		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
 
 		// setting list adapter
-		wagerExpListView.setAdapter(wagerListAdapter);
+		//wagerExpListView.setAdapter(wagerListAdapter);
 
 
 		Button editWagerButton;
