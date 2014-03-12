@@ -63,7 +63,8 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 
 		//		prepareListData();
 		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses";
-		HttpGetCourses getter = new HttpGetCourses();
+		String authToken = "unxWwUVNngaIc114DAW0thZAWJPmrDOhiiISHBwK";
+		HttpGetCourses getter = new HttpGetCourses(authToken);
 		getter.setHttpGetFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
 
@@ -154,7 +155,8 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		}
 
 		for (String courseId : listDataHeader) {
-			HttpGetMeetings meetingsGetter = new HttpGetMeetings();
+			String authToken = "unxWwUVNngaIc114DAW0thZAWJPmrDOhiiISHBwK";
+			HttpGetMeetings meetingsGetter = new HttpGetMeetings(authToken);
 			String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
 			System.out.println(meetingsUrl);
 			meetingsGetter.setHttpGetFinishedListener(this);
