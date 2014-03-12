@@ -33,7 +33,7 @@ import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetings;
 
 
-public class ScheduleFragment extends Fragment implements HttpGetFinishedListener{
+public class ScheduleFragment extends Fragment implements HttpGetCoursesFinishedListener, HttpGetMeetingsFinishedListener{
 
 	private ExpandableListCourseAdapter listAdapter;
 	private ExpandableListView expListView;
@@ -65,7 +65,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses";
 		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
 		HttpGetCourses getter = new HttpGetCourses(authToken);
-		getter.setHttpGetFinishedListener(this);
+		getter.setHttpGetCoursesFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
 
 
@@ -159,7 +159,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 			HttpGetMeetings meetingsGetter = new HttpGetMeetings(authToken);
 			String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
 			System.out.println(meetingsUrl);
-			meetingsGetter.setHttpGetFinishedListener(this);
+			meetingsGetter.setHttpGetMeetingsFinishedListener(this);
 			meetingsGetter.execute(new String[] {meetingsUrl});
 		}
 

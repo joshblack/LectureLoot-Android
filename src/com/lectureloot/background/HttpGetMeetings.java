@@ -11,7 +11,7 @@ public class HttpGetMeetings extends HttpGet {
 		String testString = "[ { \"id\": 1,\"course_id\":\"1\",\"buildingCode\":\"LIT\",\"roomNumber\":\"109\",\"meetingDay\":\"f\",\"period\":\"6\"} ,  "; 
 		testString += "{ \"id\": 1,\"course_id\":\"1\",\"buildingCode\":\"LIT\",\"roomNumber\":\"109\",\"meetingDay\":\"m\",\"period\":\"6\"} ]";
 		
-		listener.onHttpGetMeetingsReady(output);
+		meetingsListener.onHttpGetMeetingsReady(output);
 
 	}
 

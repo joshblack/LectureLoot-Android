@@ -1,7 +1,11 @@
 package com.lectureloot.background;
 
 import android.os.AsyncTask;
-import com.lectureloot.android.HttpGetFinishedListener;
+import com.lectureloot.android.HttpGetCoursesFinishedListener;
+import com.lectureloot.android.HttpGetMeetingsFinishedListener;
+import com.lectureloot.android.HttpGetSessionsFinishedListener;
+import com.lectureloot.android.HttpGetWagersFinishedListener;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,15 +16,30 @@ import java.net.URLConnection;
 
 public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
-	protected HttpGetFinishedListener listener;
+	protected HttpGetCoursesFinishedListener courseListener;
+	protected HttpGetMeetingsFinishedListener meetingsListener;
+	protected HttpGetSessionsFinishedListener sessionsListener;
+	protected HttpGetWagersFinishedListener wagersListener;
 	protected String authorizationToken;
 	
 	public HttpGet(String authToken) {
 		this.authorizationToken = authToken;
 	}
 
-	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
-		this.listener = listener;
+	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
+		this.courseListener = listener;
+	}
+	
+	public void setHttpGetMeetingsFinishedListener(HttpGetMeetingsFinishedListener listener) {
+		this.meetingsListener = listener;
+	}
+	
+	public void setHttpGetSessionsFinishedListener(HttpGetSessionsFinishedListener listener) {
+		this.sessionsListener = listener;
+	}
+	
+	public void setHttpGetWagersFinishedListener(HttpGetWagersFinishedListener listener) {
+		this.wagersListener = listener;
 	}
 
 	@Override

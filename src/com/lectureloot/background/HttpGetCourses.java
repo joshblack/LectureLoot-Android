@@ -8,7 +8,7 @@ public class HttpGetCourses extends HttpGet {
 	}
 	@Override
 	public void returnResponse(String output) {
-		listener.onHttpGetCoursesReady(output);
+		courseListener.onHttpGetCoursesReady(output);
 
 		
 	}
