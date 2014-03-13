@@ -77,13 +77,10 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		LostWager.setText("  " + LostWagerText);
 		
 		
-		wagerPerMeeting.setTypeface(null, Typeface.BOLD);
+
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
-		totalMeetings.setTypeface(null,Typeface.BOLD);
 		totalMeetings.setTextColor(Color.parseColor("#FFFFFF"));
-		totalWager.setTypeface(null, Typeface.BOLD);
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
-		LostWager.setTypeface(null, Typeface.BOLD);
 		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
 		
 		
