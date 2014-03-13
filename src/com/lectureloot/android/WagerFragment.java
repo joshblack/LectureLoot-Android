@@ -170,33 +170,33 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 	}
 
 
-	private void prepareWagerListData() {
-		wagerListDataHeader = new ArrayList<String>();
-		wagerListDataChild = new HashMap<String, List<Wager>>();
-
-		Wager Session1 = new Wager();
-		Session1.setWagerSessionCode(1);
-		Session1.setWagerPerMeeting(5);
-		Session1.setTotalMeetings(10);
-		Session1.setTotalWager(50);
-		Session1.setCurrentWagerLost(11);
-
-		List<Wager> Session1List = new ArrayList<Wager>();
-		Session1List.add(Session1);
-
-		
-		// no longer need newWager
-		//Wager newWager = new Wager();
-		//newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
-		//List<Wager> newWagerList = new ArrayList<Wager>();
-		//newWagerList.add(newWager);
-
-		// Adding child data 
-		wagerListDataHeader.add(Session1.getWagerSessionCodeString());
-
-		wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
-
-	}
+//	private void prepareWagerListData() {
+//		wagerListDataHeader = new ArrayList<String>();
+//		wagerListDataChild = new HashMap<String, List<Wager>>();
+//
+//		Wager Session1 = new Wager();
+//		Session1.setWagerSessionCode(1);
+//		Session1.setWagerPerMeeting(5);
+//		Session1.setTotalMeetings(10);
+//		Session1.setTotalWager(50);
+//		Session1.setCurrentWagerLost(11);
+//
+//		List<Wager> Session1List = new ArrayList<Wager>();
+//		Session1List.add(Session1);
+//
+//		
+//		// no longer need newWager
+//		//Wager newWager = new Wager();
+//		//newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
+//		//List<Wager> newWagerList = new ArrayList<Wager>();
+//		//newWagerList.add(newWager);
+//
+//		// Adding child data 
+//		wagerListDataHeader.add(Session1.getWagerSessionCodeString());
+//
+//		wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
+//
+//	}
 
 
 	@Override

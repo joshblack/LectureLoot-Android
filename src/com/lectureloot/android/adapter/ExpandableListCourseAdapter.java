@@ -4,8 +4,12 @@ package com.lectureloot.android.adapter;
  * @author Austin Bruch, Justin Rafanan
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONTokener;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -23,6 +27,9 @@ import android.widget.Toast;
 
 import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
+import com.lectureloot.background.HttpDeleteCourses;
+import com.lectureloot.background.HttpGetCourses;
+import com.lectureloot.background.HttpGetMeetings;
 
 public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
@@ -50,6 +57,9 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+
+		final int courseId = ((Course)getChild(groupPosition,childPosition)).getCourseId();
+
 
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -179,8 +189,16 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 					@Override
 					public void onClick(View v) {
+
+						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses/"+courseId;
+						String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+						HttpDeleteCourses getter = new HttpDeleteCourses(authToken);
+						//	getter.setHttpDeleteCoursesFinishedListener(this);
+						getter.execute(new String[] {coursesUrl});
+
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
 						//						mNeedsToCheckIn.setVisibility(View.GONE);
+
 						dialog.dismiss();
 
 					}
@@ -273,5 +291,6 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+
 
 }
