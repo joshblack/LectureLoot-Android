@@ -36,8 +36,6 @@
             android:id="@+id/totalMeetingsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:text="Total Meetings in Session:"
             android:textColor="#FFFFFF"
             android:textSize="17sp" />
@@ -54,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="5dp" > 
+		> 
 
         <TextView
             android:id="@+id/totalWagerText"
@@ -72,6 +70,35 @@
             android:text="Total Wager" />
     </LinearLayout>
 
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp" 
+        >
+        
+        <TextView 
+            android:id="@+id/WagerLostText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wagers Lost:"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"  
+            />
+        
+        <TextView 
+            android:id="@+id/WagerLost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity = "center"
+            android:text="Wagers Lost"
+            />
+        
+        
+    </LinearLayout>
+    
+    
+    
     <Button
         android:id="@+id/editWagerButton"
         android:layout_width="match_parent"
@@ -79,4 +106,5 @@
         android:text="Edit Wager"
         android:textColor="#FFFFFF" />
 
+    
 </LinearLayout>

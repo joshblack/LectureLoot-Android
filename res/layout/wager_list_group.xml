@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Session Number:"
-        android:textColor="#f9f93d"
+        android:textColor="#FFFFFF"
         android:textSize="17sp" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="courseCode"
-        android:textColor="#f9f93d"
+        android:textColor="#FFFFFF"
         android:textSize="17sp" />
 
 </LinearLayout>

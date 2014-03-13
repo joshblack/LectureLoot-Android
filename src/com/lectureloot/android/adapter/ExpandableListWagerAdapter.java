@@ -62,23 +62,30 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		TextView wagerPerMeeting = (TextView) convertView.findViewById(R.id.wagerPerMeeting);
 		TextView totalMeetings = (TextView) convertView.findViewById(R.id.totalMeetings);
 		TextView totalWager = (TextView) convertView.findViewById(R.id.totalWager);
-
+		TextView LostWager = (TextView) convertView.findViewById(R.id.WagerLost);
+		
 		//final String wagerSessionCodeText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode());
 		final String wagerPerMeetingText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerPerMeeting());
 		final String totalMeetingsText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalMeetings());
 		final String totalWagerText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalWager());
-
+		final String LostWagerText = String.valueOf(((Wager)getChild(groupPosition, childPosition)).getCurrentWagerLost());
+		
 		//wagerSessionCode.setText("  " + wagerSessionCodeText); // wagerSessionCode --- wagerSessionCodeText
 		wagerPerMeeting.setText("  " + wagerPerMeetingText);
 		totalMeetings.setText("  " + totalMeetingsText);
 		totalWager.setText("  " + totalWagerText);
-
+		LostWager.setText("  " + LostWagerText);
+		
+		
 		wagerPerMeeting.setTypeface(null, Typeface.BOLD);
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
 		totalMeetings.setTypeface(null,Typeface.BOLD);
 		totalMeetings.setTextColor(Color.parseColor("#FFFFFF"));
 		totalWager.setTypeface(null, Typeface.BOLD);
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
+		LostWager.setTypeface(null, Typeface.BOLD);
+		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
+		
 		
 //		Button dropCourseButton;
 //		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
