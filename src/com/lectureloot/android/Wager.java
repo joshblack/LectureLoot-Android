@@ -4,6 +4,7 @@ package com.lectureloot.android;
 
 public class Wager {
 
+	private int wagerId;
 	private int wagerSessionCode;
 	private int wagerPerMeeting;
 	private int totalMeetings;
@@ -15,8 +16,9 @@ public class Wager {
 		
 	}
 	
-	public Wager(int wagerSessionCode, int wagerPerMeeting, int totalMeetings, int totalWager, int currentWagerLost) {
+	public Wager(int wagerId, int wagerSessionCode, int wagerPerMeeting, int totalMeetings, int totalWager, int currentWagerLost) {
 		
+		this.wagerId = wagerId;
 		this.wagerSessionCode = wagerSessionCode;
 		this.wagerPerMeeting = wagerPerMeeting;
 		this.totalMeetings = totalMeetings;
@@ -67,6 +69,14 @@ public class Wager {
 
 	public void setTotalWager(int totalWager) {
 		this.totalWager = totalWager;
+	}
+
+	public int getWagerId() {
+		return wagerId;
+	}
+
+	public void setWagerId(int wagerId) {
+		this.wagerId = wagerId;
 	}	
 	
 }

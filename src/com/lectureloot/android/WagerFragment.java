@@ -29,9 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
+import com.lectureloot.background.HttpGetCourses;
 //import com.lectureloot.background.HttpGetWagers;
 //import com.lectureloot.background.HttpGetSession;
+import com.lectureloot.background.HttpGetMeetings;
+import com.lectureloot.background.HttpGetSessions;
+import com.lectureloot.background.HttpGetWagers;
 
 
 public class WagerFragment extends Fragment implements HttpGetWagersFinishedListener, HttpGetSessionsFinishedListener{
@@ -60,12 +65,18 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 
 		//        // get the listview
 		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
-		prepareWagerListData();
-		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
+		//prepareWagerListData();
+		//wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
 
 		// setting list adapter
-		wagerExpListView.setAdapter(wagerListAdapter);
+		//wagerExpListView.setAdapter(wagerListAdapter);
 
+		
+		String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers";
+		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+		HttpGetWagers wagersGetter = new HttpGetWagers(authToken);
+		wagersGetter.setHttpGetWagersFinishedListener(this);
+		wagersGetter.execute(new String[] {wagersUrl});
 
 
 
@@ -158,115 +169,6 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 		return rootView;
 	}
 
-	/*	public void onHttpGetWagerReady(String output) {
-		System.out.println("onHttpGetCoursesReady enter");
-
-		wagerListDataHeader = new ArrayList<String>();
-		wagerListDataChild = new HashMap<String, List<Wager>>();
-
-		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
-		System.out.println("onHttpGetCoursesReady 1");
-
-		try {
-			array = (JSONArray) tokener.nextValue();
-			//			System.out.println(array.toString());
-			System.out.println("onHttpGetCoursesReady 2");
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		System.out.println("onHttpGetCoursesReady 3");
-
-		ArrayList<Wager> Wagers = jsonArrayToWagers(array);
-		System.out.println("onHttpGetCoursesReady 4");
-
-		List<Wager> oneWagerList = null;
-		for (Wager Wager : Wagers) {
-			wagerListDataHeader.add(Integer.toString(Wager.getWagerSessionCode()));
-			oneWagerList = new ArrayList<Wager>();
-			oneWagerList.add(Wager);
-			wagerListDataChild.put(Integer.toString(Wager.getWagerSessionCode()),oneWagerList);
-
-
-			//			System.out.println("onHttpGetCoursesReady 5");
-			//			System.out.println("course:" + course.toString());
-
-		}
-
-		for (String wagerCode : wagerListDataHeader) {
-			HttpGetSession SessionsGetter = new HttpGetSession();
-			String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers/" + wagerCode + "/session_id";
-			System.out.println(meetingsUrl);
-			SessionsGetter.setHttpGetFinishedListener(this);
-			SessionsGetter.execute(new String[] {meetingsUrl});
-		}
-
-		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
-		// setting list adapter
-		wagerExpListView.setAdapter((ListAdapter) wagerListAdapter);
-		System.out.println("onHttpGetCoursesReady exit");
-	}
-
-	 */
-
-	/*	public void onHttpGetSessionsReady(String output) {
-		System.out.println("onHttpGetMeetingsReady enter");
-
-		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
-		System.out.println("onHttpGetMeetingsReady 1");
-		Sessions sessions = null;
-		List<Sessions> oneSessionList = null;
-		try {
-			array = (JSONArray) tokener.nextValue();
-			System.out.println("array printstring" + array.toString());
-			System.out.println("onHttpGetMeetingsReady 2");
-
-			System.out.println("onHttpGetMeetingsReady 3");
-
-			ArrayList<Sessions> wagerSessions = jsonArrayToSessions(array);
-			System.out.println("onHttpGetMeetingsReady 4");
-			sessions = wagerListDataChild.get(Integer.toString(Sessions.get(0).getSessionId())).get(0);
-			sessions.setSession(wagerSessions);
-
-			oneSessionList = new ArrayList<Sessions>();
-			oneSessionList.add(sessions);
-			wagerListDataChild.remove(sessions.getSessionId());
-			wagerListDataChild.put(Integer.toString(sessions.getSessionId()),oneSessionList);
-
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-	}
-	 */	
-
-	//TODO figure out how meetings are stored, maybe have to create meeting model
-
-	//	private Wager jsonObjectToWager(JSONObject jsonWager/*,JSONArray jsonMeetings*/) {
-	/*
-		Wager wager = new Wager();
-		try{
-			wager.setWagerSessionCode((Integer)jsonWager.get("id"));
-
-//			String user_id = (String)jsonWager.getString("user_id");
-//			int SessionCode = (int)jsonWager.getInt("session_id");
-			int wagerUnitValue = (int)jsonWager.getInt("wagerUnitValue");
-			int wagerTotalValue = (int)jsonWager.getInt("wagerTotalValue");
-			int totalMeetings = wagerTotalValue/wagerUnitValue;
-
-
-//			String courseCode = deptCode + courseNumber;
-			wager.setWagerPerMeeting(wagerUnitValue);
-			wager.setTotalWager(wagerTotalValue);
-			wager.setTotalMeetings(totalMeetings);
-
-		} catch (Exception e){
-
-		}
-		return wager;
-	}
-	 */
 
 	private void prepareWagerListData() {
 		wagerListDataHeader = new ArrayList<String>();
@@ -295,7 +197,66 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 		wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
 
 	}
-	/*    
+
+
+	@Override
+	public void onHttpGetSessionsReady(String output) {
+
+	}
+
+	@Override
+	public void onHttpGetWagersReady(String output) {
+		System.out.println("onHttpGetWagersReady enter");
+
+		wagerListDataHeader = new ArrayList<String>();
+		wagerListDataChild = new HashMap<String, List<Wager>>();
+
+		JSONTokener tokener = new JSONTokener(output);
+		JSONArray array = null;
+		System.out.println("onHttpGetWagersReady 1");
+
+		try {
+			array = (JSONArray) tokener.nextValue();
+			//			System.out.println(array.toString());
+			System.out.println("onHttpGetWagersReady 2");
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("onHttpGetWagersReady 3");
+
+		ArrayList<Wager> wagers = jsonArrayToWagers(array);
+
+		System.out.println("onHttpGetWagersReady 4");
+
+		List<Wager> oneWagerList = null;
+		for (Wager wager : wagers) {
+			wagerListDataHeader.add(Integer.toString(wager.getWagerId()));
+			oneWagerList = new ArrayList<Wager>();
+			oneWagerList.add(wager);
+			wagerListDataChild.put(Integer.toString(wager.getWagerId()),oneWagerList);
+
+
+			System.out.println("onHttpGetWagersReady 5");
+			System.out.println("wager:" + wager.toString());
+
+		}
+
+//		for (String wagerId : wagerListDataHeader) {
+//			String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+//			HttpGetSessions sessionsGetter = new HttpGetSessions(authToken);
+//			String SessionsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
+//			System.out.println(meetingsUrl);
+//			meetingsGetter.setHttpGetMeetingsFinishedListener(this);
+//			meetingsGetter.execute(new String[] {meetingsUrl});
+//		}
+
+		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
+		// setting list adapter
+		wagerExpListView.setAdapter(wagerListAdapter);
+		System.out.println("onHttpGetWagersReady exit");
+	}
+	
 	private ArrayList<Wager> jsonArrayToWagers(JSONArray jsonWagers) {
 		ArrayList<Wager>  wagers = new ArrayList<Wager>();
 
@@ -313,48 +274,22 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 
 		return wagers;
 	}
-	 */
-	/*
-	private Sessions jsonObjectToSession(JSONObject jsonSession) {
+	
+	private Wager jsonObjectToWager(JSONObject jsonWager) {
 
-		Sessions session = new Sessions();
+		Wager wager = new Wager();
 		try{
-			session.setSessionId((Integer)jsonSession.get("id"));
-			session.setStartDate((Date)jsonSession.get("startDate"));
-			session.setEndDate((Date)jsonSession.get("endDate"));
+			wager.setWagerId((Integer)jsonWager.get("id"));
+			wager.setWagerSessionCode((Integer)jsonWager.get("session_id"));
+			wager.setWagerPerMeeting((Integer)jsonWager.get("wagerUnitValue"));
+			wager.setTotalWager((Integer)jsonWager.get("wagerTotalValue"));
+			wager.setCurrentWagerLost((Integer)jsonWager.get("pointsLost"));
+
 
 		} catch (Exception e){
 
 		}
-		return session;
+		return wager;
 	}
-
-	private ArrayList<Sessions> jsonArrayToSessions(JSONArray jsonSessions) {
-		ArrayList<Sessions>  session= new ArrayList<Sessions>();
-
-		try {
-			JSONObject jsonWagerSession;
-			Sessions wagerSession;
-			for(int i = 0; i < jsonSessions.length(); i++) {
-				jsonWagerSession = jsonSessions.getJSONObject(i);
-				wagerSession = jsonObjectToSession(jsonWagerSession);
-				session.add(wagerSession);
-			}
-		} catch (Exception e) {
-
-		}
-
-		return session;
-	}
-	 */
-
-	@Override
-	public void onHttpGetSessionsReady(String output) {
-
-	}
-
-	@Override
-	public void onHttpGetWagersReady(String output) {
-
-	}
+	
 }
