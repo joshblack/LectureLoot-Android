@@ -4,10 +4,8 @@ import android.os.AsyncTask;
 import android.view.View.OnClickListener;
 
 import com.lectureloot.android.HttpDeleteCoursesFinishedListener;
-import com.lectureloot.android.HttpGetCoursesFinishedListener;
-import com.lectureloot.android.HttpGetMeetingsFinishedListener;
-import com.lectureloot.android.HttpGetSessionsFinishedListener;
-import com.lectureloot.android.HttpGetWagersFinishedListener;
+import com.lectureloot.android.HttpDeleteWagersFinishedListener;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +18,7 @@ import java.net.URLConnection;
 public abstract class HttpDelete extends AsyncTask<String, Void, String> {
 
 	protected HttpDeleteCoursesFinishedListener courseListener;
-//	protected HttpDeleteWagersFinishedListener wagersListener;
+	protected HttpDeleteWagersFinishedListener wagerListener;
 	protected String authorizationToken;
 	
 	public HttpDelete(String authToken) {
@@ -31,9 +29,9 @@ public abstract class HttpDelete extends AsyncTask<String, Void, String> {
 		this.courseListener = (HttpDeleteCoursesFinishedListener) onClickListener;
 	}
 	
-//	public void setHttpDeleteWagersFinishedListener(HttpDeleteWagersFinishedListener listener) {
-//		this.wagersListener = listener;
-//	}
+	public void setHttpDeleteWagersFinishedListener(HttpDeleteWagersFinishedListener listener) {
+		this.wagerListener = listener;
+	}
 
 	@Override
 	protected String doInBackground(String... urls) {

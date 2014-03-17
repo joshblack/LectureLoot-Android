@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 
+import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
 import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
 import com.lectureloot.android.Wager;
+import com.lectureloot.background.HttpDeleteCourses;
+import com.lectureloot.background.HttpDeleteWagers;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -51,7 +54,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
-
+		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();
+		
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,53 +80,11 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		totalWager.setText("  " + totalWagerText);
 		LostWager.setText("  " + LostWagerText);
 		
-		
-
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
 		totalMeetings.setTextColor(Color.parseColor("#FFFFFF"));
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
 		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
 		
-		
-//		Button dropCourseButton;
-//		dropCourseButton = (Button)convertView.findViewById(R.id.dropButton);
-//		dropCourseButton.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				System.out.println("Drop Course Button Clicked");
-//
-//				final Dialog dialog = new Dialog(_context);
-//				dialog.setContentView(R.layout.dialog_drop_course);
-//				dialog.setTitle("Drop Course?");
-//
-//				Button confirmButton = (Button) dialog.findViewById(R.id.dialogDropConfirmButton);
-//				confirmButton.setOnClickListener(new View.OnClickListener() {
-//
-//					@Override
-//					public void onClick(View v) {
-//						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
-//						//						mNeedsToCheckIn.setVisibility(View.GONE);
-//						dialog.dismiss();
-//
-//					}
-//				});
-//
-//				Button denyButton = (Button) dialog.findViewById(R.id.dialogDropDenyButton);
-//				denyButton.setOnClickListener(new View.OnClickListener() {
-//
-//					@Override
-//					public void onClick(View v) {
-//						Toast.makeText(_context, "Course Not Dropped", Toast.LENGTH_LONG).show();
-//						dialog.dismiss();
-//
-//					}
-//				});
-//
-//				dialog.show();
-//			}
-//		});
-//		
 		
 		Button editWagerButton;
 		editWagerButton = (Button)convertView.findViewById(R.id.editWagerButton);
@@ -191,8 +153,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 					@Override
 					public void onClick(View v) {
-
-						Toast.makeText(_context, "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
+						
+						Toast.makeText(_context, "Edits have been made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 
 					}
@@ -203,7 +165,14 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(_context, "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
+						
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers/" + wagerId;
+						String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
+						//	getter.setHttpDeleteCoursesFinishedListener(this);
+						getter.execute(new String[] {wagersUrl});
+						
+						Toast.makeText(_context, "Wager has been deleted", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 
 					}
