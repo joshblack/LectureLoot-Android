@@ -74,16 +74,6 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		// TODO: Test data used for stubs until we can get JSON data from lectureloot REST API
-		//		String testString = "[ { \"id\": 1, \"deptCode\": \"CEN\", \"courseNumber\": \"3031\", \"sectionNumber\":  \"11F8\", \"credits\": \"3\", \"instructor\": \"Bermudez, Manuel E\", \"courseTitle\":\"INTRO SOFTWARE ENGR\"} , "; 
-		//		testString += "{ \"id\": 2, \"deptCode\": \"CAP\", \"courseNumber\": \"4053\", \"sectionNumber\":  \"133E\", \"credits\": \"3\", \"instructor\": \"Anthony,Lisa, Dankel,Douglas D,II\", \"courseTitle\":\"AI FOR COMPUTER GAMES\" } ]";
-
-
-
-
-		System.out.println("response:" + output);
-		//			System.out.println("onPostExecute logger");
-		//			listener.onHttpGetCoursesReady(output);
 		returnResponse(output);
 	}
 

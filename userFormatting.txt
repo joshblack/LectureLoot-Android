@@ -1,5 +1,6 @@
 ---Formatting for the user.dat file---
-Name:<Display Name>
+First:<User's First Name>
+Last:<User's Last Name>
 Email:<email>
 Password:<password> (plaintext is insecure, but I'll add security later)
 Points:<Points>
@@ -12,6 +13,6 @@ Course:<CourseID>:<Code>:<Title>:<Section>:<Credits>:<Instructor>:<numMeettings>
 Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
 Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
 NumWagers:<numWagers> (2 or so)
-Wager:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
-Wager:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
+Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
+Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
 
