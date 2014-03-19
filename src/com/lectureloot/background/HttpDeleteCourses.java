@@ -1,7 +1,6 @@
 package com.lectureloot.background;
 
 public class HttpDeleteCourses extends HttpDelete {
-
 	
 	public HttpDeleteCourses(String authToken){
 		super(authToken);
@@ -9,8 +8,6 @@ public class HttpDeleteCourses extends HttpDelete {
 	@Override
 	public void returnResponse(String output) {
 		courseListener.onHttpDeleteCoursesReady(output);
-
-		
 	}
 
 }
