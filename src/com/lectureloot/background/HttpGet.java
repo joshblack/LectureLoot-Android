@@ -23,9 +23,12 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		this.listener = listener;
 	}
 
+	public void onPreExecute(){
+		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
+	}
+	
 	@Override
 	protected String doInBackground(String... urls) {
-		//	android.os.Debug.waitForDebugger();
 		String output = null;
 		for (String url : urls) {
 			output = getOutputFromUrl(url);

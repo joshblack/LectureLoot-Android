@@ -6,9 +6,10 @@ public class HttpGetMeetings extends HttpGet {
 		super(authToken);
 	}
 	
-	@Override
+	
 	public void returnResponse(String output) {		
 		listener.onHttpGetMeetingsReady(output);
+		listener.notifyThreadComplete();
 	}
 
 }

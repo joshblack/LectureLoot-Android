@@ -33,7 +33,7 @@ import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetings;
 
 
-public class ScheduleFragment extends Fragment implements HttpGetFinishedListener{
+public class ScheduleFragment extends Fragment{
 
 	private ExpandableListCourseAdapter listAdapter;
 	private ExpandableListView expListView;
@@ -62,12 +62,15 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		//AsyncTask testing
 
 		//		prepareListData();
+		
+		/*
+		-- Do this some other way - JOSH --
 		String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses";
 		String authToken = "unxWwUVNngaIc114DAW0thZAWJPmrDOhiiISHBwK";
 		HttpGetCourses getter = new HttpGetCourses(authToken);
 		getter.setHttpGetFinishedListener(this);
 		getter.execute(new String[] {coursesUrl});
-
+		 */
 
 
 		Button addNewCourseButton;
@@ -117,8 +120,7 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		return rootView;
 	}
 
-	@Override
-	public void onHttpGetCoursesReady(String output) {
+	/*public void onHttpGetCoursesReady(String output) {
 		System.out.println("onHttpGetCoursesReady enter");
 
 		listDataHeader = new ArrayList<String>();
@@ -167,41 +169,9 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
 		System.out.println("onHttpGetCoursesReady exit");
-	}
+	}*/
 
 
-	@Override
-	public void onHttpGetMeetingsReady(String output) {
-		System.out.println("onHttpGetMeetingsReady enter");
-
-		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
-		System.out.println("onHttpGetMeetingsReady 1");
-		Course course = null;
-		List<Course> oneCourseList = null;
-		try {
-			array = (JSONArray) tokener.nextValue();
-			System.out.println("array printstring" + array.toString());
-			System.out.println("onHttpGetMeetingsReady 2");
-
-			System.out.println("onHttpGetMeetingsReady 3");
-
-			ArrayList<Meeting> meetings = jsonArrayToMeetings(array);
-			meetings = groupMeetingsDays(meetings);
-			System.out.println("onHttpGetMeetingsReady 4");
-			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
-			course.setMeetings(meetings);
-
-			oneCourseList = new ArrayList<Course>();
-			oneCourseList.add(course);
-			listDataChild.remove(course.getCourseId());
-			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
-
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-	}
-	
 	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetings) {
 		ArrayList<Meeting> groupedMeetingsDays = new ArrayList<Meeting>();
 
@@ -413,11 +383,5 @@ public class ScheduleFragment extends Fragment implements HttpGetFinishedListene
 		}
 
 		return meetings;
-	}
-
-	@Override
-	public void onHttpGetWagersReady(String output) {
-		// TODO Auto-generated method stub
-		
 	}
 }

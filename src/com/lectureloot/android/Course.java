@@ -113,7 +113,7 @@ public class Course {
 
 	
 	public void loadMeetings(UserListner user){
-		/* method to load meetings from server (use internal threads/listner) */
+		/* method to load meetings from server for multiple courses (use internal threads/listner) */
 		CourseListner listner = new CourseListner(this, user);
 		
 		//load the courses from the server
@@ -122,7 +122,6 @@ public class Course {
 		meetingTask.setHttpGetFinishedListener(listner);
 		meetingTask.execute(new String[] {meetingUrl});
 	}
-
 }
 
 

@@ -9,7 +9,7 @@ import com.lectureloot.android.Course;
 import com.lectureloot.android.HttpGetFinishedListener;
 import com.lectureloot.android.Meeting;
 
-public class CourseListner implements HttpGetFinishedListener{
+public class CourseListner extends HttpGetFinishedListener{
 	Course course;
 	UserListner user;
 	ArrayList<Meeting> meetings;
@@ -20,10 +20,6 @@ public class CourseListner implements HttpGetFinishedListener{
 		this.meetings = new ArrayList<Meeting>(); 
 	}
 	
-	public void onHttpGetWagersReady(String output) {
-		//unused
-	}	
-
 	public void onHttpGetMeetingsReady(String output) {
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 		try {
@@ -52,8 +48,4 @@ public class CourseListner implements HttpGetFinishedListener{
 			//TOAST
 		}
 	}
-
-	public void onHttpGetCoursesReady(String output) {
-		//Unused
-	}	
 }

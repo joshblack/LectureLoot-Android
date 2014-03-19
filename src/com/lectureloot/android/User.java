@@ -20,10 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.lectureloot.background.HttpGet;
-import com.lectureloot.background.HttpGetCourses;
-import com.lectureloot.background.HttpGetWagers;
-import com.lectureloot.background.UserListner;
+import com.lectureloot.background.*;
 
 import android.text.format.Time;
 
@@ -41,6 +38,8 @@ public class User {
 	private ArrayList<Wager> mWagers;
 	private ArrayList<Course> mCourses;
 	private ArrayList<Meeting> mMeetings;
+	private ArrayList<Sessions> mSessions;
+	private ArrayList<Course> mCourseList;
 	
 	/* CONSTRUCTOR FOR USER */
 	private User(){
@@ -55,10 +54,12 @@ public class User {
 		mCourses = new ArrayList<Course>();
 		mMeetings = new ArrayList<Meeting>();
 		mWagers = new ArrayList<Wager>();
+		mSessions = new ArrayList<Sessions>();
+		mCourseList = new ArrayList<Course>();
 	}
 	
-	/* create new user and load data, or return existing user */
 	public static User getInstance(){
+	/* create new user and load data, or return existing user */	
 		if(mInstance == null){
             mInstance = new User();
             mInstance.load();
@@ -66,8 +67,7 @@ public class User {
         return mInstance;
 	}
 	
-	/* CONSTRUCTOR FOR User WITH SUPPLIED NAME */
-	
+	/* Old Constructers (Outdated - Don't use except for testing) */
 	private User(String name){
 		mFirstName = name;
 		mAuthToken = "";
@@ -86,8 +86,9 @@ public class User {
         return mInstance;
 	}
 	
-	/* load() will either get data from file, or from database if no file exists */
+	/* Methods By Josh */
 	public void load(){
+	/* load() will either get data from file, or from database if no file exists */
 		//try to load data from file
 		if(!loadFromFile()){
 			if(!login())	//try login to server (generate auth token)
@@ -257,7 +258,7 @@ public class User {
 			     JSONObject input = (JSONObject) tokener.nextValue();
 			     if(input.get("messgage").equals("Success, valid credentials")){
 			    	 mAuthToken = input.getString("token");	//logged in successfully
-			    	 mUserId = input.getString();
+			    	 mUserId = input.getString("user_id");
 			    	 return true;
 			     }
 			   } catch (JSONException e) {
@@ -290,9 +291,9 @@ public class User {
 				 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				 JSONTokener tokener = new JSONTokener(in.readLine());
 			     JSONObject input = (JSONObject) tokener.nextValue();
-			     if(input.get("messgage").equals(SOME-RESPONSE)){
+			     if(input.get("messgage").equals("Success, the user was registered")){
 			    	 mAuthToken = input.getString("token");	//registered successfully
-			    	 mUserId = input.getString();
+			    	 mUserId = input.getString("user_id");
 			    	 return true;
 			     }
 			   } catch (JSONException e) {
@@ -328,7 +329,8 @@ public class User {
 	}
 	
 	public void loadUserData(){
-		UserListner listner = new UserListner();  //setup the listner for the return
+	/* Method will load user data from the serer in seperate threads, but will block until done */
+		UserListner listner = new UserListner(this);  //setup the listner for the return
 		
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
@@ -341,46 +343,45 @@ public class User {
 		HttpGetWagers wagerTask = new HttpGetWagers(mAuthToken);
 		wagerTask.setHttpGetFinishedListener(listner);
 		wagerTask.execute(new String[] {wagerUrl});
-	}
-	
-	public void checkIn(){
-		//get the user's location with gps
-		//double check that with the location of the meeting
 		
-		//if it's close enough, check the user into the a meeting
-	}
-	
-	public Meeting getUpcomingMeeting(){
-		//go through the meetings arraylist and get the next meeting
+		//get the sessions frm the server
+		String sessionUrl = "http://lectureloot.eu1.frbit.net/api/v1/sessions";	//TODO: check this later
+		HttpGetSessions sessionTask = new HttpGetSessions(mAuthToken);
+		wagerTask.setHttpGetFinishedListener(listner);
+		wagerTask.execute(new String[] {wagerUrl});
+				
+		//get the full course list from the server (does not block) 
+		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
+		HttpGetCourses courseListTask = new HttpGetCourses(mAuthToken);
+		courseListTask.setHttpGetFinishedListener(listner);
+		courseListTask.execute(new String[] {courseUrl});
+				
 		
-		//based on the current time and checked in courses
-		return null;
+        //wait for threads to finish before continuing
+        listner.waitForThreads();
 	}
 	
-	public void addCourse(Course newCourse){
+	public void addCourseFromList(Course course){
+	/* method to resolve incomplete course from courseList and add to user (DOESN'T POST, DOESN'T BLOCK) */
+		UserListner listner = new UserListner(this);  //setup the listner for the return
 		
+		//load the courses from the server
+		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId();
+		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken);
+		courseTask.setHttpGetFinishedListener(listner);
+		courseTask.execute(new String[] {courseUrl});
 	}
-	
-	public void addMeeting(Meeting newMeeting){
-		
-	}
-	
-	public void addToPoints(int newPoints){
-		mPoints += newPoints;
-	}
-	
-	//TODO: Examine security/completness of Get/Set methods
 	
 	/* GETTERS */
 
-	public String getAuthToken(){
-		return mAuthToken;
+	public String getUserId(){
+		return mUserId;
 	}
 	
 	public String getName() {
 		return mFirstName + " " + mLastName;
 	}
-	
+
 	public String getFirstName() {
 		return mFirstName;
 	}
@@ -389,6 +390,14 @@ public class User {
 		return mLastName;
 	}
 
+	public String getEmail(){
+		return mEmail;
+	}
+	
+	public String getAuthToken(){
+		return mAuthToken;
+	}
+		
 	public int getPoints() {
 		return mPoints;
 	}
@@ -408,6 +417,14 @@ public class User {
 	public ArrayList<Meeting> getMeetings() {
 		return mMeetings;
 	}
+	
+	public ArrayList<Sessions> getSessions(){
+		return mSessions;
+	}
+	
+	public ArrayList<Course> getCourseList(){
+		return mCourseList;
+	}
 
 	/* SETTERS */
 
@@ -419,6 +436,14 @@ public class User {
 		mFirstName = name;
 	}
 
+	public void setEmail(String email){
+		mEmail = email;
+	}
+	
+	public void setPassword(String password){
+		mPassword = password;
+	}
+	
 	public void setPoints(int points) {
 		mPoints = points;
 	}
@@ -439,4 +464,11 @@ public class User {
 		mMeetings = meetings;
 	}
 
+	public void setSessions(ArrayList<Sessions> sessions) {
+		mSessions = sessions;
+	}
+	
+	public void setCourseList(ArrayList<Course> courseList) {
+		mCourseList = courseList;
+	}
 }
