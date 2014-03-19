@@ -30,6 +30,7 @@ import android.text.format.Time;
 @SuppressWarnings("unused")
 public class User {
 	private static User mInstance = null;
+	private String mUserId;
 	private String mFirstName;
 	private String mLastName;
 	private String mEmail;
@@ -45,6 +46,7 @@ public class User {
 	private User(){
 		mFirstName = "";
 		mLastName = "";
+		mUserId = "";
 		mEmail = "";
 		mAuthToken = "";
 		mPassword = "";
@@ -102,6 +104,7 @@ public class User {
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
 			//grab the top level data
+			this.mUserId = in.readLine().split(":")[1];
 			this.mFirstName = in.readLine().split(":")[1];
 			this.mLastName = in.readLine().split(":")[1];
 			this.mEmail = in.readLine().split(":")[1];
@@ -188,6 +191,7 @@ public class User {
 			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", 0);	
 			
 			//write user data
+			out.write(("ID:" + mUserId + "\n").getBytes());
 			out.write(("First:" + mFirstName + "\n").getBytes());
 			out.write(("Last:" + mLastName + "\n").getBytes());
 			out.write(("Email:" + mPassword + "\n").getBytes());
@@ -246,12 +250,14 @@ public class User {
 			String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword;
 			url = new URL("http://lectureloot.com/api/v1/users/login?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("GET");
 			   try {
 				 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				 JSONTokener tokener = new JSONTokener(in.readLine());
 			     JSONObject input = (JSONObject) tokener.nextValue();
 			     if(input.get("messgage").equals("Success, valid credentials")){
 			    	 mAuthToken = input.getString("token");	//logged in successfully
+			    	 mUserId = input.getString();
 			    	 return true;
 			     }
 			   } catch (JSONException e) {
@@ -279,12 +285,14 @@ public class User {
 			String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword + "&firstName=" + mFirstName + "&lastName=" + mLastName;
 			url = new URL("http://lectureloot.com/api/v1/users?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("POST");
 			   try {
 				 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				 JSONTokener tokener = new JSONTokener(in.readLine());
 			     JSONObject input = (JSONObject) tokener.nextValue();
-			     if(input.get("messgage").equals("Success, valid credentials")){
+			     if(input.get("messgage").equals(SOME-RESPONSE)){
 			    	 mAuthToken = input.getString("token");	//registered successfully
+			    	 mUserId = input.getString();
 			    	 return true;
 			     }
 			   } catch (JSONException e) {

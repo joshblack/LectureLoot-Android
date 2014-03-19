@@ -1,4 +1,5 @@
 ---Formatting for the user.dat file---
+ID:<user ID used for API calls>
 First:<User's First Name>
 Last:<User's Last Name>
 Email:<email>
