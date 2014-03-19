@@ -14,6 +14,13 @@ public class Sessions {
 		
 	}
 
+	public Sessions(int SessionId, Date startDate, Date endDate)
+	{
+		this.SessionId = SessionId;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+	
 	public int getSessionId() {
 		return SessionId;
 	}

@@ -199,9 +199,45 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 //	}
 
 
-	@Override
-	public void onHttpGetSessionsReady(String output) {
 
+	public void onHttpGetSessionsReady(String output) {
+//		
+//	
+//		System.out.println("onHttpGetSessionsReady enter");
+//
+//		wagerListDataHeader = new ArrayList<String>();
+//		wagerListDataChild = new HashMap<String, List<Wager>>();
+//
+//		JSONTokener tokener = new JSONTokener(output);
+//		JSONArray array = null;
+//		System.out.println("onHttpGetSessionsReady 1");
+//
+//		try {
+//			array = (JSONArray) tokener.nextValue();
+//			//			System.out.println(array.toString());
+//			System.out.println("onHttpGetSessionsReady 2");
+//
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		System.out.println("onHttpGetSessionsReady 3");
+//
+//		ArrayList<Sessions> sessions = jsonArrayToSessions(array);
+//
+//		System.out.println("onHttpGetWagersReady 4");
+//
+//		List<Sessions> oneSessionList = null;
+//		for (Sessions sesssion : sessions) {
+//			wagerListDataHeader.add(Integer.toString(session.getSessionId()));
+//			oneSessionList = new ArrayList<Sessions>();
+//			oneSessionList.add(session);
+//			wagerListDataChild.put(Integer.toString(session.getSessionId()),oneSessionList);
+//
+//
+//			System.out.println("onHttpGetWagersReady 5");
+//			System.out.println("session:" + session.toString());
+//
+//		}
 	}
 
 	@Override
@@ -292,4 +328,44 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 		return wager;
 	}
 	
+//	private ArrayList<Sessions> jsonArrayToSessions(JSONArray jsonSessions) {
+//		ArrayList<Sessions>  sessions = new ArrayList<Sessions>();
+//
+//		try {
+//			JSONObject jsonSession;
+//			Sessions session;
+//			for(int i = 0; i < jsonSessions.length(); i++) {
+//				jsonSessions = jsonSessions.getJSONObject(i);
+//				// here
+//				session = jsonObjectToSessions(jsonSession);
+//				sessions.add(session);
+//			}
+//		} catch (Exception e) {
+//
+//		}
+//
+//		return sessions;
+//	}
+//	
+//	private Sessions jsonObjectToSessions(JSONObject jsonSessions) {
+//
+//		Sessions session = new Sessions();
+//		try{
+//			session.setSessionId((Integer)jsonSessions.get("id"));
+//			session.setStartDate((Date)jsonSessions.get(""));
+//			session.setEndDate((Date)jsonSessions.get(""));
+//			
+//			//wager.setWagerId((Integer)jsonWager.get("id"));
+//			//wager.setWagerSessionCode((Integer)jsonWager.get("session_id"));
+//			//wager.setWagerPerMeeting((Integer)jsonWager.get("wagerUnitValue"));
+//			//wager.setTotalWager((Integer)jsonWager.get("wagerTotalValue"));
+//			//wager.setCurrentWagerLost((Integer)jsonWager.get("pointsLost"));
+//
+//
+//		} catch (Exception e){
+//
+//		}
+//		return session;
+//	}
+		
 }
