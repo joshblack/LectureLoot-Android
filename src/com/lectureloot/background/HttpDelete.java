@@ -6,7 +6,6 @@ import android.view.View.OnClickListener;
 import com.lectureloot.android.HttpDeleteCoursesFinishedListener;
 import com.lectureloot.android.HttpDeleteWagersFinishedListener;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

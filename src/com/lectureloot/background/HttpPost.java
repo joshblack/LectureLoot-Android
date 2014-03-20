@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.lectureloot.android.HttpDeleteCoursesFinishedListener; // change to post
-import com.lectureloot.android.HttpDeleteWagersFinishedListener; // change to post
 import com.lectureloot.android.HttpPostCoursesFinishedListener;
 import com.lectureloot.android.HttpPostWagersFinishedListener;
 
@@ -18,8 +16,8 @@ import android.view.View.OnClickListener;
 
 public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	
-	protected HttpPostCoursesFinishedListener courseListener; // change to post 
-	protected HttpPostWagersFinishedListener wagerListener;  // change to post
+	protected HttpPostCoursesFinishedListener courseListener;
+	protected HttpPostWagersFinishedListener wagerListener; 
 	protected String authorizationToken;
 	
 	public HttpPost(String authToken) {
