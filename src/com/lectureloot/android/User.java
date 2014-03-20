@@ -1,31 +1,28 @@
 package com.lectureloot.android;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.json.JSONArray;
+import javax.security.auth.login.LoginException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.util.Log;
+
 import com.lectureloot.background.*;
 
-import android.text.format.Time;
-
-@SuppressWarnings("unused")
 public class User {
+	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
 	private static User mInstance = null;
 	private String mUserId;
 	private String mFirstName;
@@ -40,15 +37,15 @@ public class User {
 	private ArrayList<Meeting> mMeetings;
 	private ArrayList<Sessions> mSessions;
 	private ArrayList<Course> mCourseList;
-	
+
 	/* CONSTRUCTOR FOR USER */
 	private User(){
-		mFirstName = "";
-		mLastName = "";
-		mUserId = "";
-		mEmail = "";
-		mAuthToken = "";
-		mPassword = "";
+		mFirstName = " ";
+		mLastName = " ";
+		mUserId = " ";
+		mEmail = " ";
+		mAuthToken = " ";
+		mPassword = " ";
 		mPoints = 0;
 		mWageredPoints = 0;
 		mCourses = new ArrayList<Course>();
@@ -57,43 +54,24 @@ public class User {
 		mSessions = new ArrayList<Sessions>();
 		mCourseList = new ArrayList<Course>();
 	}
-	
+
 	public static User getInstance(){
-	/* create new user and load data, or return existing user */	
+		/* create new user and load data, or return existing user */	
 		if(mInstance == null){
-            mInstance = new User();
-            mInstance.load();
-        }
-        return mInstance;
+			mInstance = new User();
+			mInstance.load();
+		}
+		return mInstance;
 	}
-	
-	/* Old Constructers (Outdated - Don't use except for testing) */
-	private User(String name){
-		mFirstName = name;
-		mAuthToken = "";
-		mPoints = 0;
-		mWageredPoints = 0;
-		//mWagers = null;
-		mCourses = null;
-		mMeetings = null;
-	}
-	
-	public static User getInstance(String name){
-		//this is for development purposes
-		if(mInstance == null){
-            mInstance = new User(name);
-        }
-        return mInstance;
-	}
-	
+
 	/* Methods By Josh */
 	public void load(){
-	/* load() will either get data from file, or from database if no file exists */
+		/* load() will either get data from file, or from database if no file exists */
 		//try to load data from file
 		if(!loadFromFile()){
 			if(!login())	//try login to server (generate auth token)
 				register();	//register user instead if login fails
-			
+
 			loadUserData();	//either way, get the data from the server afterwards
 		}
 	}
@@ -101,6 +79,7 @@ public class User {
 	public boolean loadFromFile(){
 		//try to open file. If it exists, load the data
 		try{
+			MainActivity.mContext.deleteFile("user.dat");
 			FileInputStream fis = MainActivity.mContext.openFileInput("user.dat");
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
@@ -173,6 +152,7 @@ public class User {
 			in.close();
 			fis.close();
 
+			Log.i("Load File:", "Load Succeessful\n" + mFirstName + " " + mLastName + " " + mEmail);
 			return true; //load successful
 
 			//If the file doesn't exist, get data from server then make it
@@ -182,7 +162,10 @@ public class User {
 			//TOAST
 		} catch (IOException e) {
 			//TOAST
+		} catch (ArrayIndexOutOfBoundsException e){
+			Log.i("LoadFile:",e.toString());
 		}
+		Log.i("Load File:", "Load Failed");
 		return false; //load failed
 	}
 
@@ -190,7 +173,7 @@ public class User {
 		/* method will write the user class to the file, only one write allowed at a time */
 		try{
 			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", 0);	
-			
+
 			//write user data
 			out.write(("ID:" + mUserId + "\n").getBytes());
 			out.write(("First:" + mFirstName + "\n").getBytes());
@@ -200,7 +183,7 @@ public class User {
 			out.write(("Points:" + mPoints + "\n").getBytes());
 			out.write(("WageredPoints:" + mWageredPoints + "\n").getBytes());
 			out.write(("NumCourses:" + mCourses.size() + "\n").getBytes());	
-			
+
 			//write course data
 			for(int i = 0;i<mCourses.size();++i){
 				out.write(("Course:" + mCourses.get(i).getCourseId()).getBytes());
@@ -209,10 +192,10 @@ public class User {
 				out.write((":" + mCourses.get(i).getSectionNumber()).getBytes());
 				out.write((":" + mCourses.get(i).getCredits()).getBytes());
 				out.write((":" + mCourses.get(i).getInstructor()).getBytes());
-				
+
 				ArrayList<Meeting> meetings = new ArrayList<Meeting>();				
 				out.write((":" + meetings.size()+"\n").getBytes());
-				
+
 				//write meeting data (ignoring time)
 				for(int k=0;k<meetings.size();++k){
 					out.write(("Meeting:" + meetings.get(k).getMeetingId()).getBytes());
@@ -222,7 +205,7 @@ public class User {
 					out.write((":" + meetings.get(k).getPeriod()+"\n").getBytes());
 				}
 			}
-			
+
 			out.write(("NumWagers:" + mWagers.size() + "\n").getBytes());
 			for(int i = mWagers.size();i >0;--i){				
 				out.write(("Wager:" + mWagers.get(i).getWagerId()).getBytes());
@@ -231,7 +214,7 @@ public class User {
 				out.write((":" + mWagers.get(i).getTotalMeetings()).getBytes());
 				out.write((":" + mWagers.get(i).getTotalWager() + "\n").getBytes());
 			}			
-			
+
 			//close the file
 			out.close();
 		} catch (IOException e) {
@@ -239,145 +222,155 @@ public class User {
 		}
 		return true;
 	}
-	
+
 	public boolean doLogin(){
 		/*automaticly log the user in and generate authToken (will block)*/
-		
+
 		//TODO: display some sort of 'logging in' popup here (currently just blocking)
-		
+
 		//get the info from the server
 		URL url;
 		try {
 			String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword;
-			url = new URL("http://lectureloot.com/api/v1/users/login?" + urlParamaters);
+			url = new URL(URL_BASE + "/users/login?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("GET");
-			   try {
-				 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-				 JSONTokener tokener = new JSONTokener(in.readLine());
-			     JSONObject input = (JSONObject) tokener.nextValue();
-			     if(input.get("messgage").equals("Success, valid credentials")){
-			    	 mAuthToken = input.getString("token");	//logged in successfully
-			    	 mUserId = input.getString("user_id");
-			    	 return true;
-			     }
-			   } catch (JSONException e) {
+			urlConnection.setRequestMethod("POST");
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				JSONTokener tokener = new JSONTokener(in.readLine());
+				JSONObject input = (JSONObject) tokener.nextValue();
+				if(input.getString("message").equals("Success, valid credentials")){
+					mAuthToken = input.getString("token");	//logged in successfully
+					mUserId = input.getString("user_id");
+					Log.i("Login:", "Login Succeeded");		//DEBUG
+					return true;
+				}
+			} catch (JSONException e) {
 				//Toast
 			} finally {
-			     urlConnection.disconnect();
-			   }
+				urlConnection.disconnect();
+			}
 		} catch (MalformedURLException e) {
 			//Toast
 		} catch (IOException e) {
 			//Toast
 		}
-		
-		return false;	//logged in successfully
+		Log.i("Login:", "Login Failed");		//DEBUG
+		return false;		
 	}
-	
+
 	public boolean doRegister(){
 		/*try to register the user and generate an auth token (will block)*/
-		
+
 		//TODO: display some sort of 'logging in' popup here (currently just blocking)
-		
+
 		//get the info from the server
 		URL url;
 		try {
 			String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword + "&firstName=" + mFirstName + "&lastName=" + mLastName;
-			url = new URL("http://lectureloot.com/api/v1/users?" + urlParamaters);
+			url = new URL(URL_BASE + "/users?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setRequestMethod("POST");
-			   try {
-				 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-				 JSONTokener tokener = new JSONTokener(in.readLine());
-			     JSONObject input = (JSONObject) tokener.nextValue();
-			     if(input.get("messgage").equals("Success, the user was registered")){
-			    	 mAuthToken = input.getString("token");	//registered successfully
-			    	 mUserId = input.getString("user_id");
-			    	 return true;
-			     }
-			   } catch (JSONException e) {
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				JSONTokener tokener = new JSONTokener(in.readLine());
+				JSONObject input = (JSONObject) tokener.nextValue();
+				if(input.get("message").equals("Success, the user was registered")){
+					mAuthToken = input.getString("token");	//registered successfully
+					mUserId = input.getString("user_id");
+					Log.i("Register:","Registration Successful");
+					return true;
+				}
+			} catch (JSONException e) {
 				//Toast
 			} finally {
-			     urlConnection.disconnect();
-			   }
+				urlConnection.disconnect();
+			}
 		} catch (MalformedURLException e) {
 			//Toast
 		} catch (IOException e) {
 			//Toast
+		} catch (ClassCastException e){
+			Log.i("Register:",e.toString());
 		}
-		
+
+		Log.i("Register:","Registration Failed");
 		return false;	//logged in successfully
 	}
-	
+
 	public boolean login(){
 		/*prompt for Email/password from the UI element and try to login */		
-		
+
 		//TODO: Throw to UI element to get Username/Password
-		
+
+		/*	
+		//TEST DATA
+		mEmail = "joshS@ufl.edu";
+		mPassword = "password";
+		*/
+
 		return doLogin();	//call login method
 	}
-	
+
 	public boolean register(){
 		/*prompt for Email/Name/password from the UI element and try to register */		
-		
+
 		//TODO: Throw to UI element to get infos
-		
+
 		return doRegister();	//call login method
-		
-		
+
+
 	}
-	
+
 	public void loadUserData(){
-	/* Method will load user data from the serer in seperate threads, but will block until done */
+		/* Method will load user data from the serer in seperate threads, but will block until done */
 		UserListner listner = new UserListner(this);  //setup the listner for the return
-		
+
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
-		
+
 		//get the wagers frm the server
 		String wagerUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/wagers";
 		HttpGetWagers wagerTask = new HttpGetWagers(mAuthToken);
 		wagerTask.setHttpGetFinishedListener(listner);
 		wagerTask.execute(new String[] {wagerUrl});
-		
+
 		//get the sessions frm the server
 		String sessionUrl = "http://lectureloot.eu1.frbit.net/api/v1/sessions";	//TODO: check this later
 		HttpGetSessions sessionTask = new HttpGetSessions(mAuthToken);
-		wagerTask.setHttpGetFinishedListener(listner);
-		wagerTask.execute(new String[] {wagerUrl});
-				
+		sessionTask.setHttpGetFinishedListener(listner);
+		sessionTask.execute(new String[] {sessionUrl});
+
 		//get the full course list from the server (does not block) 
 		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
 		HttpGetCourses courseListTask = new HttpGetCourses(mAuthToken);
 		courseListTask.setHttpGetFinishedListener(listner);
-		courseListTask.execute(new String[] {courseUrl});
-				
-		
-        //wait for threads to finish before continuing
-        listner.waitForThreads();
+		courseListTask.execute(new String[] {courseListUrl});
+
+		//wait for threads to finish before continuing
+		listner.waitForThreads(); 
 	}
-	
+
 	public void addCourseFromList(Course course){
-	/* method to resolve incomplete course from courseList and add to user (DOESN'T POST, DOESN'T BLOCK) */
+		/* method to resolve incomplete course from courseList and add to user (DOESN'T POST, DOESN'T BLOCK) */
 		UserListner listner = new UserListner(this);  //setup the listner for the return
-		
+
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId();
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
 	}
-	
+
 	/* GETTERS */
 
 	public String getUserId(){
 		return mUserId;
 	}
-	
+
 	public String getName() {
 		return mFirstName + " " + mLastName;
 	}
@@ -385,7 +378,7 @@ public class User {
 	public String getFirstName() {
 		return mFirstName;
 	}
-	
+
 	public String getLastName() {
 		return mLastName;
 	}
@@ -393,11 +386,11 @@ public class User {
 	public String getEmail(){
 		return mEmail;
 	}
-	
+
 	public String getAuthToken(){
 		return mAuthToken;
 	}
-		
+
 	public int getPoints() {
 		return mPoints;
 	}
@@ -417,11 +410,11 @@ public class User {
 	public ArrayList<Meeting> getMeetings() {
 		return mMeetings;
 	}
-	
+
 	public ArrayList<Sessions> getSessions(){
 		return mSessions;
 	}
-	
+
 	public ArrayList<Course> getCourseList(){
 		return mCourseList;
 	}
@@ -431,7 +424,7 @@ public class User {
 	public void setFirstName(String name) {
 		mFirstName = name;
 	}
-	
+
 	public void setLastName(String name) {
 		mFirstName = name;
 	}
@@ -439,11 +432,11 @@ public class User {
 	public void setEmail(String email){
 		mEmail = email;
 	}
-	
+
 	public void setPassword(String password){
 		mPassword = password;
 	}
-	
+
 	public void setPoints(int points) {
 		mPoints = points;
 	}
@@ -451,7 +444,7 @@ public class User {
 	public void setWageredPoints(int wageredPoints) {
 		mWageredPoints = wageredPoints;
 	}
-	
+
 	public void setWagers(ArrayList<Wager> wagers) {
 		mWagers = wagers;
 	}	
@@ -467,7 +460,7 @@ public class User {
 	public void setSessions(ArrayList<Sessions> sessions) {
 		mSessions = sessions;
 	}
-	
+
 	public void setCourseList(ArrayList<Course> courseList) {
 		mCourseList = courseList;
 	}

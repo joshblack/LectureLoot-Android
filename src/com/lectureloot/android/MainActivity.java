@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -71,8 +72,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//set the middle tab to be the default
 		mViewPager.setCurrentItem(1, false);
 		
-		//create the User, for now it'll just be static
-		mCurrentUser = mCurrentUser.getInstance();
+		//damn strict mode (will fix this later)
+		Thread loadThread = new Thread(new Runnable(){
+			public void run(){
+				mCurrentUser = User.getInstance();	//Create the user
+			}
+		});
+		
+		loadThread.start();
 	}
 
 	@Override
@@ -134,6 +141,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//write data on app close
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
+		Log.i("Main Activity:","Stopped");
+		super.onStop();
 	}
 
 }

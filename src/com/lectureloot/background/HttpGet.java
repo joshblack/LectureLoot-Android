@@ -1,6 +1,8 @@
 package com.lectureloot.background;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
 import com.lectureloot.android.HttpGetFinishedListener;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,6 +42,10 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer("");
 		try {
 			InputStream stream = getHttpConnection(url);
+			if (stream == null){
+				Log.w("HttpGet:", "Null Stream - " + url);
+				return "";
+			}
 			BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
 			String s = "";
 			while ((s = buffer.readLine()) != null) {

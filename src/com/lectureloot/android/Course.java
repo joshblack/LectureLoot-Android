@@ -82,27 +82,35 @@ public class Course {
 	public String getCourseTitle() {
 		return courseTitle;
 	}
+	
 	public void setCourseTitle(String courseTitle) {
 		this.courseTitle = courseTitle;
 	}
+
 	public String getSectionNumber() {
 		return sectionNumber;
 	}
+
 	public void setSectionNumber(String sectionNumber) {
 		this.sectionNumber = sectionNumber;
 	}
+
 	public String getCredits() {
 		return credits;
 	}
+
 	public void setCredits(String credits) {
 		this.credits = credits;
 	}
+
 	public String getInstructor() {
 		return instructor;
 	}
+
 	public void setInstructor(String instructor) {
 		this.instructor = instructor;
 	}
+
 	public ArrayList<Meeting> getMeetings() {
 		return meetings;
 	}
