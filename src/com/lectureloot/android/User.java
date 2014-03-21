@@ -371,7 +371,7 @@ public class User {
 
 		//get the full course list from the server (does not block) 
 		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
-		HttpGetCourses courseListTask = new HttpGetCourses(mAuthToken);
+		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
 		courseListTask.setHttpGetFinishedListener(listner);
 		courseListTask.execute(new String[] {courseListUrl});
 
