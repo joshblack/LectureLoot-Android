@@ -4,6 +4,7 @@ import java.net.URL;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,6 +18,10 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -72,14 +77,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//set the middle tab to be the default
 		mViewPager.setCurrentItem(1, false);
 		
-		//damn strict mode (will fix this later)
-		Thread loadThread = new Thread(new Runnable(){
-			public void run(){
-				mCurrentUser = User.getInstance();	//Create the user
-			}
-		});
+		//Asynchrounously load the user (check status with user.isBusy())
+		mCurrentUser = User.getInstance();
 		
-		loadThread.start();
+		while(mCurrentUser.isBusy());
 	}
 
 	@Override

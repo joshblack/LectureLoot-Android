@@ -17,7 +17,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lectureloot.background.*;
 
@@ -69,14 +80,24 @@ public class User {
 	/* Methods By Josh */
 	public void load(){
 		/* load() will either get data from file, or from database if no file exists */
-		busyFlag = true;
-		if(!loadFromFile()){
-			if(!login())	//try login to server (generate auth token)
-				register();	//register user instead if login fails
+		
+		busyFlag = true;	//user is being loaded
+		
+		//load data in seperate thread
+		Thread loadThread = new Thread(new Runnable(){
+			public void run(){
+				Looper.prepare();
+				if(!loadFromFile()){	//try to get from file
+					if(!login())		//try login to server (generate auth token)
+						register();		//register user
 
-			loadUserData();	//either way, get the data from the server afterwards
-		}
-		busyFlag = false;
+					loadUserData();		//either way, get the data from the server afterwards
+				}
+				busyFlag = false;
+			}
+		});
+		
+		loadThread.start();
 	}
 
 	public boolean loadFromFile(){
@@ -250,7 +271,9 @@ public class User {
 				}
 			} catch (JSONException e) {
 				//Toast
-			} finally {
+			} catch (ClassCastException e){
+				Log.w("Login:",e.toString());
+			}finally {
 				urlConnection.disconnect();
 			}
 		} catch (MalformedURLException e) {
@@ -302,21 +325,20 @@ public class User {
 	}
 
 	public boolean login(){
-		/*prompt for Email/password from the UI element and try to login */		
-
-		//TODO: Throw to UI element to get Username/Password
-
-		/*	
-		//TEST DATA
-		mEmail = "joshS@ufl.edu";
-		mPassword = "password";
-		*/
-
-		return doLogin();	//call login method
+	/*prompt for Email/password from the UI element and try to login */
+		
+		//TODO: Throw to UI element for login
+		
+		/*Test Data
+		 * mEmail = joshS@ufl.edu
+		 * mPassword = password;
+		 */
+		
+		return doLogin();
 	}
 
 	public boolean register(){
-		/*prompt for Email/Name/password from the UI element and try to register */		
+	/*prompt for Email/Name/password from the UI element and try to register */		
 
 		//TODO: Throw to UI element to get infos
 
@@ -369,7 +391,10 @@ public class User {
 	}
 
 	/* GETTERS */
-
+	public boolean isBusy(){
+		return busyFlag;
+	}
+	
 	public String getUserId(){
 		return mUserId;
 	}
