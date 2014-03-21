@@ -1,0 +1,19 @@
+---Formatting for the user.dat file---
+ID:<user ID used for API calls>
+First:<User's First Name>
+Last:<User's Last Name>
+Email:<email>
+Password:<password> (plaintext is insecure, but I'll add security later)
+Points:<Points>
+WageredPoints:<WageredPoints>
+NumCourses:<numCourses> (2 in example)
+Course:<CourseID>:<Code>:<Title>:<Section>:<Credits>:<Instructor>:<numMeettings>(2 here)
+Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
+Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
+Course:<CourseID>:<Code>:<Title>:<Section>:<Credits>:<Instructor>:<numMeettings>(2 here)
+Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
+Meeting:<MeetingID>:<buildingCode>:<roomNum>:<Day>:<Period>
+NumWagers:<numWagers> (2 or so)
+Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
+Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
+

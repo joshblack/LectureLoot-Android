@@ -1,10 +1,10 @@
 package com.lectureloot.background;
 
 import android.os.AsyncTask;
-import com.lectureloot.android.HttpGetCoursesFinishedListener;
-import com.lectureloot.android.HttpGetMeetingsFinishedListener;
-import com.lectureloot.android.HttpGetSessionsFinishedListener;
-import com.lectureloot.android.HttpGetWagersFinishedListener;
+
+import android.util.Log;
+
+import com.lectureloot.android.HttpGetFinishedListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,9 +42,12 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		this.wagersListener = listener;
 	}
 
+	public void onPreExecute(){
+		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
+	}
+	
 	@Override
 	protected String doInBackground(String... urls) {
-		//	android.os.Debug.waitForDebugger();
 		String output = null;
 		for (String url : urls) {
 			output = getOutputFromUrl(url);
@@ -56,6 +59,10 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer("");
 		try {
 			InputStream stream = getHttpConnection(url);
+			if (stream == null){
+				Log.w("HttpGet:", "Null Stream - " + url);
+				return "";
+			}
 			BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
 			String s = "";
 			while ((s = buffer.readLine()) != null) {
@@ -93,16 +100,6 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		// TODO: Test data used for stubs until we can get JSON data from lectureloot REST API
-		//		String testString = "[ { \"id\": 1, \"deptCode\": \"CEN\", \"courseNumber\": \"3031\", \"sectionNumber\":  \"11F8\", \"credits\": \"3\", \"instructor\": \"Bermudez, Manuel E\", \"courseTitle\":\"INTRO SOFTWARE ENGR\"} , "; 
-		//		testString += "{ \"id\": 2, \"deptCode\": \"CAP\", \"courseNumber\": \"4053\", \"sectionNumber\":  \"133E\", \"credits\": \"3\", \"instructor\": \"Anthony,Lisa, Dankel,Douglas D,II\", \"courseTitle\":\"AI FOR COMPUTER GAMES\" } ]";
-
-
-
-
-		System.out.println("response:" + output);
-		//			System.out.println("onPostExecute logger");
-		//			listener.onHttpGetCoursesReady(output);
 		returnResponse(output);
 	}
 

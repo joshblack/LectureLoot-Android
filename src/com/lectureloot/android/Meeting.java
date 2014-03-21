@@ -8,7 +8,7 @@ public class Meeting {
 	private String roomNumber;
 	private String meetingDay;
 	private String period;
-	private long time;
+	private long time;	//is this even used?
 	
 	public Meeting(){
 		
@@ -17,6 +17,15 @@ public class Meeting {
 	//this can be deleted later
 	public Meeting(long timeInMillis){
 		this.time = timeInMillis;
+	}
+	
+	public Meeting(int meetingId, int courseId, String buildingCode, String roomNumber, String meetingDay, String period){
+		this.meetingId = meetingId;
+		this.courseId = courseId;
+		this.buildingCode = buildingCode;
+		this.roomNumber = roomNumber;
+		this.meetingDay = meetingDay;
+		this.period = period;
 	}
 	
 	public int getMeetingId() {

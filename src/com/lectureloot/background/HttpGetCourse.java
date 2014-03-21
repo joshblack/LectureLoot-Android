@@ -1,17 +1,15 @@
 package com.lectureloot.background;
 
-public class HttpGetCourses extends HttpGet {
+public class HttpGetCourse extends HttpGet {
 
 	
-	public HttpGetCourses(String authToken){
+	public HttpGetCourse(String authToken){
 		super(authToken);
 	}
-
+	
 	public void returnResponse(String output) {
-
-		listener.onHttpGetCoursesReady(output);
+		listener.onHttpGetCourseReady(output);
 		listener.notifyThreadComplete();
-
 	}
 
 }

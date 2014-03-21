@@ -4,6 +4,7 @@ package com.lectureloot.android;
 
 public class Wager {
 
+
 	private int wagerId;
 	private int wagerSessionCode;
 	private int wagerPerMeeting;
@@ -16,14 +17,18 @@ public class Wager {
 		
 	}
 	
-	public Wager(int wagerId, int wagerSessionCode, int wagerPerMeeting, int totalMeetings, int totalWager, int currentWagerLost) {
-		
+public Wager(int wagerId, int sessionId, int unitValue, int totalValue, int pointsLost){
+			//TODO: This is the data that I can get from the server. 
+			// Somehow you have to turn this into a wager. Good luck.
+	
+			
+
+//public Wager(int wagerId, int wagerSessionCode, int wagerPerMeeting, int totalMeetings, int totalWager, int currentWagerLost) {	
 		this.wagerId = wagerId;
-		this.wagerSessionCode = wagerSessionCode;
-		this.wagerPerMeeting = wagerPerMeeting;
-		this.totalMeetings = totalMeetings;
-		this.totalWager = totalWager;
-		this.currentWagerLost = currentWagerLost;
+		this.wagerSessionCode = sessionId;
+		this.wagerPerMeeting = unitValue;
+		this.totalWager = totalValue;
+		this.currentWagerLost = pointsLost;
 	}
 
 	public String getWagerSessionCodeString() {
@@ -33,7 +38,10 @@ public class Wager {
 	public int getWagerSessionCode() {
 		return wagerSessionCode;
 	}
-
+	
+	public int getWagerId(){
+		return wagerId;
+	}
 
 	public void setWagerSessionCode(int wagerSessionCode) {
 		this.wagerSessionCode = wagerSessionCode;
@@ -71,12 +79,8 @@ public class Wager {
 		this.totalWager = totalWager;
 	}
 
-	public int getWagerId() {
-		return wagerId;
-	}
-
-	public void setWagerId(int wagerId) {
+	public void setWagerId(int wagerId){
 		this.wagerId = wagerId;
-	}	
+	}
 	
 }

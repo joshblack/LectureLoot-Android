@@ -6,13 +6,9 @@ public class HttpGetMeetings extends HttpGet {
 		super(authToken);
 	}
 	
-	@Override
-	public void returnResponse(String output) {
-		String testString = "[ { \"id\": 1,\"course_id\":\"1\",\"buildingCode\":\"LIT\",\"roomNumber\":\"109\",\"meetingDay\":\"f\",\"period\":\"6\"} ,  "; 
-		testString += "{ \"id\": 1,\"course_id\":\"1\",\"buildingCode\":\"LIT\",\"roomNumber\":\"109\",\"meetingDay\":\"m\",\"period\":\"6\"} ]";
-		
-		meetingsListener.onHttpGetMeetingsReady(output);
-
+	public void returnResponse(String output) {		
+		listener.onHttpGetMeetingsReady(output);
+		listener.notifyThreadComplete();
 	}
 
 }

@@ -6,11 +6,11 @@ public class HttpGetWagers extends HttpGet {
 	public HttpGetWagers(String authToken){
 		super(authToken);
 	}
-	@Override
-	public void returnResponse(String output) {
-		wagersListener.onHttpGetWagersReady(output);
-
 		
+	public void returnResponse(String output) {
+		listener.onHttpGetWagersReady(output);
+		listener.notifyThreadComplete();	
+
 	}
 
 }

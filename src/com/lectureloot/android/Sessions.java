@@ -8,10 +8,11 @@ public class Sessions {
 	private int SessionId;
 	private Date startDate;
 	private Date endDate;
+
 	
 	public Sessions()
 	{
-		
+
 	}
 
 	public Sessions(int SessionId, Date startDate, Date endDate)
@@ -20,7 +21,7 @@ public class Sessions {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
-	
+
 	public int getSessionId() {
 		return SessionId;
 	}
@@ -44,5 +45,8 @@ public class Sessions {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
+
 }
+
+
+
