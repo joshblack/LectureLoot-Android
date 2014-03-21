@@ -104,6 +104,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String output) {
 		returnResponse(output);
+		listener.notifyThreadComplete();
 	}
 
 	public abstract void returnResponse(String output);

@@ -36,10 +36,10 @@ public class UserListner extends HttpGetFinishedListener{
 			Wager wager;
 			for(int i = 0; i < array.length(); i++) {
 				jsonCourse = array.getJSONObject(i);
-
+				
+				if(Integer.parseInt(user.getUserId()) == (Integer)jsonCourse.get("user_id")){
 				wager = new Wager(	
 						(Integer)jsonCourse.get("id"),
-						(Integer)jsonCourse.get("user_id"),
 						(Integer)jsonCourse.get("session_id"),
 						(Integer)jsonCourse.get("wagerUnitValue"),
 						(Integer)jsonCourse.get("wagerTotalValue"),
@@ -47,6 +47,7 @@ public class UserListner extends HttpGetFinishedListener{
 						);
 
 				wagers.add(wager);
+				}
 			}
 		} catch (Exception e) {
 			//Toast

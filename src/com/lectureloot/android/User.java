@@ -24,6 +24,7 @@ import com.lectureloot.background.*;
 public class User {
 	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
 	private static User mInstance = null;
+	private boolean busyFlag;
 	private String mUserId;
 	private String mFirstName;
 	private String mLastName;
@@ -53,6 +54,7 @@ public class User {
 		mWagers = new ArrayList<Wager>();
 		mSessions = new ArrayList<Sessions>();
 		mCourseList = new ArrayList<Course>();
+		busyFlag = false;
 	}
 
 	public static User getInstance(){
@@ -67,13 +69,14 @@ public class User {
 	/* Methods By Josh */
 	public void load(){
 		/* load() will either get data from file, or from database if no file exists */
-		//try to load data from file
+		busyFlag = true;
 		if(!loadFromFile()){
 			if(!login())	//try login to server (generate auth token)
 				register();	//register user instead if login fails
 
 			loadUserData();	//either way, get the data from the server afterwards
 		}
+		busyFlag = false;
 	}
 
 	public boolean loadFromFile(){

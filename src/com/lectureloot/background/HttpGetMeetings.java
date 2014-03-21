@@ -8,7 +8,6 @@ public class HttpGetMeetings extends HttpGet {
 	
 	public void returnResponse(String output) {		
 		listener.onHttpGetMeetingsReady(output);
-		listener.notifyThreadComplete();
 	}
 
 }
