@@ -14,7 +14,7 @@ public class Wager {
 		
 	}
 	
-	public Wager(int wagerId, int userId, int sessionId, int unitValue, int totalValue, int pointsLost){
+	public Wager(int wagerId, int sessionId, int unitValue, int totalValue, int pointsLost){
 			//TODO: This is the data that I can get from the server. 
 			// Somehow you have to turn this into a wager. Good luck.
 	}
