@@ -71,12 +71,12 @@ public class WagerFragment extends Fragment implements HttpGetWagersFinishedList
 		// setting list adapter
 		//wagerExpListView.setAdapter(wagerListAdapter);
 
-		
-		String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers";
-		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
-		HttpGetWagers wagersGetter = new HttpGetWagers(authToken);
-		wagersGetter.setHttpGetWagersFinishedListener(this);
-		wagersGetter.execute(new String[] {wagersUrl});
+//		
+//		String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers";
+//		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+//		HttpGetWagers wagersGetter = new HttpGetWagers(authToken);
+//		wagersGetter.setHttpGetWagersFinishedListener(this);
+//		wagersGetter.execute(new String[] {wagersUrl});
 
 
 

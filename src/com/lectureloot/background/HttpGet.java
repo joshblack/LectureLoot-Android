@@ -16,32 +16,35 @@ import java.net.URLConnection;
 
 public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
-	protected HttpGetCoursesFinishedListener courseListener;
-	protected HttpGetMeetingsFinishedListener meetingsListener;
-	protected HttpGetSessionsFinishedListener sessionsListener;
-	protected HttpGetWagersFinishedListener wagersListener;
+//	protected HttpGetCoursesFinishedListener courseListener;
+//	protected HttpGetMeetingsFinishedListener meetingsListener;
+//	protected HttpGetSessionsFinishedListener sessionsListener;
+//	protected HttpGetWagersFinishedListener wagersListener;
+	protected HttpGetFinishedListener listener;
 	protected String authorizationToken;
 	
 	public HttpGet(String authToken) {
 		this.authorizationToken = authToken;
 	}
 
-	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
-		this.courseListener = listener;
-	}
-	
-	public void setHttpGetMeetingsFinishedListener(HttpGetMeetingsFinishedListener listener) {
-		this.meetingsListener = listener;
-	}
-	
-	public void setHttpGetSessionsFinishedListener(HttpGetSessionsFinishedListener listener) {
-		this.sessionsListener = listener;
-	}
-	
-	public void setHttpGetWagersFinishedListener(HttpGetWagersFinishedListener listener) {
-		this.wagersListener = listener;
-	}
-
+//	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
+//		this.courseListener = listener;
+//	}
+//	
+//	public void setHttpGetMeetingsFinishedListener(HttpGetMeetingsFinishedListener listener) {
+//		this.meetingsListener = listener;
+//	}
+//	
+//	public void setHttpGetSessionsFinishedListener(HttpGetSessionsFinishedListener listener) {
+//		this.sessionsListener = listener;
+//	}
+//	
+//	public void setHttpGetWagersFinishedListener(HttpGetWagersFinishedListener listener) {
+//		this.wagersListener = listener;
+//	}
+	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
+	this.listener = listener;
+}
 	public void onPreExecute(){
 		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
 	}
