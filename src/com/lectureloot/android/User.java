@@ -329,10 +329,10 @@ public class User {
 		
 		//TODO: Throw to UI element for login
 		
-		/*Test Data
-		 * mEmail = joshS@ufl.edu
-		 * mPassword = password;
-		 */
+		//test Data
+		 mEmail = "joshS@ufl.edu";
+		 mPassword = "password";
+		
 		
 		return doLogin();
 	}

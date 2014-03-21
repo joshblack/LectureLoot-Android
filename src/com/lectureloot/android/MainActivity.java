@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//Asynchrounously load the user (check status with user.isBusy())
 		mCurrentUser = User.getInstance();
 		
-		while(mCurrentUser.isBusy());
+		//while(mCurrentUser.isBusy());
 	}
 
 	@Override

@@ -290,7 +290,9 @@ public class ScheduleFragment extends Fragment{
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<Course>>();
 
-		ArrayList<Course> courses = user.getCourses();
+		ArrayList<Course> courses = user.getCourseList();
+		System.out.println("COURSES ARRAY LIST" + courses.toString());
+		
 
 		List<Course> oneCourseList = null;
 		for (Course course : courses) {
