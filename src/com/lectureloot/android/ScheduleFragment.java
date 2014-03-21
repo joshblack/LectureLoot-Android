@@ -39,7 +39,7 @@ public class ScheduleFragment extends Fragment implements HttpGetCoursesFinished
 	private ExpandableListView expListView;
 	private List<String> listDataHeader = null;
 	private HashMap<String, List<Course>> listDataChild = null;
-
+	private User user;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +49,9 @@ public class ScheduleFragment extends Fragment implements HttpGetCoursesFinished
 
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 
+		user = User.getInstance();
+		
+		
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.username);
 		//TODO: Set Display name dynamically based on Singleton User Model
 		userDisplay.setText("Justin Rafanan's Schedule");
@@ -186,6 +189,8 @@ public class ScheduleFragment extends Fragment implements HttpGetCoursesFinished
 
 			System.out.println("onHttpGetMeetingsReady 3");
 
+			// change to user data
+			
 			ArrayList<Meeting> meetings = jsonArrayToMeetings(array);
 			meetings = groupMeetingsDays(meetings);
 			System.out.println("onHttpGetMeetingsReady 4");
