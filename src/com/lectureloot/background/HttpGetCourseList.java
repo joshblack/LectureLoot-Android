@@ -9,7 +9,6 @@ public class HttpGetCourseList extends HttpGet {
 	
 	public void returnResponse(String output) {
 		listener.onHttpGetCourseListReady(output);
-		listener.notifyThreadComplete();		
 	}
 
 }

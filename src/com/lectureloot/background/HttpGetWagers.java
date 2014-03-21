@@ -9,7 +9,6 @@ public class HttpGetWagers extends HttpGet {
 	
 	public void returnResponse(String output) {
 		listener.onHttpGetWagersReady(output);
-		listener.notifyThreadComplete();	
 	}
 
 }

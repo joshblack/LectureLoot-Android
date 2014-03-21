@@ -9,7 +9,6 @@ public class HttpGetSessions extends HttpGet {
 	
 	public void returnResponse(String output) {
 		listener.onHttpGetSessionsReady(output);
-		listener.notifyThreadComplete();		
 	}
 
 }
