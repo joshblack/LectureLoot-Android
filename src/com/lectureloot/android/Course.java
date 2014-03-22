@@ -17,7 +17,8 @@ import com.lectureloot.background.UserListner;
 public class Course {
 
 	private int courseId;
-	private String courseCode;
+	private String coursePrefix;
+	private String courseNum;
 	private String courseTitle;
 	private String sectionNumber;
 	private String credits;
@@ -28,34 +29,12 @@ public class Course {
 
 	}
 
-	public Course(String courseCode, String courseTitle, String sectionNumber, String credits,
-			String instructor, String meetingDays1, String meetingDays2,
-			String meetingDays3, String period1, String period2,
-			String period3, String room1, String room2, String room3) {
-		this.courseCode = courseCode;
-		this.courseTitle = courseTitle;
-		this.sectionNumber = sectionNumber;
-		this.credits = credits;
-		this.instructor = instructor;
-	}
-
-	public Course(int courseId, String courseCode, String courseTitle, String sectionNumber, String credits,
-			String instructor, String meetingDays1, String meetingDays2,
-			String meetingDays3, String period1, String period2,
-			String period3, String room1, String room2, String room3) {
-		this.courseId = courseId;
-		this.courseCode = courseCode;
-		this.courseTitle = courseTitle;
-		this.sectionNumber = sectionNumber;
-		this.credits = credits;
-		this.instructor = instructor;
-	}
-
 	/* constructor for current course setup */
-	public Course(int courseID, String courseCode, String courseTitle, String sectionNumber, String credits,
+	public Course(int courseID, String coursePrefix, String courseNum, String courseTitle, String sectionNumber, String credits,
 			String instructor) {
 		this.courseId = courseID;
-		this.courseCode = courseCode;
+		this.coursePrefix = coursePrefix;
+		this.courseNum = courseNum;
 		this.courseTitle = courseTitle;
 		this.sectionNumber = sectionNumber;
 		this.credits = credits;
@@ -71,14 +50,30 @@ public class Course {
 	}
 
 	public String getCourseCode() {
-		return courseCode;
+		return coursePrefix + courseNum;
+	}
+	
+	public void setCourseCode(String courseCode){
+		coursePrefix = courseCode.substring(0,2);
+		courseNum = courseCode.substring(3);
 	}
 
-
-	public void setCourseCode(String courseCode) {
-		this.courseCode = courseCode;
+	public String getCoursePrefix(){
+		return coursePrefix;
+	}
+	
+	public String getCourseNum(){
+		return courseNum;
 	}
 
+	public void setCourseNum(String courseNum){
+		this.courseNum = courseNum;
+	}
+	
+	public void setCoursePrefix(String coursePrefix){
+		this.coursePrefix = coursePrefix;
+	}
+	
 	public String getCourseTitle() {
 		return courseTitle;
 	}
