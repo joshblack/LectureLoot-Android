@@ -45,7 +45,8 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	private List<String> listDataHeader = null;
 	private HashMap<String, List<Course>> listDataChild = null;
 	private User user;
-
+	private int courseId; // used to setup Course Post with courseId
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -124,6 +125,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
+
 					
 //				      String userId = user.getUserId();
 //				      String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/courses?course_id="+courseId;

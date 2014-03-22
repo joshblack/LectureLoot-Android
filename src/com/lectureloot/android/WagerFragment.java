@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -34,9 +36,11 @@ import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
 //import com.lectureloot.background.HttpGetCourses;
 //import com.lectureloot.background.HttpGetWagers;
 //import com.lectureloot.background.HttpGetSession;
+
 //import com.lectureloot.background.HttpGetMeetings;
 //import com.lectureloot.background.HttpGetSessions;
 //import com.lectureloot.background.HttpGetWagers;
+
 
 
 public class WagerFragment extends Fragment {
@@ -141,8 +145,26 @@ public class WagerFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_SHORT).show();
+						
+//						String userId = user.getUserId();
+//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers";
+//						String authToken = user.getAuthToken();
+//						HttpPostWagers wagersPost = new HttpPostWagers(authToken);
+//				        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+//				        nameValuePairs.add(new BasicNameValuePair("user_id", "12345"));
+//				        nameValuePairs.add(new BasicNameValuePair("session_id", "0"));
+//				        nameValuePairs.add(new BasicNameValuePair("wagerUnitValue", "12345"));
+//				        nameValuePairs.add(new BasicNameValuePair("WagerTotalValue", "12345"));
+//				        nameValuePairs.add(new BasicNameValuePair("pointsLost", "0"));
+//				        
+//						//wagersPost.setHttpPostWagersFinishedListener(this);
+//						wagersPost.execute(new String[] {wagersUrl});
+						
+						/******************************************
+						 * Need Sessions to get Wager Post to work*
+						 ******************************************/
+						
+						Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 					}
 				});
