@@ -35,7 +35,7 @@ public class CourseListner extends HttpGetFinishedListener{
 				
 				meeting = new Meeting(	
 				(Integer)jsonCourse.get("id"),
-				(Integer)jsonCourse.get("course_id"),
+				Integer.parseInt((String)jsonCourse.get("course_id")),
 				(String)jsonCourse.getString("buildingCode"),
 				(String)jsonCourse.getString("roomNumber"),
 				(String)jsonCourse.getString("meetingDay"),
