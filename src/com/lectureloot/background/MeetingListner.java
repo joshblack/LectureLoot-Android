@@ -16,7 +16,7 @@ public class MeetingListner extends HttpGetFinishedListener{
 		this.meeting = meeting;
 	}
 	
-	public void onHttpGetMeetingsReady(String output) {
+	public void onHttpGetBuildingReady(String output) {
 		try {
 			JSONTokener tokener = new JSONTokener(output);
 			JSONArray array = null;
