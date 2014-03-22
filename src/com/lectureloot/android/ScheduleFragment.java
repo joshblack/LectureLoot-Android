@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -290,7 +291,7 @@ public class ScheduleFragment extends Fragment{
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<Course>>();
 
-		ArrayList<Course> courses = user.getCourseList();
+		ArrayList<Course> courses = user.getCourses();
 		System.out.println("COURSES ARRAY LIST" + courses.toString());
 		
 
@@ -300,11 +301,12 @@ public class ScheduleFragment extends Fragment{
 			oneCourseList = new ArrayList<Course>();
 			oneCourseList.add(course);
 			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
+			System.out.println(course.getCourseId());
 		}
 
 		for (String courseId : listDataHeader) {
 			getMeetingsReady();
-
+			System.out.println(courseId);
 		}
 		
 
@@ -449,10 +451,13 @@ public class ScheduleFragment extends Fragment{
 		try {
 
 			ArrayList<Meeting> meetings = user.getMeetings();
+			System.out.println(meetings.toString());
 			meetings = groupMeetingsDays(meetings);
-			System.out.println("onHttpGetMeetingsReady 4");
+			System.out.println("SET MEETINGS");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
+			System.out.println("SET MEETINGS2");
 			course.setMeetings(meetings);
+			System.out.println("SET MEETINGS3");
 
 			oneCourseList = new ArrayList<Course>();
 			oneCourseList.add(course);
@@ -460,7 +465,7 @@ public class ScheduleFragment extends Fragment{
 			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
 
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("Exception:" + e.getMessage());
 		}
 	}
 }
