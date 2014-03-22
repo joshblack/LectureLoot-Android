@@ -213,16 +213,19 @@ public class ScheduleFragment extends Fragment{
 
 	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetings) {
 		ArrayList<Meeting> groupedMeetingsDays = new ArrayList<Meeting>();
-
+		System.out.println("enter groupMeetingDays");
 		Meeting comparedAgainstMeeting = null;
 		Meeting testMeeting = null;
 		Meeting compareTestMeeting = null;
 		for(int i = 0; i < meetings.size(); i++) {
 			comparedAgainstMeeting = meetings.get(i);
 			compareTestMeeting = meetings.get(i);
+			System.out.println(compareTestMeeting.toString());
 			boolean flag = false;
 			for(int j = i+1; j < meetings.size(); j++) {
 				testMeeting = meetings.get(j);
+				System.out.println("Test"+ testMeeting.toString());
+				//does nothing past this point
 				if (comparedAgainstMeeting.getPeriod().equalsIgnoreCase(testMeeting.getPeriod()) 
 						&& comparedAgainstMeeting.getBuildingCode().equalsIgnoreCase(testMeeting.getBuildingCode()) 
 						&& comparedAgainstMeeting.getRoomNumber().equalsIgnoreCase(testMeeting.getRoomNumber())  && i != j) {
@@ -252,6 +255,7 @@ public class ScheduleFragment extends Fragment{
 			}
 		}
 		if (groupedMeetingsDays.size() == 0) {
+	
 			groupedMeetingsDays.addAll(meetings);
 		}
 
@@ -284,6 +288,7 @@ public class ScheduleFragment extends Fragment{
 			groupedMeeting.setMeetingDay(sortedMeet);
 			groupedMeetingsDays.set(i,groupedMeeting);
 		}
+
 		return groupedMeetingsDays;
 	}
 
@@ -451,7 +456,19 @@ public class ScheduleFragment extends Fragment{
 		try {
 
 			ArrayList<Meeting> meetings = user.getMeetings();
-			System.out.println(meetings.toString());
+//			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+//			Meeting meeting = new Meeting();
+//			meeting.setMeetingId(1);
+//			meeting.setBuildingCode("100");
+//			meeting.setRoomNumber("RoomNum");
+//			meeting.setMeetingDay("M");
+//			meeting.setPeriod("6");
+//			meeting.setCourseId(1);
+//			
+//			meetings.add(meeting);	//add to arrayList
+					
+					
+			System.out.println("building code: " +meetings.get(0).getBuildingCode());
 			meetings = groupMeetingsDays(meetings);
 			System.out.println("SET MEETINGS");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
