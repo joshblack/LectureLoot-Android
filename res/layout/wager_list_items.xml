@@ -31,28 +31,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/totalMeetingsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Meetings in Session:"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/totalMeetings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Meeting Sum"
-            android:textSize="17sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:orientation="horizontal"
 		> 
 
