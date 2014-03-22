@@ -67,7 +67,8 @@ public class UserListner extends HttpGetFinishedListener{
 
 				course = new Course(	
 						(Integer)jsonCourse.get("id"),
-						((String)jsonCourse.getString("deptCode") + (String)jsonCourse.getString("courseNumber")),
+						(String)jsonCourse.getString("deptCode"),
+						(String)jsonCourse.getString("courseNumber"),
 						(String)jsonCourse.getString("courseTitle"),
 						(String)jsonCourse.getString("sectionNumber"),
 						(String)jsonCourse.getString("credits"),
@@ -97,7 +98,8 @@ public class UserListner extends HttpGetFinishedListener{
 
 				course = new Course(	
 						(Integer)jsonCourse.get("id"),
-						((String)jsonCourse.getString("deptCode") + (String)jsonCourse.getString("courseNumber")),
+						(String)jsonCourse.getString("deptCode"),
+						(String)jsonCourse.getString("courseNumber"),
 						(String)jsonCourse.getString("courseTitle"),
 						(String)jsonCourse.getString("sectionNumber"),
 						(String)jsonCourse.getString("credits"),
@@ -151,7 +153,8 @@ public class UserListner extends HttpGetFinishedListener{
 
 			course = new Course(	
 					(Integer)jsonCourse.get("id"),
-					((String)jsonCourse.getString("deptCode") + (String)jsonCourse.getString("courseNumber")),
+					(String)jsonCourse.getString("deptCode"),
+					(String)jsonCourse.getString("courseNumber"),
 					(String)jsonCourse.getString("courseTitle"),
 					(String)jsonCourse.getString("sectionNumber"),
 					(String)jsonCourse.getString("credits"),
