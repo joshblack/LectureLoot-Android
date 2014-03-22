@@ -1,13 +1,16 @@
 package com.lectureloot.android.adapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
 import com.lectureloot.android.Course;
+import com.lectureloot.android.Meeting;
 import com.lectureloot.android.R;
 import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
+import com.lectureloot.android.User;
 import com.lectureloot.android.Wager;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpDeleteWagers;
@@ -35,6 +38,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	private int tempPerClassWager;
 	private String displayTempPerClassWager;
 	private TextView DisplayCurrentWager;
+	private User user;
 
 	public ExpandableListWagerAdapter(Context context, List<String> wagerListDataHeader, HashMap<String, List<Wager>> wagerListChildData) {
 		this._context = context;
@@ -53,8 +57,23 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-
+		
+		user = User.getInstance();
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();
+		ArrayList<Meeting> meetings = user.getMeetings();   // getting Meetings arraylist
+		System.out.println("meetings:" + meetings);
+		
+		final int wagerMeetings = meetings.size();			// finding the size of arrayList to get total Meetings
+		System.out.println("Wager Meetings" +wagerMeetings);
+		((Wager)getChild(groupPosition, childPosition)).setTotalMeetings(wagerMeetings); // setting total Meetings
+		
+		System.out.println("WagerMeetings"+((Wager)getChild(groupPosition, childPosition)).getTotalMeetings());
+		final int wagerUnitValue =((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting();
+		System.out.println("total WagerPerMeeting"+((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting());
+		
+		final int newTotalWager = wagerMeetings*wagerUnitValue;
+		System.out.println("newTotalWager:   "+ newTotalWager);
+		((Wager)getChild(groupPosition, childPosition)).setTotalWager(newTotalWager);
 		
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -64,24 +83,21 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 		//TextView wagerSessionCode = (TextView) convertView.findViewById(R.id.wagerSessionCode);
 		TextView wagerPerMeeting = (TextView) convertView.findViewById(R.id.wagerPerMeeting);
-		TextView totalMeetings = (TextView) convertView.findViewById(R.id.totalMeetings);
 		TextView totalWager = (TextView) convertView.findViewById(R.id.totalWager);
 		TextView LostWager = (TextView) convertView.findViewById(R.id.WagerLost);
 		
+		
 		//final String wagerSessionCodeText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode());
 		final String wagerPerMeetingText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerPerMeeting());
-		final String totalMeetingsText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalMeetings());
 		final String totalWagerText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalWager());
 		final String LostWagerText = String.valueOf(((Wager)getChild(groupPosition, childPosition)).getCurrentWagerLost());
 		
 		//wagerSessionCode.setText("  " + wagerSessionCodeText); // wagerSessionCode --- wagerSessionCodeText
 		wagerPerMeeting.setText("  " + wagerPerMeetingText);
-		totalMeetings.setText("  " + totalMeetingsText);
 		totalWager.setText("  " + totalWagerText);
 		LostWager.setText("  " + LostWagerText);
 		
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
-		totalMeetings.setTextColor(Color.parseColor("#FFFFFF"));
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
 		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
 		
@@ -116,11 +132,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
 						DisplayCurrentWager.setText(displayTempPerClassWager);
 						// changes the original Per Class Wager value to the updated incremented value
-
 					}
-
 					// temp solution, don't remember if needed
-
 				});
 
 				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
@@ -156,7 +169,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						Toast.makeText(_context, "Edits have been made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
-
 					}
 				});
 
@@ -174,7 +186,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						Toast.makeText(_context, "Wager has been deleted", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
-
 					}
 				});
 

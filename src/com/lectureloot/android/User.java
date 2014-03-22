@@ -330,7 +330,7 @@ public class User {
 		//TODO: Throw to UI element for login
 		
 		//test Data
-		 mEmail = "joshS@ufl.edu";
+		 mEmail = "kthnxbai5921@ufl.edu";
 		 mPassword = "password";
 		
 		
