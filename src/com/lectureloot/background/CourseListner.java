@@ -41,7 +41,7 @@ public class CourseListner extends HttpGetFinishedListener{
 				(String)jsonCourse.getString("period")
 				);
 				
-				meeting.addBuildingById(Integer.parseInt(jsonCourse.getString("building_id")));
+				meeting.addBuildingById((Integer)jsonCourse.get("building_id"));
 				meetings.add(meeting);
 				user.addMeeting(meeting);
 			}
