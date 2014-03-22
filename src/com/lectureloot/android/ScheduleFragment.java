@@ -42,7 +42,8 @@ public class ScheduleFragment extends Fragment{
 	private List<String> listDataHeader = null;
 	private HashMap<String, List<Course>> listDataChild = null;
 	private User user;
-
+	private int courseId; // used to setup Course Post with courseId
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -105,6 +106,20 @@ public class ScheduleFragment extends Fragment{
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
+						
+//						String userId = user.getUserId();
+//						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/courses?course_id="+courseId;
+//						String authToken = user.getAuthToken();
+//						HttpPostCourses coursesPost = new HttpPostCourses(authToken);
+//				        
+//						//CoursesPost.setHttpPostCoursesFinishedListener(this);
+//						CoursesPost.execute(new String[] {coursesUrl});
+						
+						/*********************************************************************
+						 * Need to identify the right CourseId before we can post to database*
+						 *********************************************************************/
+						
+						
 						Toast.makeText(getActivity(), "Error: Course Not Added", Toast.LENGTH_LONG).show();
 						dialog.dismiss();
 
