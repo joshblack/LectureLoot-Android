@@ -113,7 +113,7 @@ public class ScheduleFragment extends Fragment{
 //						HttpPostCourses coursesPost = new HttpPostCourses(authToken);
 //				        
 //						//CoursesPost.setHttpPostCoursesFinishedListener(this);
-//						CoursesPost.execute(new String[] {coursesUrl});
+//						coursesPost.execute(new String[] {coursesUrl});
 						
 						/*********************************************************************
 						 * Need to identify the right CourseId before we can post to database*
