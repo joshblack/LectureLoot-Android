@@ -456,16 +456,27 @@ public class ScheduleFragment extends Fragment{
 		try {
 
 			ArrayList<Meeting> meetings = user.getMeetings();
+			//System.out.println("building code: " +meetings.get(0).getBuildingCode());
 //			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 //			Meeting meeting = new Meeting();
 //			meeting.setMeetingId(1);
-//			meeting.setBuildingCode("100");
+//			meeting.setBuildingCode("LIT");
 //			meeting.setRoomNumber("RoomNum");
 //			meeting.setMeetingDay("M");
 //			meeting.setPeriod("6");
 //			meeting.setCourseId(1);
 //			
 //			meetings.add(meeting);	//add to arrayList
+//			
+//			Meeting meeting2 = new Meeting();
+//			meeting2.setMeetingId(2);
+//			meeting2.setBuildingCode("LIT");
+//			meeting2.setRoomNumber("RoomNum");
+//			meeting2.setMeetingDay("W");
+//			meeting2.setPeriod("6");
+//			meeting2.setCourseId(1);
+//			
+//			meetings.add(meeting2);	//add to arrayList
 					
 					
 			System.out.println("building code: " +meetings.get(0).getBuildingCode());
