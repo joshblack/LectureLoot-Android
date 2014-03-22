@@ -5,6 +5,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.util.Log;
+
 import com.lectureloot.android.Course;
 import com.lectureloot.android.HttpGetFinishedListener;
 import com.lectureloot.android.Meeting;
@@ -45,7 +47,7 @@ public class CourseListner extends HttpGetFinishedListener{
 			}
 			course.setMeetings(meetings);
 		} catch (Exception e) {
-			//TOAST
+			Log.i("Meetings:",e.toString());
 		}
 	}
 }
