@@ -315,7 +315,7 @@ public class ScheduleFragment extends Fragment{
 		}
 
 		for (String courseId : listDataHeader) {
-			getMeetingsReady();
+			getMeetingsReady(courseId);
 			System.out.println(courseId);
 		}
 		
@@ -454,13 +454,21 @@ public class ScheduleFragment extends Fragment{
 	//		return meetings;
 	//	}
 
-	public void getMeetingsReady() {
+	public void getMeetingsReady(String courseId) {
 
 		Course course = null;
 		List<Course> oneCourseList = null;
+		int id = Integer.parseInt(courseId);
 		try {
 
-			ArrayList<Meeting> meetings = user.getMeetings();
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+			ArrayList<Course> courses = user.getCourses();
+			for(Course c : courses){
+				if(c.getCourseId() == id){
+					meetings = c.getMeetings();
+				}
+			}
+			
 			//System.out.println("building code: " +meetings.get(0).getBuildingCode());
 //			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 //			Meeting meeting = new Meeting();
@@ -484,7 +492,7 @@ public class ScheduleFragment extends Fragment{
 //			meetings.add(meeting2);	//add to arrayList
 					
 					
-			System.out.println("building code: " +meetings.get(0).getBuildingCode());
+			System.out.println("building code: " + meetings.get(0).getBuildingCode());
 			meetings = groupMeetingsDays(meetings);
 			System.out.println("SET MEETINGS");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);

@@ -29,14 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
+//import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
-import com.lectureloot.background.HttpGetCourses;
+//import com.lectureloot.background.HttpGetCourses;
 //import com.lectureloot.background.HttpGetWagers;
 //import com.lectureloot.background.HttpGetSession;
-import com.lectureloot.background.HttpGetMeetings;
-import com.lectureloot.background.HttpGetSessions;
-import com.lectureloot.background.HttpGetWagers;
+//import com.lectureloot.background.HttpGetMeetings;
+//import com.lectureloot.background.HttpGetSessions;
+//import com.lectureloot.background.HttpGetWagers;
 
 
 public class WagerFragment extends Fragment {
