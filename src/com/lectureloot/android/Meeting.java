@@ -1,9 +1,14 @@
 package com.lectureloot.android;
 
+import com.lectureloot.background.HttpGetBuilding;
+import com.lectureloot.background.MeetingListner;
+
 public class Meeting {
 	
 	private int meetingId;
 	private int courseId;
+	private double latitude;
+	private double longitude;
 	private String buildingCode;
 	private String roomNumber;
 	private String meetingDay;
@@ -19,13 +24,23 @@ public class Meeting {
 		this.time = timeInMillis;
 	}
 	
-	public Meeting(int meetingId, int courseId, String buildingCode, String roomNumber, String meetingDay, String period){
+	public Meeting(int meetingId, int courseId, String roomNumber, String meetingDay, String period){
 		this.meetingId = meetingId;
 		this.courseId = courseId;
-		this.buildingCode = buildingCode;
 		this.roomNumber = roomNumber;
 		this.meetingDay = meetingDay;
 		this.period = period;
+	}
+	
+	public void addBuildingById(int buildingId){
+		/* method to load meetings from server for multiple courses (use internal threads/listner) */
+		MeetingListner listner = new MeetingListner(this);
+		
+		//load the courses from the server
+		String buildingUrl = "http://lectureloot.eu1.frbit.net/api/v1/buildings/" + buildingId;
+		HttpGetBuilding buildingTask = new HttpGetBuilding(User.getInstance().getAuthToken());
+		buildingTask.setHttpGetFinishedListener(listner);
+		buildingTask.execute(new String[] {buildingUrl});
 	}
 	
 	public int getMeetingId() {
@@ -64,6 +79,19 @@ public class Meeting {
 	public void setPeriod(String period) {
 		this.period = period;
 	}
+	public void setLatitude(double lat){
+		latitude = lat;
+	}
+	public void setLongitude(double log){
+		longitude = log;
+	}
+	public double getLatitude(){
+		return latitude;
+	}
+	public double getLongitude(){
+		return longitude;
+	}
+	
 	
 	//this can be deleted later, for testing purposes
 	public void setTime(long timeInMillis){
