@@ -15,6 +15,8 @@ public abstract class HttpGetFinishedListener {
 
 	public void onHttpGetCourseReady(String output){}
 	
+	public void onHttpGetBuildingReady(String output){}
+	
 	public void waitForThreads(){
 	/* Function will wait until all threads have executed before allowing caller to unblock */
 		synchronized(this){
