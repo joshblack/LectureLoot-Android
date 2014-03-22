@@ -85,6 +85,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//while(mCurrentUser.isBusy());
 	}
 
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

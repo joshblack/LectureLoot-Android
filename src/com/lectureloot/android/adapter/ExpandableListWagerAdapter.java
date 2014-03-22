@@ -8,6 +8,7 @@ import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
 import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
+import com.lectureloot.android.User;
 import com.lectureloot.android.Wager;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpDeleteWagers;
@@ -31,6 +32,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Wager>> _listDataChild;
+	private User user;
 	
 	private int tempPerClassWager;
 	private String displayTempPerClassWager;
@@ -54,6 +56,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
+		user = User.getInstance();
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();
 		
 		if (convertView == null) {
@@ -166,13 +169,16 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 					@Override
 					public void onClick(View v) {
 						
-						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers/" + wagerId;
-						String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+						String userId = user.getUserId();
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
+						String authToken = user.getAuthToken();
 						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {wagersUrl});
 						
 						Toast.makeText(_context, "Wager has been deleted", Toast.LENGTH_SHORT).show();
+						
+						
 						dialog.dismiss();
 
 					}

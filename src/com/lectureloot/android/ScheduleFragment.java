@@ -56,6 +56,8 @@ public class ScheduleFragment extends Fragment{
 
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.username);
 		//TODO: Set Display name dynamically based on Singleton User Model
+		//String name = user.getName();
+		//System.out.println("HELLO" + user.getName());
 		userDisplay.setText("Justin Rafanan's Schedule");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
@@ -89,7 +91,10 @@ public class ScheduleFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
-
+					
+				ArrayList<Course> allCoursesArray = user.getCourseList();
+				System.out.println(allCoursesArray.toString());
+				
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_course);
 				dialog.setTitle("Select Course");

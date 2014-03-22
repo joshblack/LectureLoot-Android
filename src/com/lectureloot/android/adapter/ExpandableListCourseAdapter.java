@@ -11,6 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONTokener;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
+import com.lectureloot.android.User;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetings;
@@ -37,11 +39,15 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Course>> _listDataChild;
+	private User user;
+	
 
 	public ExpandableListCourseAdapter(Context context, List<String> listDataHeader,HashMap<String, List<Course>> listChildData) {
 		this._context = context;
 		this._listDataHeader = listDataHeader;
 		this._listDataChild = listChildData;
+		
+		
 	}
 
 	@Override
@@ -58,6 +64,7 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
+		user = User.getInstance();
 		final int courseId = ((Course)getChild(groupPosition,childPosition)).getCourseId();
 
 
@@ -189,16 +196,15 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 					@Override
 					public void onClick(View v) {
-
-						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/courses/"+courseId;
-						String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
+						String userId = user.getUserId();
+						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/"+userId+"/courses/"+courseId;
+						String authToken = user.getAuthToken();
 						HttpDeleteCourses getter = new HttpDeleteCourses(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {coursesUrl});
 
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
 						//						mNeedsToCheckIn.setVisibility(View.GONE);
-
 						dialog.dismiss();
 
 					}
