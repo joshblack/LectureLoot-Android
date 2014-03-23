@@ -60,9 +60,12 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
 		user = User.getInstance();
+		
+		
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();
 		ArrayList<Meeting> meetings = user.getMeetings();   // getting Meetings arraylist
 		System.out.println("meetings:" + meetings);
+		System.out.println("USER ID:    IT IS HERE!   "+user.getUserId());
 		
 		final int wagerMeetings = meetings.size();			// finding the size of arrayList to get total Meetings
 		System.out.println("Wager Meetings" +wagerMeetings);

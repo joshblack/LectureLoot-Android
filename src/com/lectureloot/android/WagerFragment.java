@@ -2,13 +2,13 @@ package com.lectureloot.android;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 //import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
+import com.lectureloot.background.HttpPostWagers;
 //import com.lectureloot.background.HttpGetCourses;
 //import com.lectureloot.background.HttpGetWagers;
 //import com.lectureloot.background.HttpGetSession;
@@ -146,26 +147,40 @@ public class WagerFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						
-//						String userId = user.getUserId();
-//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers";
-//						String authToken = user.getAuthToken();
-//						HttpPostWagers wagersPost = new HttpPostWagers(authToken);
-//				        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-//				        nameValuePairs.add(new BasicNameValuePair("user_id", "12345"));
-//				        nameValuePairs.add(new BasicNameValuePair("session_id", "0"));
-//				        nameValuePairs.add(new BasicNameValuePair("wagerUnitValue", "12345"));
-//				        nameValuePairs.add(new BasicNameValuePair("WagerTotalValue", "12345"));
-//				        nameValuePairs.add(new BasicNameValuePair("pointsLost", "0"));
-//				        
-//						//wagersPost.setHttpPostWagersFinishedListener(this);
-//						wagersPost.execute(new String[] {wagersUrl});
+						JSONObject wagerJsonObject = new JSONObject();
+						String userId = user.getUserId();
+//						ArrayList<Meeting> meetings = user.getMeetings();
+//						int wagerMeetings = meetings.size();
+//						String newWagerMeeting = Integer.toString(wagerMeetings);
 						
-						/******************************************
-						 * Need Sessions to get Wager Post to work*
-						 ******************************************/
+						/*
+						 * user_id
+						 * session_id
+						 * wagerUnitValue
+						 * wagerTotalValue
+						 * lostPoints
+						 */
+						
+						String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id=4&session_id=9&wagerUnitValue=5&wagerTotalValue=20&pointsLost=0";
+						
+						
+//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
+//								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
+						System.out.println("Test3 Test3 Test3");
+						String authToken = user.getAuthToken();
+						HttpPostWagers wagersPost = new HttpPostWagers(authToken);
+						
+						//wagersPost.setHttpPostWagersFinishedListener(this);
+						wagersPost.execute(new String[] {wagersUrl});
+						
+/********************************************************************************************************************************
+* Need Sessions to get Wager Post to work                                                                                       *
+* Current code is a hard coded version                                                                                          *
+*********************************************************************************************************************************/
 						
 						Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
+						System.out.println("Test Test Test");
 					}
 				});
 				dialog.show();
@@ -189,14 +204,25 @@ public class WagerFragment extends Fragment {
 			wagerListDataChild.put(Integer.toString(wager.getWagerId()),oneWagerList);
 			System.out.println(wager.getWagerId());
 			
-			/**************************************************************
-			 * Waiting for sessions database connection to be established *
-			 * Then change the sessions for the group adapter             *
-			 * So, the adatpers display the dates of each Wager           *
-			 **************************************************************/		
+/*********************************************************************************************************************************
+* Waiting for sessions database connection to be established                                                                     *
+* Then change the sessions for the group adapter                                                                                 *
+* So, the adapters display the dates of each Wager                                                                               *
+**********************************************************************************************************************************/		
 		}
 	}
 
+//	private void makeWagerJsonObject(JSONObject wagerJsonObject) throws Exception
+//	{
+//		// temp method to creating JsonObject for Wager Post
+//		wagerJsonObject.put("user_id", "4");
+//		wagerJsonObject.put("session_id", "6");
+//		wagerJsonObject.put("wagerUnitValue", "5");
+//		wagerJsonObject.put("wagerTotalValue", "25");
+//		wagerJsonObject.put("pointsLost", "0");
+//	}
+		
+	
 //	public void onHttpGetSessionsReady(String output) {
 ////		
 ////	

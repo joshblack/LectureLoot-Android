@@ -58,7 +58,7 @@ public abstract class HttpPut extends AsyncTask<String, Void, String> {
 
 		try {
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			httpConnection.setRequestMethod("DELETE");
+			httpConnection.setRequestMethod("PUT");
 			httpConnection.setRequestProperty("Authorization", authorizationToken); //HEADER for access token
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();

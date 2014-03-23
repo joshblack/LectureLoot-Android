@@ -220,6 +220,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 				      coursesPost.execute(new String[] {coursesUrl});
 				      
 						Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
+
 						dialog.dismiss();
 
 					}
