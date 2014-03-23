@@ -1,7 +1,7 @@
 package com.lectureloot.background;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -127,11 +127,11 @@ public class UserListner extends HttpGetFinishedListener{
 			Sessions session;
 			for(int i = 0; i < array.length(); i++) {
 				jsonCourse = array.getJSONObject(i);
-
+				
 				session = new Sessions(
 						(Integer)jsonCourse.get("id"),
-						(Date)jsonCourse.get("startDate"),
-						(Date)jsonCourse.get("endDate")
+						Date.valueOf(jsonCourse.getString("endDate")),
+						Date.valueOf(jsonCourse.getString("endDate"))
 						);
 
 				sessions.add(session);
