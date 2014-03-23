@@ -63,6 +63,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		
 		
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();	 // getting wagerId for currect wager
+		final int wagerSessionId = ((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode();	// get sessionId for wager
 		ArrayList<Meeting> meetings = user.getMeetings();  									 // getting Meetings arraylist
 		final int wagerMeetings = meetings.size();						// finding the size of arrayList to get total Meetings
 		((Wager)getChild(groupPosition, childPosition)).setTotalMeetings(wagerMeetings); 	 // setting total Meetings
@@ -186,7 +187,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						for(int i=0;i<wagers.size();i++)
 						{
-							if(wagerId != wagers.get(i).getWagerId())
+							if(wagerSessionId != wagers.get(i).getWagerSessionCode())
 							{
 								newWagers.add(wagers.get(i));
 							}
