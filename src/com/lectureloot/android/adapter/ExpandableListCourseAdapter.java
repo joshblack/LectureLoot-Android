@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
 import com.lectureloot.android.User;
+import com.lectureloot.android.Wager;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetings;
@@ -203,6 +204,23 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {coursesUrl});
 
+						
+						
+						ArrayList<Course> courses = user.getCourses();
+						ArrayList<Course> newCourses = new  ArrayList<Course>();
+						
+						for(int i=0;i<courses.size();i++)
+						{
+							if(courseId != courses.get(i).getCourseId())
+							{
+								newCourses.add(courses.get(i));
+							}
+						}
+						user.setCourses(newCourses);
+						
+						
+						
+						
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
 						//						mNeedsToCheckIn.setVisibility(View.GONE);
 						dialog.dismiss();
