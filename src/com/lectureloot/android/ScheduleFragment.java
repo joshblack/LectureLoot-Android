@@ -17,6 +17,7 @@ import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,17 +49,19 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	private HashMap<String, List<Course>> listDataChild = null;
 	private User user;
 	private int courseId = -69; // used to setup Course Post with courseId
-
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		
+		
 		System.out.println("onCreateView enter");
 
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 		//final AdapterView aView = (AdapterView)rootView;
-
+	
 
 		user = User.getInstance();
 
@@ -264,6 +267,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							user.addCourseFromList(newCourse);
 							
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
+
 							dialog.dismiss();
 			
 						}
@@ -287,7 +291,6 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 			}
 		});
-
 		return rootView;
 	}
 
@@ -464,5 +467,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }
