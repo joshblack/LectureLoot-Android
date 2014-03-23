@@ -45,6 +45,7 @@ public class WagerFragment extends Fragment {
 	private String displayTempPerClassWager;
 	private TextView DisplayCurrentWager;
 	private User user;
+	private int sessionId = 0;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +61,23 @@ public class WagerFragment extends Fragment {
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
 
+		// get all the session information formated and ready before anything start
+		final ArrayList<String> stringSessions = new ArrayList<String>();		// new ArrayLisy for formated date strings
+		ArrayList<Sessions> tempSessions = user.getSessions();			// ArrayList copy of User's sessions
+		String formatModel;												// String used to format the dates
+		System.out.println("Date Strings: "+stringSessions);
+		for(Sessions s : tempSessions)
+		{
+			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
+			stringSessions.add(formatModel);
+		}
+		
+		System.out.println("User Sessions: "+tempSessions);
+		System.out.println("Date Strings: "+stringSessions);
+//		System.out.println();
+//		System.out.println();
+		
+		
 		// get the listview
 		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
 		prepareWagerListData();
@@ -116,16 +134,43 @@ public class WagerFragment extends Fragment {
 						DisplayCurrentWager.setText(displayTempPerClassWager);
 						// changes the original Per Class Wager value to the updated incremented value
 					}
-					// temp solution don't remember if needed
 				});
-
+				
+/********************************************************************************************************************************
+ * Dummy data is present to make it look good, but there will be need to sessions to be pull to populate spinners               *
+ * To go into a post, you need the selected date's sessionId to not match any of the current wagers sessionIds                  *
+ * If the above condition is met, then boolean checker will switch true and allow a post to go through                          *
+ ********************************************************************************************************************************/
+			
+//				String[] wagerDates = {"2/3/2014 - 2/7/2014","2/10/2014 - 2/14/2014","2/17/2014 - 2/21/2014","2/24/2014 - 2/28/2014",
+//						"3/3/2014 - 3/7/2014","3/10/2014 - 3/14/2014","3/17/2014 - 3/21/2014"};
+				final Spinner wagerDateSpinner = (Spinner)dialog.findViewById(R.id.wagerDates);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringSessions); 
+				wagerDateSpinner.setAdapter(adapter);
+							
 				Button dialogCreateButton = (Button) dialog.findViewById(R.id.dialogCreateWagerButton);
 				dialogCreateButton.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						
-//						JSONObject wagerJsonObject = new JSONObject();
+						String formatedDate = wagerDateSpinner.getSelectedItem().toString();
+						System.out.println("Text From spinner"+ formatedDate);
+//						if(stringSessions.size() != 0)
+//						{
+							for(int i = 0;i < stringSessions.size();i++)
+								{
+									if(formatedDate.equals(stringSessions.get(i)));
+									{
+										sessionId = i+1;
+									}
+								}
+//						}
+//						else
+//						{// in case for date array - stringSessions has a size of zero, which will break code
+//							
+//						}
+						
 						String userId = user.getUserId();
 						ArrayList<Meeting> meetings = user.getMeetings();
 						int wagerMeetings = meetings.size();
@@ -137,6 +182,15 @@ public class WagerFragment extends Fragment {
 						// I want to see if the value for the variables are correct
 						//if they are, I will insert them into the url for post
 						
+						boolean checker = true;
+						ArrayList<Wager> wagersChecker = user.getWagers();
+						for(Wager w: wagersChecker)
+						{
+							if(w.getWagerSessionCode() == sessionId)
+							{
+								checker = false;
+							}
+						}
 						
 /*******************************************************************************************************************************
 * user_id    	- user.getUserId;                                                                                              *
@@ -146,56 +200,66 @@ public class WagerFragment extends Fragment {
 * lostPoints	- 0 ( gets defaulted to zero)                                                                                  *
 ********************************************************************************************************************************/
 						
-						String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id="+userId+"&session_id=10&wagerUnitValue="
-						+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
+						if(checker == true)
+						{
+							String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id="+userId+"&session_id="+sessionId+"&wagerUnitValue="
+									+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
 						
 //						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
 //								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
-						String authToken = user.getAuthToken();
-						HttpPostWagers wagersPost = new HttpPostWagers(authToken);
+							String authToken = user.getAuthToken();
+							HttpPostWagers wagersPost = new HttpPostWagers(authToken);
 						
 						//wagersPost.setHttpPostWagersFinishedListener(this);
-						wagersPost.execute(new String[] {wagersUrl});
+							wagersPost.execute(new String[] {wagersUrl});
 						
 /********************************************************************************************************************************
 * Need Sessions to get Wager Post to work                                                                                       *
 * Current code is a hard coded version                                                                                          *
+* Need to find a way to get the right wagerIf for wagers on a local basis														*
 *********************************************************************************************************************************/
-						ArrayList<Wager> wagers = user.getWagers();
-						int countWager = wagers.size();
-						countWager++;
-						Wager newWager = new Wager(countWager, 10, tempPerClassWager,newTotalWager, 0);
-						ArrayList<Wager> newWagers = new  ArrayList<Wager>();
+							ArrayList<Wager> wagers = user.getWagers();
+							int countWager = wagers.size();
+							countWager++; // problem with getting the correct wagerID, since there are more wagers than array spots
+							Wager newWager = new Wager(-1, sessionId, tempPerClassWager,newTotalWager, 0);
+							ArrayList<Wager> newWagers = new  ArrayList<Wager>();
 						
-						for(int i=0;i<countWager;i++)
+// need sessionsId to be use to add the right wagers						
+
+							for(int i=0;i<countWager;i++)
+							{
+								if(wagers.size()==0)
+								{
+									newWagers.add(newWager);
+									break;
+								}
+								else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
+								{
+									newWagers.add(wagers.get(0));
+									wagers.remove(0);
+								}
+								else
+								{
+									newWagers.add(newWager);
+									break;
+								}
+							}
+							if(wagers.size()>0){
+								for(int j=0;j<wagers.size();j++)
+								{
+									newWagers.add(wagers.get(j));
+								}					
+							}
+							user.setWagers(newWagers);
+							System.out.println("List of Wagers:"+user.getWagers());
+							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+							System.out.println("Test Test Test");
+						}
+						else
 						{
-							if(wagers.size()==0)
-							{
-								newWagers.add(newWager);
-								break;
-							}
-							else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
-							{
-								newWagers.add(wagers.get(0));
-								wagers.remove(0);
-							}
-							else
-							{
-								newWagers.add(newWager);
-								break;
-							}
+							Toast.makeText(getActivity(), "Invald Date, please chose a different date", Toast.LENGTH_SHORT).show();
 						}
-						if(wagers.size()>0){
-							for(int j=0;j<wagers.size();j++)
-							{
-								newWagers.add(wagers.get(j));
-							}					
-						}
-						user.setWagers(newWagers);
-						System.out.println("List of Wagers:"+user.getWagers());
-						Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-						System.out.println("Test Test Test");
 					}
 				});
 				dialog.show();
