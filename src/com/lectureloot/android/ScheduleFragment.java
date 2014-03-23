@@ -47,9 +47,9 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	private List<String> listDataHeader = null;
 	private HashMap<String, List<Course>> listDataChild = null;
 	private User user;
-	private int courseId; // used to setup Course Post with courseId
-	
-	
+	private int courseId = -69; // used to setup Course Post with courseId
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 		//final AdapterView aView = (AdapterView)rootView;
-		
+
 
 		user = User.getInstance();
 
@@ -100,13 +100,13 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 			@Override
 			public void onClick(View v) {
 				//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
-					
+
 				final ArrayList<Course> allCoursesArray = user.getCourseList();
-//				System.out.println(allCoursesArray.toString());
+				//				System.out.println(allCoursesArray.toString());
 				ArrayList<String> deptCodes = new ArrayList<String>();
 				ArrayList<String> courseCodes = new ArrayList<String>();
 				ArrayList<String> sectionNumbers = new ArrayList<String>();
-				
+
 				for(Course course : allCoursesArray){
 					deptCodes.add(course.getCoursePrefix());
 				}
@@ -116,60 +116,60 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 				for(Course course : allCoursesArray){
 					sectionNumbers.add(course.getSectionNumber());
 				}
-				
+
 
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_course);
 				dialog.setTitle("Select Course");
-				
-				
+
+
 				//AutoCompleteTextViews for Course Selection
 				final AutoCompleteTextView deptCodeView;
 				deptCodeView = (AutoCompleteTextView) dialog.findViewById(R.id.autoCompleteTextView1);
 				ArrayAdapter<String> adapter0 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,deptCodes);
 				deptCodeView.setAdapter(adapter0);
-				
-//				deptCodeView.setOnItemClickListener(new OnItemClickListener() {
-//
-//					@Override
-//					public void onItemClick(AdapterView<?> arg0, View arg1,
-//							int arg2, long arg3) {
-//						System.out.println("HELLO HELP ME");
-//						System.out.println("Whats going on?");
-//						
-//						
-//					}
-//				});
-				
+
+				//				deptCodeView.setOnItemClickListener(new OnItemClickListener() {
+				//
+				//					@Override
+				//					public void onItemClick(AdapterView<?> arg0, View arg1,
+				//							int arg2, long arg3) {
+				//						System.out.println("HELLO HELP ME");
+				//						System.out.println("Whats going on?");
+				//						
+				//						
+				//					}
+				//				});
+
 				final AutoCompleteTextView courseCodeView;
 				courseCodeView = (AutoCompleteTextView) dialog.findViewById(R.id.autoCompleteTextView2);
 				ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,courseCodes);
 				courseCodeView.setAdapter(adapter1);
-				
+
 				final AutoCompleteTextView sectionNumberView;
 				sectionNumberView = (AutoCompleteTextView) dialog.findViewById(R.id.autoCompleteTextView3);
 				ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,sectionNumbers);
 				sectionNumberView.setAdapter(adapter2);
-				
+
 				//Spinners for Course Selection
-//				//String[] deptCodes = {"CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP"};
-//				Spinner deptCodeSpinner = (Spinner)dialog.findViewById(R.id.deptCodeSpinner);
-//				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,deptCodes); 
-//				deptCodeSpinner.setAdapter(adapter);
-//				//deptCodeSpinner.setOnItemSelectedListener(this);
-//	          
-//
-//				//String[] courseCodes = {"1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456"};
-//				Spinner courseCodeSpinner = (Spinner)dialog.findViewById(R.id.courseCodeSpinner);
-//				ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,courseCodes); 
-//				courseCodeSpinner.setAdapter(adapter2);
-//
-//				//String[] sectionNumbers = {"12AB","5678","85H7","12AB","5678","85H7","12AB","5678","85H7"};
-//				Spinner sectionNumberSpinner = (Spinner)dialog.findViewById(R.id.sectionNumberSpinner);
-//				ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,sectionNumbers); 
-//				sectionNumberSpinner.setAdapter(adapter3);
-				
-				
+				//				//String[] deptCodes = {"CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP"};
+				//				Spinner deptCodeSpinner = (Spinner)dialog.findViewById(R.id.deptCodeSpinner);
+				//				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,deptCodes); 
+				//				deptCodeSpinner.setAdapter(adapter);
+				//				//deptCodeSpinner.setOnItemSelectedListener(this);
+				//	          
+				//
+				//				//String[] courseCodes = {"1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456"};
+				//				Spinner courseCodeSpinner = (Spinner)dialog.findViewById(R.id.courseCodeSpinner);
+				//				ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,courseCodes); 
+				//				courseCodeSpinner.setAdapter(adapter2);
+				//
+				//				//String[] sectionNumbers = {"12AB","5678","85H7","12AB","5678","85H7","12AB","5678","85H7"};
+				//				Spinner sectionNumberSpinner = (Spinner)dialog.findViewById(R.id.sectionNumberSpinner);
+				//				ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,sectionNumbers); 
+				//				sectionNumberSpinner.setAdapter(adapter3);
+
+
 
 				Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
 				dialogButton.setOnClickListener(new OnClickListener() {
@@ -177,63 +177,113 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-					
+
 						String deptCodeStr = deptCodeView.getText().toString();
-						System.out.println(deptCodeStr + ".");
+						//System.out.println(deptCodeStr + ".");
 						String courseCodeStr = courseCodeView.getText().toString();
-						System.out.println(courseCodeStr + ".");
+						//System.out.println(courseCodeStr + ".");
 						String sectionNumberStr = sectionNumberView.getText().toString();
-						System.out.println(sectionNumberStr + ".");
-						
+						//System.out.println(sectionNumberStr + ".");
+
+
 						for(Course course : allCoursesArray){
-							
-							if(course.getCoursePrefix().equals(deptCodeStr)){
-								System.out.println("equals");
-							}
-							else
-								System.out.println("fail");
-							if(course.getCourseNum().equals(courseCodeStr)){
-								System.out.println("equals");
-							}
-							else
-								System.out.println("fail");
-							if(course.getSectionNumber().equals(sectionNumberStr)){
-								System.out.println("equals");
-							}
-							else
-								System.out.println("fail");
-							System.out.println("Course Prefix"+course.getCoursePrefix() +".");
-							System.out.println("Course Num"+course.getCourseNum()+ ".");
-							System.out.println("Course Section"+course.getSectionNumber()+ ".");
+
+//							if(course.getCoursePrefix().equals(deptCodeStr)){
+//								System.out.println("equals");
+//							}
+//							else
+//								System.out.println("fail");
+//							if(course.getCourseNum().equals(courseCodeStr)){
+//								System.out.println("equals");
+//							}
+//							else
+//								System.out.println("fail");
+//							if(course.getSectionNumber().equals(sectionNumberStr)){
+//								System.out.println("equals");
+//							}
+//							else
+//								System.out.println("fail");
+//							System.out.println("Course Prefix"+course.getCoursePrefix() +".");
+//							System.out.println("Course Num"+course.getCourseNum()+ ".");
+//							System.out.println("Course Section"+course.getSectionNumber()+ ".");
 							if(course.getCoursePrefix().equals(deptCodeStr) && course.getCourseNum().equals(courseCodeStr)
 									&& course.getSectionNumber().equals(sectionNumberStr)){
 								courseId = course.getCourseId();
 								break;
 							}
 						}
-				      String userId = user.getUserId();
-				      System.out.println(userId);
-				      String coursesUrl = "http://lectureloot.eu1.frbit.net//api/v1/users/" + userId + "/courses?course_id=" + courseId;
-				      System.out.println(coursesUrl);
-				      String authToken = user.getAuthToken();
-				      HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         
-				      coursesPost.execute(new String[] {coursesUrl});
-				      
-						Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
+						if(courseId != -69){
+							//send server request
+							String userId = user.getUserId();
+							System.out.println(userId);
+							String coursesUrl = "http://lectureloot.eu1.frbit.net//api/v1/users/" + userId + "/courses?course_id=" + courseId;
+							System.out.println(coursesUrl);
+							String authToken = user.getAuthToken();
+							HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         
+							coursesPost.execute(new String[] {coursesUrl});
+							
+							//update locally
+							int newCourseId = courseId;
+							String newCoursePrefix = "defaultPrefix";
+							String newCourseNum = "defaultCourseNum";
+							String newCourseTitle = "defaultCourseTitle";
+							String newSectionNum = "defaultSectionNum";
+							String newCredits = "defaultCredits";
+							String newInstructor = "defaultInstructor";
+							ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
+							
+							for(Course course : allCoursesArray){
+								if(newCourseId == course.getCourseId()){
+									newCoursePrefix = course.getCoursePrefix();
+									newCourseNum = course.getCourseNum();
+									newCourseTitle = course.getCourseTitle();
+									newSectionNum = course.getSectionNumber();
+									newCredits = course.getCredits();
+									newInstructor = course.getInstructor();
+									newMeetings = course.getMeetings();
+								}
+							}
 
-						dialog.dismiss();
+							ArrayList<Course> userCourses = user.getCourses();
+							Course newCourse = new Course(newCourseId, newCoursePrefix, newCourseNum, newCourseTitle, newSectionNum, newCredits, newInstructor);
+							
+//										Meeting meeting = new Meeting();
+//										meeting.setMeetingId(1);
+//										meeting.setBuildingCode("LIT");
+//										meeting.setRoomNumber("RoomNum");
+//										meeting.setMeetingDay("M");
+//										meeting.setPeriod("6");
+//										meeting.setCourseId(1);
+//										newMeetings.add(meeting);
+							
+							newCourse.setMeetings(newMeetings);
+							userCourses.add(newCourse);
+							
+							user.setCourses(userCourses);
+							
+							//user.addCourseFromList(newCourse);
+							
+							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
+							dialog.dismiss();
+			
+						}
+						else 
+						{
+							Toast.makeText(getActivity(), "Invalid Course", Toast.LENGTH_LONG).show();
+							dialog.dismiss();
+						}
 
 					}
 				});
 
 				dialog.show();
-					
-//				String deptCodeStr = deptCodeView.getEditableText().toString();
-//				System.out.println("deptCodeString: " + deptCodeStr);
-				
+
+				//				String deptCodeStr = deptCodeView.getEditableText().toString();
+				//				System.out.println("deptCodeString: " + deptCodeStr);
 
 
-				
+
+
 
 			}
 		});
@@ -285,7 +335,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 			}
 		}
 		if (groupedMeetingsDays.size() == 0) {
-	
+
 			groupedMeetingsDays.addAll(meetings);
 		}
 
@@ -328,7 +378,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 		ArrayList<Course> courses = user.getCourses();
 		System.out.println("COURSES ARRAY LIST" + courses.toString());
-		
+
 
 		List<Course> oneCourseList = null;
 		for (Course course : courses) {
@@ -360,30 +410,30 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 					meetings = c.getMeetings();
 				}
 			}
-			
+
 			//System.out.println("building code: " +meetings.get(0).getBuildingCode());
-//			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-//			Meeting meeting = new Meeting();
-//			meeting.setMeetingId(1);
-//			meeting.setBuildingCode("LIT");
-//			meeting.setRoomNumber("RoomNum");
-//			meeting.setMeetingDay("M");
-//			meeting.setPeriod("6");
-//			meeting.setCourseId(1);
-//			
-//			meetings.add(meeting);	//add to arrayList
-//			
-//			Meeting meeting2 = new Meeting();
-//			meeting2.setMeetingId(2);
-//			meeting2.setBuildingCode("LIT");
-//			meeting2.setRoomNumber("RoomNum");
-//			meeting2.setMeetingDay("W");
-//			meeting2.setPeriod("6");
-//			meeting2.setCourseId(1);
-//			
-//			meetings.add(meeting2);	//add to arrayList
-					
-					
+			//			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+			//			Meeting meeting = new Meeting();
+			//			meeting.setMeetingId(1);
+			//			meeting.setBuildingCode("LIT");
+			//			meeting.setRoomNumber("RoomNum");
+			//			meeting.setMeetingDay("M");
+			//			meeting.setPeriod("6");
+			//			meeting.setCourseId(1);
+			//			
+			//			meetings.add(meeting);	//add to arrayList
+			//			
+			//			Meeting meeting2 = new Meeting();
+			//			meeting2.setMeetingId(2);
+			//			meeting2.setBuildingCode("LIT");
+			//			meeting2.setRoomNumber("RoomNum");
+			//			meeting2.setMeetingDay("W");
+			//			meeting2.setPeriod("6");
+			//			meeting2.setCourseId(1);
+			//			
+			//			meetings.add(meeting2);	//add to arrayList
+
+			System.out.println(meetings.toString());
 			System.out.println("building code: " + meetings.get(0).getBuildingCode());
 			meetings = groupMeetingsDays(meetings);
 			System.out.println("SET MEETINGS");
@@ -406,13 +456,13 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
