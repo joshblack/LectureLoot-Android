@@ -30,18 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-//import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
 import com.lectureloot.background.HttpPostWagers;
-//import com.lectureloot.background.HttpGetCourses;
-//import com.lectureloot.background.HttpGetWagers;
-//import com.lectureloot.background.HttpGetSession;
-
-//import com.lectureloot.background.HttpGetMeetings;
-//import com.lectureloot.background.HttpGetSessions;
-//import com.lectureloot.background.HttpGetWagers;
-
 
 
 public class WagerFragment extends Fragment {
@@ -56,8 +46,6 @@ public class WagerFragment extends Fragment {
 	private TextView DisplayCurrentWager;
 	private User user;
 	
-
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,13 +67,6 @@ public class WagerFragment extends Fragment {
 		// setting list adapter
 		wagerExpListView.setAdapter(wagerListAdapter);
 
-//		Done by Sanders
-//		String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/1/wagers";
-//		String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
-//		HttpGetWagers wagersGetter = new HttpGetWagers(authToken);
-//		wagersGetter.setHttpGetWagersFinishedListener(this);
-//		wagersGetter.execute(new String[] {wagersUrl});
-
 		Button addNewWagerButton;
 		addNewWagerButton = (Button)rootView.findViewById(R.id.addWagerButton);
 		addNewWagerButton.setOnClickListener(new OnClickListener() {
@@ -94,11 +75,8 @@ public class WagerFragment extends Fragment {
 			public void onClick(View v) {
 
 				final Dialog dialog = new Dialog(getActivity());
-				System.out.println("toast1");
 				dialog.setContentView(R.layout.dialog_add_wager);
-				System.out.println("toast2");
 				dialog.setTitle("Make A Wager");
-				System.out.println("toast3");
 				tempPerClassWager = 10;
 				System.out.println("toast");
 				
@@ -147,26 +125,32 @@ public class WagerFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						
-						JSONObject wagerJsonObject = new JSONObject();
+//						JSONObject wagerJsonObject = new JSONObject();
 						String userId = user.getUserId();
-//						ArrayList<Meeting> meetings = user.getMeetings();
-//						int wagerMeetings = meetings.size();
-//						String newWagerMeeting = Integer.toString(wagerMeetings);
+						ArrayList<Meeting> meetings = user.getMeetings();
+						int wagerMeetings = meetings.size();
+						int newTotalWager = tempPerClassWager*wagerMeetings;
+						System.out.println("UserId: "+ userId);
+						System.out.println("Wager Per Class:  "+tempPerClassWager);
+						System.out.println("Wager Meetings: "+ wagerMeetings);
+						System.out.println("Total Wager Value: "+ newTotalWager);
+						// I want to see if the value for the variables are correct
+						//if they are, I will insert them into the url for post
 						
-						/*
-						 * user_id
-						 * session_id
-						 * wagerUnitValue
-						 * wagerTotalValue
-						 * lostPoints
-						 */
 						
-						String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id=4&session_id=9&wagerUnitValue=5&wagerTotalValue=20&pointsLost=0";
+/*******************************************************************************************************************************
+* user_id    	- user.getUserId;                                                                                              *
+* session_id	- TBD (probably from comparing dates or position in array                                                      *
+* wagerUnitValue  - use tempPerClassWager                                                                                      *
+* wagerTotalValue - usetempPerClassWager* meetings size                                                                        *
+* lostPoints	- 0 ( gets defaulted to zero)                                                                                  *
+********************************************************************************************************************************/
 						
+						String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id="+userId+"&session_id=10&wagerUnitValue="
+						+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
 						
 //						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
 //								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
-						System.out.println("Test3 Test3 Test3");
 						String authToken = user.getAuthToken();
 						HttpPostWagers wagersPost = new HttpPostWagers(authToken);
 						
@@ -177,7 +161,32 @@ public class WagerFragment extends Fragment {
 * Need Sessions to get Wager Post to work                                                                                       *
 * Current code is a hard coded version                                                                                          *
 *********************************************************************************************************************************/
+						ArrayList<Wager> wagers = user.getWagers();
+						int countWager = wagers.size();
+						countWager++;
+						Wager newWager = new Wager(countWager, 10, tempPerClassWager,newTotalWager, 0);
+						ArrayList<Wager> newWagers = new  ArrayList<Wager>();
 						
+						for(int i=0;i<countWager;i++)
+						{
+							if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
+							{
+								newWagers.add(wagers.get(0));
+								wagers.remove(0);
+							}
+							else
+							{
+								newWagers.add(newWager);
+								break;
+							}
+						}
+						for(int j=0;j<wagers.size();j++)
+						{
+							newWagers.add(wagers.get(j));
+						}					
+						
+						user.setWagers(newWagers);
+						System.out.println("List of Wagers:"+user.getWagers());
 						Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
 						System.out.println("Test Test Test");
@@ -211,184 +220,5 @@ public class WagerFragment extends Fragment {
 **********************************************************************************************************************************/		
 		}
 	}
-
-//	private void makeWagerJsonObject(JSONObject wagerJsonObject) throws Exception
-//	{
-//		// temp method to creating JsonObject for Wager Post
-//		wagerJsonObject.put("user_id", "4");
-//		wagerJsonObject.put("session_id", "6");
-//		wagerJsonObject.put("wagerUnitValue", "5");
-//		wagerJsonObject.put("wagerTotalValue", "25");
-//		wagerJsonObject.put("pointsLost", "0");
-//	}
-		
-	
-//	public void onHttpGetSessionsReady(String output) {
-////		
-////	
-////		System.out.println("onHttpGetSessionsReady enter");
-////
-////		wagerListDataHeader = new ArrayList<String>();
-////		wagerListDataChild = new HashMap<String, List<Wager>>();
-////
-////		JSONTokener tokener = new JSONTokener(output);
-////		JSONArray array = null;
-////		System.out.println("onHttpGetSessionsReady 1");
-////
-////		try {
-////			array = (JSONArray) tokener.nextValue();
-////			//			System.out.println(array.toString());
-////			System.out.println("onHttpGetSessionsReady 2");
-////
-////		} catch (Exception e) {
-////			System.out.println(e.getMessage());
-////		}
-////		System.out.println("onHttpGetSessionsReady 3");
-////
-////		ArrayList<Sessions> sessions = jsonArrayToSessions(array);
-////
-////		System.out.println("onHttpGetWagersReady 4");
-////
-////		List<Sessions> oneSessionList = null;
-////		for (Sessions sesssion : sessions) {
-////			wagerListDataHeader.add(Integer.toString(session.getSessionId()));
-////			oneSessionList = new ArrayList<Sessions>();
-////			oneSessionList.add(session);
-////			wagerListDataChild.put(Integer.toString(session.getSessionId()),oneSessionList);
-////
-////
-////			System.out.println("onHttpGetWagersReady 5");
-////			System.out.println("session:" + session.toString());
-////
-////		}
-//	}
-
-//	@Override
-//	public void onHttpGetWagersReady(String output) {
-//		System.out.println("onHttpGetWagersReady enter");
-//
-//		wagerListDataHeader = new ArrayList<String>();
-//		wagerListDataChild = new HashMap<String, List<Wager>>();
-//
-//		JSONTokener tokener = new JSONTokener(output);
-//		JSONArray array = null;
-//		System.out.println("onHttpGetWagersReady 1");
-//
-//		try {
-//			array = (JSONArray) tokener.nextValue();
-//			//			System.out.println(array.toString());
-//			System.out.println("onHttpGetWagersReady 2");
-//
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//		System.out.println("onHttpGetWagersReady 3");
-//
-//		ArrayList<Wager> wagers = jsonArrayToWagers(array);
-//
-//		System.out.println("onHttpGetWagersReady 4");
-//
-//		List<Wager> oneWagerList = null;
-//		for (Wager wager : wagers) {
-//			wagerListDataHeader.add(Integer.toString(wager.getWagerId()));
-//			oneWagerList = new ArrayList<Wager>();
-//			oneWagerList.add(wager);
-//			wagerListDataChild.put(Integer.toString(wager.getWagerId()),oneWagerList);
-//
-//
-//			System.out.println("onHttpGetWagersReady 5");
-//			System.out.println("wager:" + wager.toString());
-//
-//		}
-//
-////		for (String wagerId : wagerListDataHeader) {
-////			String authToken = "MJByIloBXVKpebWqqTqW9zGY0EUmAcyDDaiCzyyX";
-////			HttpGetSessions sessionsGetter = new HttpGetSessions(authToken);
-////			String SessionsUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
-////			System.out.println(meetingsUrl);
-////			meetingsGetter.setHttpGetMeetingsFinishedListener(this);
-////			meetingsGetter.execute(new String[] {meetingsUrl});
-////		}
-//
-//		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
-//		// setting list adapter
-//		wagerExpListView.setAdapter(wagerListAdapter);
-//		System.out.println("onHttpGetWagersReady exit");
-//	}
-	
-//	private ArrayList<Wager> jsonArrayToWagers(JSONArray jsonWagers) {
-//		ArrayList<Wager>  wagers = new ArrayList<Wager>();
-//
-//		try {
-//			JSONObject jsonWager;
-//			Wager wager;
-//			for(int i = 0; i < jsonWagers.length(); i++) {
-//				jsonWager = jsonWagers.getJSONObject(i);
-//				wager = jsonObjectToWager(jsonWager);
-//				wagers.add(wager);
-//			}
-//		} catch (Exception e) {
-//
-//		}
-//
-//		return wagers;
-//	}
-//	
-//	private Wager jsonObjectToWager(JSONObject jsonWager) {
-//
-//		Wager wager = new Wager();
-//		try{
-//			wager.setWagerId((Integer)jsonWager.get("id"));
-//			wager.setWagerSessionCode((Integer)jsonWager.get("session_id"));
-//			wager.setWagerPerMeeting((Integer)jsonWager.get("wagerUnitValue"));
-//			wager.setTotalWager((Integer)jsonWager.get("wagerTotalValue"));
-//			wager.setCurrentWagerLost((Integer)jsonWager.get("pointsLost"));
-//
-//
-//		} catch (Exception e){
-//
-//		}
-//		return wager;
-//	}
-	
-//	private ArrayList<Sessions> jsonArrayToSessions(JSONArray jsonSessions) {
-//		ArrayList<Sessions>  sessions = new ArrayList<Sessions>();
-//
-//		try {
-//			JSONObject jsonSession;
-//			Sessions session;
-//			for(int i = 0; i < jsonSessions.length(); i++) {
-//				jsonSessions = jsonSessions.getJSONObject(i);
-//				// here
-//				session = jsonObjectToSessions(jsonSession);
-//				sessions.add(session);
-//			}
-//		} catch (Exception e) {
-//
-//		}
-//
-//		return sessions;
-//	}
-//	
-//	private Sessions jsonObjectToSessions(JSONObject jsonSessions) {
-//
-//		Sessions session = new Sessions();
-//		try{
-//			session.setSessionId((Integer)jsonSessions.get("id"));
-//			session.setStartDate((Date)jsonSessions.get(""));
-//			session.setEndDate((Date)jsonSessions.get(""));
-//			
-//			//wager.setWagerId((Integer)jsonWager.get("id"));
-//			//wager.setWagerSessionCode((Integer)jsonWager.get("session_id"));
-//			//wager.setWagerPerMeeting((Integer)jsonWager.get("wagerUnitValue"));
-//			//wager.setTotalWager((Integer)jsonWager.get("wagerTotalValue"));
-//			//wager.setCurrentWagerLost((Integer)jsonWager.get("pointsLost"));
-//
-//
-//		} catch (Exception e){
-//
-//		}
-//		return session;
-//	}
 		
 }
