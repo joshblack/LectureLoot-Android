@@ -130,7 +130,7 @@ public class UserListner extends HttpGetFinishedListener{
 				
 				session = new Sessions(
 						(Integer)jsonCourse.get("id"),
-						Date.valueOf(jsonCourse.getString("endDate")),
+						Date.valueOf(jsonCourse.getString("startDate")),
 						Date.valueOf(jsonCourse.getString("endDate"))
 						);
 
