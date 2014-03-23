@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.util.Log;
+
 import com.lectureloot.android.Course;
 import com.lectureloot.android.HttpGetFinishedListener;
 import com.lectureloot.android.Meeting;
@@ -144,12 +146,9 @@ public class UserListner extends HttpGetFinishedListener{
 	public void onHttpGetCourseReady(String output) {
 		try {
 			JSONTokener tokener = new JSONTokener(output);
-			JSONArray array = null;
-			array = (JSONArray) tokener.nextValue();
-			JSONObject jsonCourse;
+			JSONObject jsonCourse = (JSONObject) tokener.nextValue();
+			
 			Course course;
-
-			jsonCourse = array.getJSONObject(0);
 
 			course = new Course(	
 					(Integer)jsonCourse.get("id"),
@@ -168,7 +167,7 @@ public class UserListner extends HttpGetFinishedListener{
 			user.setCourses(courses);
 			user.setMeetings(meetings);
 		} catch (Exception e) {
-			//Toast
+			Log.i("Add Course:",e.toString());
 		}
 	}
 
