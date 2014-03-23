@@ -230,7 +230,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							String newSectionNum = "defaultSectionNum";
 							String newCredits = "defaultCredits";
 							String newInstructor = "defaultInstructor";
-							ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
+							//ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
 							
 							for(Course course : allCoursesArray){
 								if(newCourseId == course.getCourseId()){
@@ -240,11 +240,11 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 									newSectionNum = course.getSectionNumber();
 									newCredits = course.getCredits();
 									newInstructor = course.getInstructor();
-									newMeetings = course.getMeetings();
+									//newMeetings = course.getMeetings();
 								}
 							}
 
-							ArrayList<Course> userCourses = user.getCourses();
+							//ArrayList<Course> userCourses = user.getCourses();
 							Course newCourse = new Course(newCourseId, newCoursePrefix, newCourseNum, newCourseTitle, newSectionNum, newCredits, newInstructor);
 							
 //										Meeting meeting = new Meeting();
@@ -256,12 +256,12 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 //										meeting.setCourseId(1);
 //										newMeetings.add(meeting);
 							
-							newCourse.setMeetings(newMeetings);
-							userCourses.add(newCourse);
+							//newCourse.setMeetings(newMeetings);
+							//userCourses.add(newCourse);
 							
-							user.setCourses(userCourses);
+							//user.setCourses(userCourses);
 							
-							//user.addCourseFromList(newCourse);
+							user.addCourseFromList(newCourse);
 							
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
 							dialog.dismiss();
