@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -32,10 +34,11 @@ import android.widget.Toast;
 import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetings;
+import com.lectureloot.background.HttpPostCourses;
 
 
 
-public class ScheduleFragment extends Fragment{
+public class ScheduleFragment extends Fragment implements OnItemSelectedListener{
 
 	private ExpandableListCourseAdapter listAdapter;
 	private ExpandableListView expListView;
@@ -95,6 +98,22 @@ public class ScheduleFragment extends Fragment{
 					
 				ArrayList<Course> allCoursesArray = user.getCourseList();
 				System.out.println(allCoursesArray.toString());
+
+//				ArrayList<String> deptCodes = new ArrayList<String>();
+//				ArrayList<String> courseCodes = new ArrayList<String>();
+				ArrayList<String> sectionNumbers = new ArrayList<String>();
+				
+//				for(Course course : allCoursesArray){
+//					deptCodes.add(course.getDeptCode());
+//				}
+//				for(Course course : allCoursesArray){
+//					courseCodes.add(course.getCourseCodes());
+//				}				
+				for(Course course : allCoursesArray){
+					sectionNumbers.add(course.getSectionNumber());
+				}
+				
+				
 				
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_course);
@@ -120,26 +139,29 @@ public class ScheduleFragment extends Fragment{
 						 *********************************************************************/
 						
 						
-						Toast.makeText(getActivity(), "Error: Course Not Added", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
+
 						dialog.dismiss();
 
 					}
 				});
 
 				dialog.show();
+					
 
 				//TODO: Stubbed out data for the course selection spinners
 				String[] deptCodes = {"CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP","CEN","CIS","CAP"};
 				Spinner deptCodeSpinner = (Spinner)dialog.findViewById(R.id.deptCodeSpinner);
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,deptCodes); 
 				deptCodeSpinner.setAdapter(adapter);
+			//	deptCodeSpinner.setOnItemSelectedListener(listener);
 
 				String[] courseCodes = {"1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456","1234","2345","3456"};
 				Spinner courseCodeSpinner = (Spinner)dialog.findViewById(R.id.courseCodeSpinner);
 				ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,courseCodes); 
 				courseCodeSpinner.setAdapter(adapter2);
 
-				String[] sectionNumbers = {"12AB","5678","85H7","12AB","5678","85H7","12AB","5678","85H7"};
+//				String[] sectionNumbers = {"12AB","5678","85H7","12AB","5678","85H7","12AB","5678","85H7"};
 				Spinner sectionNumberSpinner = (Spinner)dialog.findViewById(R.id.sectionNumberSpinner);
 				ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,sectionNumbers); 
 				sectionNumberSpinner.setAdapter(adapter3);
@@ -523,5 +545,18 @@ public class ScheduleFragment extends Fragment{
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 		}
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
