@@ -164,6 +164,7 @@ public class UserListner extends HttpGetFinishedListener{
 			courses = user.getCourses();
 			meetings = user.getMeetings();			
 			course.loadMeetings(this);
+			courses.add(course);
 			user.setCourses(courses);
 			user.setMeetings(meetings);
 		} catch (Exception e) {
