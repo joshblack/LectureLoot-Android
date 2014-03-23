@@ -65,7 +65,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 
 		try {
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			httpConnection.setRequestMethod("DELETE");
+			httpConnection.setRequestMethod("POST");
 			httpConnection.setRequestProperty("Authorization", authorizationToken); //HEADER for access token
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();

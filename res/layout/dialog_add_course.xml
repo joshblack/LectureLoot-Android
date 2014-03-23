@@ -10,29 +10,54 @@
         android:orientation="horizontal"
         android:paddingBottom="50dp" >
 
-        <Spinner
-            android:id="@+id/deptCodeSpinner"
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:prompt="@string/department_code" />
+            android:layout_marginTop="65dp"
+            android:ems="10" >
+         </AutoCompleteTextView>
+         
+         <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:ems="10" >
+         </AutoCompleteTextView>
+         
+         <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:ems="10" >
+         </AutoCompleteTextView>
 
-        <Spinner
-            android:id="@+id/courseCodeSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:prompt="@string/department_code" />
+            <Spinner
+                android:id="@+id/deptCodeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:prompt="@string/department_code" />
 
-        <Spinner
-            android:id="@+id/sectionNumberSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:prompt="@string/department_code" />
+            <Spinner
+                android:id="@+id/courseCodeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:prompt="@string/department_code" />
+
+            <Spinner
+                android:id="@+id/sectionNumberSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:prompt="@string/department_code" />
+
     </LinearLayout>
 
     <Button
