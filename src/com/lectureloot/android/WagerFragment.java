@@ -169,7 +169,12 @@ public class WagerFragment extends Fragment {
 						
 						for(int i=0;i<countWager;i++)
 						{
-							if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
+							if(wagers.size()==0)
+							{
+								newWagers.add(newWager);
+								break;
+							}
+							else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
 							{
 								newWagers.add(wagers.get(0));
 								wagers.remove(0);
@@ -180,11 +185,12 @@ public class WagerFragment extends Fragment {
 								break;
 							}
 						}
-						for(int j=0;j<wagers.size();j++)
-						{
-							newWagers.add(wagers.get(j));
-						}					
-						
+						if(wagers.size()>0){
+							for(int j=0;j<wagers.size();j++)
+							{
+								newWagers.add(wagers.get(j));
+							}					
+						}
 						user.setWagers(newWagers);
 						System.out.println("List of Wagers:"+user.getWagers());
 						Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
