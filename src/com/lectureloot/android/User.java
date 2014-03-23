@@ -372,7 +372,7 @@ public class User {
 
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId();
-		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken);
+		HttpGetCourse courseTask = new HttpGetCourse(mAuthToken);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
 	}
