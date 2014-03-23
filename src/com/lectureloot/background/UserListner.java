@@ -137,7 +137,7 @@ public class UserListner extends HttpGetFinishedListener{
 				sessions.add(session);
 			}
 		} catch (Exception e) {
-			//Toast
+			Log.i("Sessions:",e.toString());
 		}
 		user.setSessions(sessions);
 

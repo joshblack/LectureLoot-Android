@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Looper;
 import android.util.Log;
 import com.lectureloot.background.*;
@@ -363,7 +365,7 @@ public class User {
 		courseListTask.execute(new String[] {courseListUrl});
 
 		//wait for threads to finish before continuing
-		listner.waitForThreads(); 
+		listner.waitForThreads();
 	}
 
 	public void addCourseFromList(Course course){
