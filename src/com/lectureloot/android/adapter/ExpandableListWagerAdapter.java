@@ -189,6 +189,19 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {wagersUrl});
 						
+						ArrayList<Wager> wagers = new ArrayList<Wager>();
+						wagers = user.getWagers();
+						
+						System.out.println(wagers.toString());
+						
+						for(Wager wager : wagers){
+							if(wagerId == wager.getWagerId())
+								wagers.remove(wager);
+						}
+
+						System.out.println(wagers.toString());
+						user.setWagers(wagers);
+						
 						Toast.makeText(_context, "Wager has been deleted", Toast.LENGTH_SHORT).show();
 						
 						
