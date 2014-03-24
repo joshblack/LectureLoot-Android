@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONTokener;
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -28,11 +24,9 @@ import android.widget.Toast;
 
 import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
+import com.lectureloot.android.ScheduleFragment;
 import com.lectureloot.android.User;
-import com.lectureloot.android.Wager;
 import com.lectureloot.background.HttpDeleteCourses;
-import com.lectureloot.background.HttpGetCourses;
-import com.lectureloot.background.HttpGetMeetings;
 
 public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
@@ -217,6 +211,10 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 							}
 						}
 						user.setCourses(newCourses);
+						ScheduleFragment frg = new ScheduleFragment();
+						_listDataHeader = frg.prepareDataHeader();
+						_listDataChild = frg.prepareDataChild();
+						notifyDataSetChanged();
 						
 						
 						
@@ -314,6 +312,13 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+	
+	public void reloadItems(ArrayList<String> header, HashMap<String, List<Course>> child)
+	{
+		this._listDataHeader = header;
+		this._listDataChild = child;
+		notifyDataSetChanged();
 	}
 
 

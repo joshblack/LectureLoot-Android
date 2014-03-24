@@ -1,11 +1,5 @@
 package com.lectureloot.background;
 
-import android.os.AsyncTask;
-
-import android.util.Log;
-
-import com.lectureloot.android.HttpGetFinishedListener;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +7,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ListAdapter;
+
+import com.lectureloot.android.HttpGetFinishedListener;
+import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 
 public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
@@ -22,9 +23,12 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 //	protected HttpGetWagersFinishedListener wagersListener;
 	protected HttpGetFinishedListener listener;
 	protected String authorizationToken;
+	protected ExpandableListCourseAdapter adapter;
+
 	
-	public HttpGet(String authToken) {
+	public HttpGet(String authToken, ExpandableListCourseAdapter adapter) {
 		this.authorizationToken = authToken;
+		this.adapter = adapter;
 	}
 
 //	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
@@ -105,6 +109,10 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String output) {
 		returnResponse(output);
 		listener.notifyThreadComplete();
+		if(adapter != null) {
+			adapter.notifyDataSetChanged();
+		}
+		
 	}
 
 	public abstract void returnResponse(String output);
