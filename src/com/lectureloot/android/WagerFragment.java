@@ -165,8 +165,8 @@ public class WagerFragment extends Fragment {
 						{
 							for(int i = 0;i < stringSessions.size();i++)
 								{
-									System.out.println(formatedDate);
-									System.out.println(stringSessions.get(i));
+//									System.out.println(formatedDate);
+//									System.out.println(stringSessions.get(i));
 									String dummyTest = stringSessions.get(i);
 									boolean plzWork = false;
 									if(formatedDate.equals(stringSessions.get(i)))
@@ -177,11 +177,10 @@ public class WagerFragment extends Fragment {
 									if(plzWork == true)
 									{
 										sessionId = i+1;
-										int a = sessionId;
-										System.out.println("SessionId is HERE:    "+sessionId);
-										System.out.println("true");
+//										System.out.println("SessionId is HERE:    "+sessionId);
+//										System.out.println("true");
 									}
-									System.out.println("false");
+//									System.out.println("false");
 								}
 						}
 //						else
@@ -204,16 +203,16 @@ public class WagerFragment extends Fragment {
 						ArrayList<Wager> wagersChecker = user.getWagers();
 						for(Wager w: wagersChecker)
 						{
-							System.out.println("sessionId"+ sessionId);
-							System.out.println("w's sessionId is here:   "+w.getWagerSessionCode());
+//							System.out.println("sessionId"+ sessionId);
+//							System.out.println("w's sessionId is here:   "+w.getWagerSessionCode());
 							if(w.getWagerSessionCode() == sessionId)
 							{
 								checker = false;
-								System.out.println("False");
+//								System.out.println("False");
 							}
 							else
 							{
-							System.out.println("True");
+//							System.out.println("True");
 							}
 						}
 						
@@ -254,49 +253,55 @@ public class WagerFragment extends Fragment {
 							System.out.println("Obvious basic print");
 							for(int i=0;i<countWager;i++)
 							{
-								System.out.println("WTF WHY ARE THINGS NOT GOING LIKE I WANT THEM TO");
+//								System.out.println("WTF WHY ARE THINGS NOT GOING LIKE I WANT THEM TO");
 								if(wagers.size()==0)
 								{
 									newWagers.add(newWager);
-									System.out.println("newwagers1:   "+ newWagers);
+//									System.out.println("newwagers1: (adds newWager)  "+ newWagers);
 									break;
 								}
 								
 								else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
 								{
-									System.out.println("newwagers2:   "+ newWagers);
+//									System.out.println("newwagers2: (orignal)  "+ newWagers);
 									newWagers.add(wagers.get(0));
-									System.out.println("newwagers2:   "+ newWagers);
-									System.out.println("wagers2_1:   "+ wagers);
+//									System.out.println("newwagers2: (adds from wagers)  "+ newWagers);
+//									System.out.println("wagers2_1: (original wagers)  "+ wagers);
 									wagers.remove(0);
-									System.out.println("wagers2_2:   "+ wagers);
+//									System.out.println("wagers2_2: (-1 wagers)  "+ wagers);
 								}
 								else
 								{
-									System.out.println("newwagers3:   "+ newWagers);
+//									System.out.println("newwagers3: (original) "+ newWagers);
 									newWagers.add(newWager);
-									System.out.println("newwagers3:   "+ newWagers);
-									System.out.println("wagers3_1:   "+ wagers);
+//									System.out.println("newwagers3: (+ newWager)  "+ newWagers);
+//									System.out.println("wagers3_1: (wagers)  "+ wagers);
 									break;
 								}
-								System.out.println("PLZ FOR LOOP WORK.... JUST WORK T.T");
+//								System.out.println("PLZ FOR LOOP WORK.... JUST WORK T.T");
 							}
 							if(wagers.size()>0){
 								for(int j=0;j<wagers.size();j++)
 								{
-									System.out.println("It prolly should not go in here");
-									System.out.println("newwagers4:   "+ newWagers);
-									System.out.println("wagers4_1:   "+ wagers);
+//									System.out.println("It prolly should not go in here");
+//									System.out.println("newwagers4: (Before complete print)  "+ newWagers);
+//									System.out.println("wagers4_1: (wagerlist)  "+ wagers);
 									newWagers.add(wagers.get(j));
-									System.out.println("newwagers4:   "+ newWagers);
-									System.out.println("wagers4_2:   "+ wagers);
-									System.out.println("yea this just sucks");
+									System.out.println("newwagers4: (should have wagerlist inside now)  "+ newWagers);
 								}					
 							}
-							System.out.println("newwagers:   "+ newWagers);
+							System.out.println("newwagers: (new)  "+ newWagers);
+							for(Wager w : newWagers)
+							{
+								System.out.println(w.getWagerSessionCode());
+							}
 							user.setWagers(newWagers);
-							System.out.println("Hello!!!!!!");
+							
 							System.out.println("List of Wagers:"+user.getWagers());
+							for(Wager w : user.getWagers())
+							{
+								System.out.println(w.getWagerSessionCode());
+							}
 							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
 							System.out.println("Test Test Test");
@@ -322,17 +327,12 @@ public class WagerFragment extends Fragment {
 		
 		List<Wager> oneWagerList = null;
 		for (Wager wager : wagers) {
-			wagerListDataHeader.add(Integer.toString(wager.getWagerId()));
+			wagerListDataHeader.add(Integer.toString(wager.getWagerSessionCode()));
 			oneWagerList = new ArrayList<Wager>();
 			oneWagerList.add(wager);
-			wagerListDataChild.put(Integer.toString(wager.getWagerId()),oneWagerList);
-			System.out.println(wager.getWagerId());
+			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
 			
-/*********************************************************************************************************************************
-* Waiting for sessions database connection to be established                                                                     *
-* Then change the sessions for the group adapter                                                                                 *
-* So, the adapters display the dates of each Wager                                                                               *
-**********************************************************************************************************************************/		
 		}
 	}
 		

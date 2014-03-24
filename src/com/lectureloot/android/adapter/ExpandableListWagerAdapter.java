@@ -63,14 +63,22 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		
 		
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();	 // getting wagerId for currect wager
+		System.out.println("wagerId:   "+ wagerId);
+		System.out.println();	
 		final int wagerSessionId = ((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode();	// get sessionId for wager
+		System.out.println("wagerSessionId:   "+ wagerSessionId);
+		System.out.println();	
 		ArrayList<Meeting> meetings = user.getMeetings();  									 // getting Meetings arraylist
 		final int wagerMeetings = meetings.size();						// finding the size of arrayList to get total Meetings
+		System.out.println("wagerMeetings:   "+ wagerMeetings);	
+		System.out.println();	
 		((Wager)getChild(groupPosition, childPosition)).setTotalMeetings(wagerMeetings); 	 // setting total Meetings
 		final int wagerUnitValue =((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting();	//getting Meetings from Wagers
-
+		System.out.println("wagerUnitValue:   "+ wagerUnitValue);
+		System.out.println();	
 		final int newTotalWager = wagerMeetings*wagerUnitValue;								// Getting new TotalWager
 		System.out.println("newTotalWager:   "+ newTotalWager);								// used to verify TotalWagers is correct
+		System.out.println();	
 		((Wager)getChild(groupPosition, childPosition)).setTotalWager(newTotalWager);		// setting new Total Wager
 		
 		
@@ -175,7 +183,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 					public void onClick(View v) {
 						
 						String userId = user.getUserId();
-						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerSessionId;
 						String authToken = user.getAuthToken();
 						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
@@ -184,7 +192,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						System.out.println("Here");
 						ArrayList<Wager> wagers = user.getWagers();
 						ArrayList<Wager> newWagers = new  ArrayList<Wager>();
-						
+						System.out.println("Wager arrayList"+wagers);
 						for(int i=0;i<wagers.size();i++)
 						{
 							if(wagerSessionId != wagers.get(i).getWagerSessionCode())
@@ -192,6 +200,9 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 								newWagers.add(wagers.get(i));
 							}
 						}
+						System.out.println("Wager arrayList"+wagers);
+						System.out.println("newWager arrayList"+newWagers);
+						
 						
 						user.setWagers(newWagers);
 						System.out.println("I survived");
