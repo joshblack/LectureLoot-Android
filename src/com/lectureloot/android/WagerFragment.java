@@ -72,9 +72,10 @@ public class WagerFragment extends Fragment {
 			stringSessions.add(formatModel);
 		}
 		
-		System.out.println("User Sessions: "+tempSessions);
+		System.out.println("User Sessions: "+user.getSessions());
+		System.out.println(tempSessions);
 		System.out.println("Date Strings: "+stringSessions);
-//		System.out.println();
+		
 //		System.out.println();
 		
 		
@@ -156,16 +157,33 @@ public class WagerFragment extends Fragment {
 						
 						String formatedDate = wagerDateSpinner.getSelectedItem().toString();
 						System.out.println("Text From spinner"+ formatedDate);
-//						if(stringSessions.size() != 0)
-//						{
+						if(stringSessions.size() != 0)
+						{
+							System.out.println("Hello, this if statement is true");
+						}
+						if(stringSessions.size() != 0)
+						{
 							for(int i = 0;i < stringSessions.size();i++)
 								{
-									if(formatedDate.equals(stringSessions.get(i)));
+									System.out.println(formatedDate);
+									System.out.println(stringSessions.get(i));
+									String dummyTest = stringSessions.get(i);
+									boolean plzWork = false;
+									if(formatedDate.equals(stringSessions.get(i)))
+									{
+										plzWork = true;
+									}
+									
+									if(plzWork == true)
 									{
 										sessionId = i+1;
+										int a = sessionId;
+										System.out.println("SessionId is HERE:    "+sessionId);
+										System.out.println("true");
 									}
+									System.out.println("false");
 								}
-//						}
+						}
 //						else
 //						{// in case for date array - stringSessions has a size of zero, which will break code
 //							
@@ -186,9 +204,16 @@ public class WagerFragment extends Fragment {
 						ArrayList<Wager> wagersChecker = user.getWagers();
 						for(Wager w: wagersChecker)
 						{
+							System.out.println("sessionId"+ sessionId);
+							System.out.println("w's sessionId is here:   "+w.getWagerSessionCode());
 							if(w.getWagerSessionCode() == sessionId)
 							{
 								checker = false;
+								System.out.println("False");
+							}
+							else
+							{
+							System.out.println("True");
 							}
 						}
 						
@@ -225,32 +250,52 @@ public class WagerFragment extends Fragment {
 							ArrayList<Wager> newWagers = new  ArrayList<Wager>();
 						
 // need sessionsId to be use to add the right wagers						
-
+							System.out.println("newwagers:   "+ newWagers);
+							System.out.println("Obvious basic print");
 							for(int i=0;i<countWager;i++)
 							{
+								System.out.println("WTF WHY ARE THINGS NOT GOING LIKE I WANT THEM TO");
 								if(wagers.size()==0)
 								{
 									newWagers.add(newWager);
+									System.out.println("newwagers1:   "+ newWagers);
 									break;
 								}
+								
 								else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
 								{
+									System.out.println("newwagers2:   "+ newWagers);
 									newWagers.add(wagers.get(0));
+									System.out.println("newwagers2:   "+ newWagers);
+									System.out.println("wagers2_1:   "+ wagers);
 									wagers.remove(0);
+									System.out.println("wagers2_2:   "+ wagers);
 								}
 								else
 								{
+									System.out.println("newwagers3:   "+ newWagers);
 									newWagers.add(newWager);
+									System.out.println("newwagers3:   "+ newWagers);
+									System.out.println("wagers3_1:   "+ wagers);
 									break;
 								}
+								System.out.println("PLZ FOR LOOP WORK.... JUST WORK T.T");
 							}
 							if(wagers.size()>0){
 								for(int j=0;j<wagers.size();j++)
 								{
+									System.out.println("It prolly should not go in here");
+									System.out.println("newwagers4:   "+ newWagers);
+									System.out.println("wagers4_1:   "+ wagers);
 									newWagers.add(wagers.get(j));
+									System.out.println("newwagers4:   "+ newWagers);
+									System.out.println("wagers4_2:   "+ wagers);
+									System.out.println("yea this just sucks");
 								}					
 							}
+							System.out.println("newwagers:   "+ newWagers);
 							user.setWagers(newWagers);
+							System.out.println("Hello!!!!!!");
 							System.out.println("List of Wagers:"+user.getWagers());
 							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();

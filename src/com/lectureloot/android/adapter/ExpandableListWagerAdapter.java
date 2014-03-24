@@ -181,7 +181,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {wagersUrl});
 						
-						
+						System.out.println("Here");
 						ArrayList<Wager> wagers = user.getWagers();
 						ArrayList<Wager> newWagers = new  ArrayList<Wager>();
 						
@@ -192,8 +192,9 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 								newWagers.add(wagers.get(i));
 							}
 						}
-						user.setWagers(newWagers);
 						
+						user.setWagers(newWagers);
+						System.out.println("I survived");
 						
 //						ArrayList<Wager> wagers = new ArrayList<Wager>();
 //						wagers = user.getWagers();
