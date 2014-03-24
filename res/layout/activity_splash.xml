@@ -16,6 +16,8 @@
     <ProgressBar
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleLarge"
+        android:scaleX="2.5"
+        android:scaleY="2.5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"  />
@@ -28,6 +30,6 @@
         android:textColor="#FFFFFFFF"
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true"
-        android:text="LectureLoot" />
+        android:text="LectureLoot Version 0.0.1a" />
 
 </RelativeLayout>
