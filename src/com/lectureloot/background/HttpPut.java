@@ -1,11 +1,5 @@
 package com.lectureloot.background;
 
-import android.os.AsyncTask;
-
-import android.util.Log;
-
-import com.lectureloot.android.HttpGetFinishedListener;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,58 +8,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-public abstract class HttpGet extends AsyncTask<String, Void, String> {
+import android.os.AsyncTask;
+import android.view.View.OnClickListener;
 
-//	protected HttpGetCoursesFinishedListener courseListener;
-//	protected HttpGetMeetingsFinishedListener meetingsListener;
-//	protected HttpGetSessionsFinishedListener sessionsListener;
-//	protected HttpGetWagersFinishedListener wagersListener;
-	protected HttpGetFinishedListener listener;
+import com.lectureloot.android.HttpPutWagersFinishedListener;
+
+public abstract class HttpPut extends AsyncTask<String, Void, String> {
+
+	protected HttpPutWagersFinishedListener wagerListener;  // change to post
 	protected String authorizationToken;
 	
-	public HttpGet(String authToken) {
+	public HttpPut(String authToken) {
 		this.authorizationToken = authToken;
 	}
 
-//	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
-//		this.courseListener = listener;
-//	}
-//	
-//	public void setHttpGetMeetingsFinishedListener(HttpGetMeetingsFinishedListener listener) {
-//		this.meetingsListener = listener;
-//	}
-//	
-//	public void setHttpGetSessionsFinishedListener(HttpGetSessionsFinishedListener listener) {
-//		this.sessionsListener = listener;
-//	}
-//	
-//	public void setHttpGetWagersFinishedListener(HttpGetWagersFinishedListener listener) {
-//		this.wagersListener = listener;
-//	}
-	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
-	this.listener = listener;
-}
-	public void onPreExecute(){
-		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
+	public void setHttpPutWagersFinishedListener(OnClickListener onClickListener) {
+		this.wagerListener = (HttpPutWagersFinishedListener) onClickListener;
 	}
 	
 	@Override
 	protected String doInBackground(String... urls) {
+		//	android.os.Debug.waitForDebugger();
 		String output = null;
 		for (String url : urls) {
 			output = getOutputFromUrl(url);
 		}
 		return output;
 	}
-
+	
 	private String getOutputFromUrl(String url) {
 		StringBuffer output = new StringBuffer("");
 		try {
 			InputStream stream = getHttpConnection(url);
-			if (stream == null){
-				Log.w("HttpGet:", "Null Stream - " + url);
-				return "";
-			}
 			BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
 			String s = "";
 			while ((s = buffer.readLine()) != null) {
@@ -76,8 +50,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		}
 		return output.toString();
 	}
-
-
+	
 	private InputStream getHttpConnection(String urlString) throws  IOException{
 		InputStream stream = null;
 		URL url = new URL(urlString);
@@ -85,7 +58,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 		try {
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			httpConnection.setRequestMethod("GET");
+			httpConnection.setRequestMethod("PUT");
 			httpConnection.setRequestProperty("Authorization", authorizationToken); //HEADER for access token
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
@@ -103,9 +76,11 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		returnResponse(output);
-		listener.notifyThreadComplete();
+
+		System.out.println("response:" + output);
+		//returnResponse(output);
 	}
 
 	public abstract void returnResponse(String output);
+	
 }

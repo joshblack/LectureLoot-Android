@@ -2,77 +2,45 @@ package com.lectureloot.android;
 
 import java.util.ArrayList;
 
+import com.lectureloot.background.CourseListner;
+import com.lectureloot.background.HttpGetMeetings;
+import com.lectureloot.background.UserListner;
+
 /**
  * Course Model
  * @author Austin
+ * 
+ * modified by Josh S.
  *
  */
 
 public class Course {
 
 	private int courseId;
-	private String courseCode;
+	private String coursePrefix;
+	private String courseNum;
 	private String courseTitle;
 	private String sectionNumber;
 	private String credits;
 	private String instructor;
 	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-	//	private String meetingDays1;
-	//	private String meetingDays2;
-	//	private String meetingDays3;
-	//	private String period1;
-	//	private String period2;
-	//	private String period3;
-	//	private String room1;
-	//	private String room2;
-	//	private String room3;
 
 	public Course () {
 
 	}
 
-	public Course(String courseCode, String courseTitle, String sectionNumber, String credits,
-			String instructor, String meetingDays1, String meetingDays2,
-			String meetingDays3, String period1, String period2,
-			String period3, String room1, String room2, String room3) {
-		this.courseCode = courseCode;
+	/* constructor for current course setup */
+	public Course(int courseID, String coursePrefix, String courseNum, String courseTitle, String sectionNumber, String credits,
+			String instructor) {
+		this.courseId = courseID;
+		this.coursePrefix = coursePrefix;
+		this.courseNum = courseNum;
 		this.courseTitle = courseTitle;
 		this.sectionNumber = sectionNumber;
 		this.credits = credits;
 		this.instructor = instructor;
-		//		this.meetingDays1 = meetingDays1;
-		//		this.meetingDays2 = meetingDays2;
-		//		this.meetingDays3 = meetingDays3;
-		//		this.period1 = period1;
-		//		this.period2 = period2;
-		//		this.period3 = period3;
-		//		this.room1 = room1;
-		//		this.room2 = room2;
-		//		this.room3 = room3;
 	}
-
-	public Course(int courseId, String courseCode, String courseTitle, String sectionNumber, String credits,
-			String instructor, String meetingDays1, String meetingDays2,
-			String meetingDays3, String period1, String period2,
-			String period3, String room1, String room2, String room3) {
-		this.courseId = courseId;
-		this.courseCode = courseCode;
-		this.courseTitle = courseTitle;
-		this.sectionNumber = sectionNumber;
-		this.credits = credits;
-		this.instructor = instructor;
-		//		this.meetingDays1 = meetingDays1;
-		//		this.meetingDays2 = meetingDays2;
-		//		this.meetingDays3 = meetingDays3;
-		//		this.period1 = period1;
-		//		this.period2 = period2;
-		//		this.period3 = period3;
-		//		this.room1 = room1;
-		//		this.room2 = room2;
-		//		this.room3 = room3;
-	}
-
-
+	
 	public int getCourseId() {
 		return courseId;
 	}
@@ -82,38 +50,62 @@ public class Course {
 	}
 
 	public String getCourseCode() {
-		return courseCode;
+		return coursePrefix + courseNum;
+	}
+	
+	public void setCourseCode(String courseCode){
+		coursePrefix = courseCode.substring(0,2);
+		courseNum = courseCode.substring(3);
 	}
 
-
-	public void setCourseCode(String courseCode) {
-		this.courseCode = courseCode;
+	public String getCoursePrefix(){
+		return coursePrefix;
+	}
+	
+	public String getCourseNum(){
+		return courseNum;
 	}
 
+	public void setCourseNum(String courseNum){
+		this.courseNum = courseNum;
+	}
+	
+	public void setCoursePrefix(String coursePrefix){
+		this.coursePrefix = coursePrefix;
+	}
+	
 	public String getCourseTitle() {
 		return courseTitle;
 	}
+	
 	public void setCourseTitle(String courseTitle) {
 		this.courseTitle = courseTitle;
 	}
+
 	public String getSectionNumber() {
 		return sectionNumber;
 	}
+
 	public void setSectionNumber(String sectionNumber) {
 		this.sectionNumber = sectionNumber;
 	}
+
 	public String getCredits() {
 		return credits;
 	}
+
 	public void setCredits(String credits) {
 		this.credits = credits;
 	}
+
 	public String getInstructor() {
 		return instructor;
 	}
+
 	public void setInstructor(String instructor) {
 		this.instructor = instructor;
 	}
+
 	public ArrayList<Meeting> getMeetings() {
 		return meetings;
 	}
@@ -122,60 +114,17 @@ public class Course {
 		this.meetings = meetings;
 	}
 
-
-	//	public String getMeetingDays1() {
-	//		return meetingDays1;
-	//	}
-	//	public void setMeetingDays1(String meetingDays1) {
-	//		this.meetingDays1 = meetingDays1;
-	//	}
-	//	public String getMeetingDays2() {
-	//		return meetingDays2;
-	//	}
-	//	public void setMeetingDays2(String meetingDays2) {
-	//		this.meetingDays2 = meetingDays2;
-	//	}
-	//	public String getMeetingDays3() {
-	//		return meetingDays3;
-	//	}
-	//	public void setMeetingDays3(String meetingDays3) {
-	//		this.meetingDays3 = meetingDays3;
-	//	}
-	//	public String getPeriod1() {
-	//		return period1;
-	//	}
-	//	public void setPeriod1(String period1) {
-	//		this.period1 = period1;
-	//	}
-	//	public String getPeriod2() {
-	//		return period2;
-	//	}
-	//	public void setPeriod2(String period2) {
-	//		this.period2 = period2;
-	//	}
-	//	public String getPeriod3() {
-	//		return period3;
-	//	}
-	//	public void setPeriod3(String period3) {
-	//		this.period3 = period3;
-	//	}
-	//	public String getRoom1() {
-	//		return room1;
-	//	}
-	//	public void setRoom1(String room1) {
-	//		this.room1 = room1;
-	//	}
-	//	public String getRoom2() {
-	//		return room2;
-	//	}
-	//	public void setRoom2(String room2) {
-	//		this.room2 = room2;
-	//	}
-	//	public String getRoom3() {
-	//		return room3;
-	//	}
-	//	public void setRoom3(String room3) {
-	//		this.room3 = room3;
-	//	}
-
+	
+	public void loadMeetings(UserListner user){
+		/* method to load meetings from server for multiple courses (use internal threads/listner) */
+		CourseListner listner = new CourseListner(this, user);
+		
+		//load the courses from the server
+		String meetingUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
+		HttpGetMeetings meetingTask = new HttpGetMeetings(User.getInstance().getAuthToken());
+		meetingTask.setHttpGetFinishedListener(listner);
+		meetingTask.execute(new String[] {meetingUrl});
+	}
 }
+
+
