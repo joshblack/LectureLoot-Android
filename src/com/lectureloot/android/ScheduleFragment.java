@@ -211,8 +211,21 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 //							System.out.println("Course Section"+course.getSectionNumber()+ ".");
 							if(course.getCoursePrefix().equals(deptCodeStr) && course.getCourseNum().equals(courseCodeStr)
 									&& course.getSectionNumber().equals(sectionNumberStr)){
-								courseId = course.getCourseId();
-								break;
+								
+								ArrayList<Course> userCourses = user.getCourses();
+								boolean sameCourse = false;
+								for(Course userCourse : userCourses){
+									if(course.getCourseId() == userCourse.getCourseId()){
+										sameCourse = true;
+										Toast.makeText(getActivity(), "Already Registered for " + course.getCourseTitle(), Toast.LENGTH_LONG).show();
+										break;
+									}
+								}
+								if(sameCourse==false){
+									courseId = course.getCourseId();
+									break;
+								}
+								
 							}
 						}
 						if(courseId != -69){
@@ -268,6 +281,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
 
+							
 							dialog.dismiss();
 			
 						}
