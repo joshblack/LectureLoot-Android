@@ -309,6 +309,10 @@ public class WagerFragment extends Fragment {
 							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
 							System.out.println("Test Test Test");
+							
+							
+							wagerListAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+							
 						}
 						else
 						{

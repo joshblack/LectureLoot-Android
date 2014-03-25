@@ -287,5 +287,12 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+	
+	public void reloadItems(ArrayList<String> header, HashMap<String, List<Wager>> child)
+	{
+		this._listDataHeader = header;
+		this._listDataChild = child;
+		notifyDataSetChanged();
+	}
 
 }
