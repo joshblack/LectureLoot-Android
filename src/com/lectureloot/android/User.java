@@ -17,6 +17,9 @@ import org.json.JSONTokener;
 
 import android.os.Looper;
 import android.util.Log;
+import android.widget.ListAdapter;
+
+import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.background.*;
 
 public class User {
@@ -342,10 +345,10 @@ public class User {
 		
 		//TODO: Throw to UI element for login
 		
-		/*Test Data
-		 * mEmail = joshS@ufl.edu
-		 * mPassword = password;
-		 */
+		//test Data
+		 mEmail = "kthnxbai5921@ufl.edu";
+		 mPassword = "password";
+		
 		
 		return doLogin();
 	}
@@ -366,7 +369,7 @@ public class User {
 
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
-		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken);
+		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
 
@@ -389,16 +392,16 @@ public class User {
 		courseListTask.execute(new String[] {courseListUrl});
 
 		//wait for threads to finish before continuing
-		listner.waitForThreads();
+		//listner.waitForThreads();
 	}
 
-	public void addCourseFromList(Course course){
+	public void addCourseFromList(Course course, ExpandableListCourseAdapter adapter){
 		/* method to resolve incomplete course from courseList and add to user (DOESN'T POST, DOESN'T BLOCK) */
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId();
-		HttpGetCourse courseTask = new HttpGetCourse(mAuthToken);
+		HttpGetCourse courseTask = new HttpGetCourse(mAuthToken, adapter);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
 		

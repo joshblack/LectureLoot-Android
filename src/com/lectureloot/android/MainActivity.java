@@ -42,7 +42,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
-		mViewPager.setOffscreenPageLimit(3);
+		
+		//keeps background tabs alive
+		//mViewPager.setOffscreenPageLimit(3);
 		final ActionBar actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -79,10 +81,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		//Asynchrounously load the user (check status with user.isBusy())
 		mCurrentUser = User.getInstance();
-		
-		while(mCurrentUser.isBusy());
+		System.out.println("getting user isntance");
+		//while(mCurrentUser.isBusy());
 	}
 
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -137,13 +141,28 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
-
+	
+	@Override
 	protected void onStop(){
 		//write data on app close
+		super.onStop();
 		if(mCurrentUser != null)
+			//FOUND THE PROBLEM
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
-		super.onStop();
+	}
+	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
 }

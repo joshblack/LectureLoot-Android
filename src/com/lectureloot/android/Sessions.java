@@ -9,6 +9,7 @@ public class Sessions {
 	private Date startDate;
 	private Date endDate;
 
+	
 	public Sessions()
 	{
 
@@ -46,3 +47,6 @@ public class Sessions {
 	}
 
 }
+
+
+

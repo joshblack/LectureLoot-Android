@@ -4,6 +4,7 @@ package com.lectureloot.android.adapter;
  * @author Austin Bruch, Justin Rafanan
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +24,9 @@ import android.widget.Toast;
 
 import com.lectureloot.android.Course;
 import com.lectureloot.android.R;
+import com.lectureloot.android.ScheduleFragment;
+import com.lectureloot.android.User;
+import com.lectureloot.background.HttpDeleteCourses;
 
 public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
@@ -30,11 +34,15 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Course>> _listDataChild;
+	private User user;
+	
 
 	public ExpandableListCourseAdapter(Context context, List<String> listDataHeader,HashMap<String, List<Course>> listChildData) {
 		this._context = context;
 		this._listDataHeader = listDataHeader;
 		this._listDataChild = listChildData;
+		
+		
 	}
 
 	@Override
@@ -50,6 +58,10 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+
+		user = User.getInstance();
+		final int courseId = ((Course)getChild(groupPosition,childPosition)).getCourseId();
+
 
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -179,6 +191,34 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 
 					@Override
 					public void onClick(View v) {
+						String userId = user.getUserId();
+						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/"+userId+"/courses/"+courseId;
+						String authToken = user.getAuthToken();
+						HttpDeleteCourses getter = new HttpDeleteCourses(authToken);
+						//	getter.setHttpDeleteCoursesFinishedListener(this);
+						getter.execute(new String[] {coursesUrl});
+
+						
+						
+						ArrayList<Course> courses = user.getCourses();
+						ArrayList<Course> newCourses = new  ArrayList<Course>();
+						
+						for(int i=0;i<courses.size();i++)
+						{
+							if(courseId != courses.get(i).getCourseId())
+							{
+								newCourses.add(courses.get(i));
+							}
+						}
+						user.setCourses(newCourses);
+						ScheduleFragment frg = new ScheduleFragment();
+						_listDataHeader = frg.prepareDataHeader();
+						_listDataChild = frg.prepareDataChild();
+						notifyDataSetChanged();
+						
+						
+						
+						
 						Toast.makeText(_context, "Course Dropped", Toast.LENGTH_LONG).show();
 						//						mNeedsToCheckIn.setVisibility(View.GONE);
 						dialog.dismiss();
@@ -273,5 +313,13 @@ public class ExpandableListCourseAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
+	
+	public void reloadItems(ArrayList<String> header, HashMap<String, List<Course>> child)
+	{
+		this._listDataHeader = header;
+		this._listDataChild = child;
+		notifyDataSetChanged();
+	}
+
 
 }

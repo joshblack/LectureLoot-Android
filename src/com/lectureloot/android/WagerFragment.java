@@ -2,10 +2,12 @@ package com.lectureloot.android;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,23 +30,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.lectureloot.android.adapter.ExpandableListWagerAdapter;
-//import com.lectureloot.background.HttpGetWagers;
-//import com.lectureloot.background.HttpGetSession;
+import com.lectureloot.background.HttpPostWagers;
 
 
 public class WagerFragment extends Fragment {
 
 	private ExpandableListWagerAdapter wagerListAdapter;
 	private ExpandableListView wagerExpListView;
-	private List<String> wagerListDataHeader;
-	private HashMap<String, List<Wager>> wagerListDataChild;
+	private List<String> wagerListDataHeader = null;
+	private HashMap<String, List<Wager>> wagerListDataChild = null;
 
 	private int tempPerClassWager;
 	private String displayTempPerClassWager;
 	private TextView DisplayCurrentWager;
+	private User user;
+	private int sessionId = 0;
 
+	public WagerFragment() {
+		this.user = User.getInstance();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,124 +57,51 @@ public class WagerFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_wager, container, false);
 
+		user = User.getInstance();
+
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.userWager);
-		//TODO: Set Display name dynamically based on Singleton User Model
-		userDisplay.setText("LectureLoot's Wager");
+		//String name = user.getName();
+		userDisplay.setText( /*name +*/ "LectureLoot's Wager");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
 
-		//        // get the listview
+		// get all the session information formated and ready before anything start
+		final ArrayList<String> stringSessions = new ArrayList<String>();		// new ArrayLisy for formated date strings
+		ArrayList<Sessions> tempSessions = user.getSessions();			// ArrayList copy of User's sessions
+		String formatModel;												// String used to format the dates
+		System.out.println("Date Strings: "+stringSessions);
+		for(Sessions s : tempSessions)
+		{
+			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
+			stringSessions.add(formatModel);
+		}
+
+		System.out.println("User Sessions: "+user.getSessions());
+		System.out.println(tempSessions);
+		System.out.println("Date Strings: "+stringSessions);
+
+		//		System.out.println();
+
+
+		// get the listview
 		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
 		prepareWagerListData();
-		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
-
+		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
 		// setting list adapter
-		//wagerExpListView.setAdapter(wagerListAdapter);
-
-
-		Button editWagerButton;
-		editWagerButton = (Button)rootView.findViewById(R.id.editWagerButton);
-		editWagerButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				final Dialog dialog = new Dialog(getActivity());
-				dialog.setContentView(R.layout.dialog_edit_wager);
-				dialog.setTitle("Edit a Wager");
-				tempPerClassWager = 10;	
-
-				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementEditPerMeetingWager);
-				dialogDecrementButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-						if(tempPerClassWager > 1) // make a decision on 1 or 0 as the minimum value of a Per class wager
-						{
-							tempPerClassWager--;
-						}
-
-
-						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-
-
-						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-						DisplayCurrentWager.setText(displayTempPerClassWager);
-						// changes the original Per Class Wager value to the updated incremented value
-
-					}
-
-					// temp solution, don't remember if needed
-
-				});
-
-				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementEditPerMeetingWager);
-				dialogIncrementButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-
-						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
-						{
-							tempPerClassWager++;
-						}
-						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-
-						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
-						DisplayCurrentWager.setText(displayTempPerClassWager);
-						// changes the original Per Class Wager value to the updated incremented value
-
-
-					}
-
-					// temp solution don't remember if needed
-
-				});
-
-				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
-				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-
-						Toast.makeText(getActivity(), "Error: Wager could not be edited", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-
-					}
-				});
-
-				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
-				dialogDeleteButton.setOnClickListener(new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(getActivity(), "Error: Wager cannot be deleted", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
-
-					}
-				});
-
-				dialog.show();       
-			}
-		});
+		wagerExpListView.setAdapter(wagerListAdapter);
 
 		Button addNewWagerButton;
 		addNewWagerButton = (Button)rootView.findViewById(R.id.addWagerButton);
 		addNewWagerButton.setOnClickListener(new OnClickListener() {
 
-
-
 			@Override
 			public void onClick(View v) {
-				//			Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_SHORT).show();
 
 				final Dialog dialog = new Dialog(getActivity());
 				dialog.setContentView(R.layout.dialog_add_wager);
 				dialog.setTitle("Make A Wager");
-
 				tempPerClassWager = 10;
+				System.out.println("toast");
 
 				Button dialogDecrementButton = (Button) dialog.findViewById(R.id.decrementPerMeetingWager);
 				dialogDecrementButton.setOnClickListener(new OnClickListener() {
@@ -182,18 +114,13 @@ public class WagerFragment extends Fragment {
 							tempPerClassWager--;
 						}
 
-
 						displayTempPerClassWager = String.valueOf(tempPerClassWager);
-
 
 						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
 						DisplayCurrentWager.setText(displayTempPerClassWager);
 						// changes the original Per Class Wager value to the updated incremented value
-
 					}
-
 					// temp solution, don't remember if needed
-
 				});
 
 				Button dialogIncrementButton = (Button) dialog.findViewById(R.id.incrementPerMeetingWager);
@@ -211,218 +138,275 @@ public class WagerFragment extends Fragment {
 						DisplayCurrentWager =(TextView)dialog.findViewById(R.id.DisplayCurrentWagerPerClass);
 						DisplayCurrentWager.setText(displayTempPerClassWager);
 						// changes the original Per Class Wager value to the updated incremented value
-
-
 					}
-
-					// temp solution don't remember if needed
-
 				});
+
+			
+//				String[] wagerDates = {"2/3/2014 - 2/7/2014","2/10/2014 - 2/14/2014","2/17/2014 - 2/21/2014","2/24/2014 - 2/28/2014",
+//						"3/3/2014 - 3/7/2014","3/10/2014 - 3/14/2014","3/17/2014 - 3/21/2014"};
+
+				final Spinner wagerDateSpinner = (Spinner)dialog.findViewById(R.id.wagerDates);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringSessions); 
+				wagerDateSpinner.setAdapter(adapter);
 
 				Button dialogCreateButton = (Button) dialog.findViewById(R.id.dialogCreateWagerButton);
 				dialogCreateButton.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Toast.makeText(getActivity(), "Error: Could Not Create Wager", Toast.LENGTH_SHORT).show();
-						dialog.dismiss();
 
+						String formatedDate = wagerDateSpinner.getSelectedItem().toString();
+						System.out.println("Text From spinner"+ formatedDate);
+						if(stringSessions.size() != 0)
+						{
+							System.out.println("Hello, this if statement is true");
+						}
+						if(stringSessions.size() != 0)
+						{
+							for(int i = 0;i < stringSessions.size();i++)
+							{
+								//									System.out.println(formatedDate);
+								//									System.out.println(stringSessions.get(i));
+								String dummyTest = stringSessions.get(i);
+								boolean plzWork = false;
+								if(formatedDate.equals(stringSessions.get(i)))
+								{
+									plzWork = true;
+								}
+
+								if(plzWork == true)
+								{
+									sessionId = i+1;
+									//										System.out.println("SessionId is HERE:    "+sessionId);
+									//										System.out.println("true");
+								}
+								//									System.out.println("false");
+							}
+						}
+						//						else
+						//						{// in case for date array - stringSessions has a size of zero, which will break code
+						//							
+						//						}
+
+						String userId = user.getUserId();
+						ArrayList<Meeting> meetings = user.getMeetings();
+						int wagerMeetings = meetings.size();
+						int newTotalWager = tempPerClassWager*wagerMeetings;
+						System.out.println("UserId: "+ userId);
+						System.out.println("Wager Per Class:  "+tempPerClassWager);
+						System.out.println("Wager Meetings: "+ wagerMeetings);
+						System.out.println("Total Wager Value: "+ newTotalWager);
+						// I want to see if the value for the variables are correct
+						//if they are, I will insert them into the url for post
+
+						boolean checker = true;
+						ArrayList<Wager> wagersChecker = user.getWagers();
+						for(Wager w: wagersChecker)
+						{
+							//							System.out.println("sessionId"+ sessionId);
+							//							System.out.println("w's sessionId is here:   "+w.getWagerSessionCode());
+							if(w.getWagerSessionCode() == sessionId)
+							{
+								checker = false;
+								//								System.out.println("False");
+							}
+							else
+							{
+								//							System.out.println("True");
+							}
+						}
+
+						/*******************************************************************************************************************************
+						 * user_id    	- user.getUserId;                                                                                              *
+						 * session_id	- TBD (probably from comparing dates or position in array                                                      *
+						 * wagerUnitValue  - use tempPerClassWager                                                                                      *
+						 * wagerTotalValue - usetempPerClassWager* meetings size                                                                        *
+						 * lostPoints	- 0 ( gets defaulted to zero)                                                                                  *
+						 ********************************************************************************************************************************/
+
+						if(checker == true)
+						{
+							String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id="+userId+"&session_id="+sessionId+"&wagerUnitValue="
+									+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
+
+							//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
+							//								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
+							String authToken = user.getAuthToken();
+							HttpPostWagers wagersPost = new HttpPostWagers(authToken);
+
+							//wagersPost.setHttpPostWagersFinishedListener(this);
+							wagersPost.execute(new String[] {wagersUrl});
+
+							ArrayList<Wager> wagers = user.getWagers();
+							int countWager = wagers.size();
+							countWager++; // problem with getting the correct wagerID, since there are more wagers than array spots
+							Wager newWager = new Wager(-1, sessionId, tempPerClassWager,newTotalWager, 0);
+							ArrayList<Wager> newWagers = new  ArrayList<Wager>();
+
+							// need sessionsId to be use to add the right wagers						
+							System.out.println("newwagers:   "+ newWagers);
+							System.out.println("Obvious basic print");
+							for(int i=0;i<countWager;i++)
+							{
+								//								System.out.println("WTF WHY ARE THINGS NOT GOING LIKE I WANT THEM TO");
+								if(wagers.size()==0)
+								{
+									newWagers.add(newWager);
+									//									System.out.println("newwagers1: (adds newWager)  "+ newWagers);
+									break;
+								}
+
+								else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
+								{
+									//									System.out.println("newwagers2: (orignal)  "+ newWagers);
+									newWagers.add(wagers.get(0));
+									//									System.out.println("newwagers2: (adds from wagers)  "+ newWagers);
+									//									System.out.println("wagers2_1: (original wagers)  "+ wagers);
+									wagers.remove(0);
+									//									System.out.println("wagers2_2: (-1 wagers)  "+ wagers);
+								}
+								else
+								{
+									//									System.out.println("newwagers3: (original) "+ newWagers);
+									newWagers.add(newWager);
+									//									System.out.println("newwagers3: (+ newWager)  "+ newWagers);
+									//									System.out.println("wagers3_1: (wagers)  "+ wagers);
+									break;
+								}
+								//								System.out.println("PLZ FOR LOOP WORK.... JUST WORK T.T");
+							}
+							if(wagers.size()>0){
+								for(int j=0;j<wagers.size();j++)
+								{
+									//									System.out.println("It prolly should not go in here");
+									//									System.out.println("newwagers4: (Before complete print)  "+ newWagers);
+									//									System.out.println("wagers4_1: (wagerlist)  "+ wagers);
+									newWagers.add(wagers.get(j));
+									System.out.println("newwagers4: (should have wagerlist inside now)  "+ newWagers);
+								}					
+							}
+							System.out.println("newwagers: (new)  "+ newWagers);
+							for(Wager w : newWagers)
+							{
+								System.out.println(w.getWagerSessionCode());
+							}
+							user.setWagers(newWagers);
+
+							System.out.println("List of Wagers:"+user.getWagers());
+							for(Wager w : user.getWagers())
+							{
+								System.out.println(w.getWagerSessionCode());
+							}
+							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
+							dialog.dismiss();
+							System.out.println("Test Test Test");
+
+
+							wagerListAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+
+						}
+						else
+						{
+							Toast.makeText(getActivity(), "Invald Date, please chose a different date", Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
-
 				dialog.show();
 			}
 		});
-
-
 		return rootView;
 	}
 
-	/*	public void onHttpGetWagerReady(String output) {
-		System.out.println("onHttpGetCoursesReady enter");
-
-		wagerListDataHeader = new ArrayList<String>();
+	public ArrayList<String> prepareDataHeader() {
+		ArrayList<String> header = new ArrayList<String>();
 		wagerListDataChild = new HashMap<String, List<Wager>>();
 
-		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
-		System.out.println("onHttpGetCoursesReady 1");
-
-		try {
-			array = (JSONArray) tokener.nextValue();
-			//			System.out.println(array.toString());
-			System.out.println("onHttpGetCoursesReady 2");
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		System.out.println("onHttpGetCoursesReady 3");
-
-		ArrayList<Wager> Wagers = jsonArrayToWagers(array);
-		System.out.println("onHttpGetCoursesReady 4");
+		ArrayList<Wager> wagers = user.getWagers();
+		System.out.println("COURSES ARRAY LIST" + wagers.toString());
 
 		List<Wager> oneWagerList = null;
-		for (Wager Wager : Wagers) {
-			wagerListDataHeader.add(Integer.toString(Wager.getWagerSessionCode()));
+		for (Wager wager : wagers) {
+			header.add(Integer.toString(wager.getWagerSessionCode()));
 			oneWagerList = new ArrayList<Wager>();
-			oneWagerList.add(Wager);
-			wagerListDataChild.put(Integer.toString(Wager.getWagerSessionCode()),oneWagerList);
-
-
-			//			System.out.println("onHttpGetCoursesReady 5");
-			//			System.out.println("course:" + course.toString());
-
+			oneWagerList.add(wager);
+			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
 		}
 
-		for (String wagerCode : wagerListDataHeader) {
-			HttpGetSession SessionsGetter = new HttpGetSession();
-			String meetingsUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers/" + wagerCode + "/session_id";
-			System.out.println(meetingsUrl);
-			SessionsGetter.setHttpGetFinishedListener(this);
-			SessionsGetter.execute(new String[] {meetingsUrl});
-		}
+		return header;
 
-		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
-		// setting list adapter
-		wagerExpListView.setAdapter((ListAdapter) wagerListAdapter);
-		System.out.println("onHttpGetCoursesReady exit");
 	}
 
-	 */
+	public HashMap<String, List<Wager>> prepareDataChild() {
+		ArrayList<String> header = prepareDataHeader();
+		HashMap<String, List<Wager>> child = new HashMap<String, List<Wager>>();
 
-	/*	public void onHttpGetSessionsReady(String output) {
-		System.out.println("onHttpGetMeetingsReady enter");
+		ArrayList<Wager> wagers = user.getWagers();
+		System.out.println("COURSES ARRAY LIST" + wagers.toString());
 
-		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
-		System.out.println("onHttpGetMeetingsReady 1");
-		Sessions sessions = null;
-		List<Sessions> oneSessionList = null;
-		try {
-			array = (JSONArray) tokener.nextValue();
-			System.out.println("array printstring" + array.toString());
-			System.out.println("onHttpGetMeetingsReady 2");
+		List<Wager> oneWagerList = null;
+		for (Wager wager : wagers) {
+			header.add(Integer.toString(wager.getWagerSessionCode()));
+			oneWagerList = new ArrayList<Wager>();
+			oneWagerList.add(wager);
+			child.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
+		}	
+		return child;
 
-			System.out.println("onHttpGetMeetingsReady 3");
-
-			ArrayList<Sessions> wagerSessions = jsonArrayToSessions(array);
-			System.out.println("onHttpGetMeetingsReady 4");
-			sessions = wagerListDataChild.get(Integer.toString(Sessions.get(0).getSessionId())).get(0);
-			sessions.setSession(wagerSessions);
-
-			oneSessionList = new ArrayList<Sessions>();
-			oneSessionList.add(sessions);
-			wagerListDataChild.remove(sessions.getSessionId());
-			wagerListDataChild.put(Integer.toString(sessions.getSessionId()),oneSessionList);
-
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
 	}
-	 */	
 
-	//TODO figure out how meetings are stored, maybe have to create meeting model
-
-	//	private Wager jsonObjectToWager(JSONObject jsonWager/*,JSONArray jsonMeetings*/) {
-	/*
-		Wager wager = new Wager();
-		try{
-			wager.setWagerSessionCode((Integer)jsonWager.get("id"));
-
-//			String user_id = (String)jsonWager.getString("user_id");
-//			int SessionCode = (int)jsonWager.getInt("session_id");
-			int wagerUnitValue = (int)jsonWager.getInt("wagerUnitValue");
-			int wagerTotalValue = (int)jsonWager.getInt("wagerTotalValue");
-			int totalMeetings = wagerTotalValue/wagerUnitValue;
-
-
-//			String courseCode = deptCode + courseNumber;
-			wager.setWagerPerMeeting(wagerUnitValue);
-			wager.setTotalWager(wagerTotalValue);
-			wager.setTotalMeetings(totalMeetings);
-
-		} catch (Exception e){
-
-		}
-		return wager;
-	}
-	 */
 
 	private void prepareWagerListData() {
 		wagerListDataHeader = new ArrayList<String>();
 		wagerListDataChild = new HashMap<String, List<Wager>>();
 
-		Wager Session1 = new Wager();
-		Session1.setWagerSessionCode(1);
-		Session1.setWagerPerMeeting(5);
-		Session1.setTotalMeetings(10);
-		Session1.setTotalWager(50);
+		ArrayList<Wager> tempWagers = user.getWagers();
+		System.out.println("Here!!!!!!");
+		int j = 0;
+		for(Wager w : tempWagers)
+		{
+			System.out.println(user.getWagers().get(j).getWagerSessionCode());
+			System.out.println(w.getWagerSessionCode());
+			j++;
+		}
+		for(int i = 0;i <tempWagers.size();i++)
+		{
 
-		List<Wager> Session1List = new ArrayList<Wager>();
-		Session1List.add(Session1);
-
-		Wager newWager = new Wager();
-		newWager.setWagerSessionCode(100); // might need to create an string type for a title for Wager Class
-		List<Wager> newWagerList = new ArrayList<Wager>();
-		newWagerList.add(newWager);
-
-		// Adding child data 
-		wagerListDataHeader.add(Session1.getWagerSessionCodeString());
-
-		wagerListDataChild.put(wagerListDataHeader.get(0), Session1List); // Header, Child data
-
-	}
-	/*    
-	private ArrayList<Wager> jsonArrayToWagers(JSONArray jsonWagers) {
-		ArrayList<Wager>  wagers = new ArrayList<Wager>();
-
-		try {
-			JSONObject jsonWager;
-			Wager wager;
-			for(int i = 0; i < jsonWagers.length(); i++) {
-				jsonWager = jsonWagers.getJSONObject(i);
-				wager = jsonObjectToWager(jsonWager);
-				wagers.add(wager);
+			for(int z= i; z < tempWagers.size();z++)
+			{
+				if(tempWagers.get(i).getWagerSessionCode() >= tempWagers.get(z).getWagerSessionCode())
+				{
+					Wager tWager = tempWagers.get(i);
+					System.out.print("Yo     "+tWager);
+					tempWagers.set(i,tempWagers.get(z));
+					System.out.println("What  "+tempWagers.set(i,tempWagers.get(z)));
+					tempWagers.set(z,tWager);
+					System.out.println("Hi  "+tempWagers.set(z,tWager));
+				}
 			}
-		} catch (Exception e) {
+		
+		}
+		for(Wager w : tempWagers)
+		{
+			System.out.println(w.getWagerSessionCode());
+		}
+		for(Wager w : user.getWagers())
+		{
+			System.out.println(w.getWagerSessionCode());
+		}
+		ArrayList<Wager> wagers = tempWagers;
+		System.out.println("Wagers Array List " + wagers.toString());
+
+		List<Wager> oneWagerList = null;
+		for (Wager wager : wagers) {
+			wagerListDataHeader.add(Integer.toString(wager.getWagerSessionCode()));
+			oneWagerList = new ArrayList<Wager>();
+			oneWagerList.add(wager);
+			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
 
 		}
-
-		return wagers;
-	}
-	 */
-	/*
-	private Sessions jsonObjectToSession(JSONObject jsonSession) {
-
-		Sessions session = new Sessions();
-		try{
-			session.setSessionId((Integer)jsonSession.get("id"));
-			session.setStartDate((Date)jsonSession.get("startDate"));
-			session.setEndDate((Date)jsonSession.get("endDate"));
-
-		} catch (Exception e){
-
-		}
-		return session;
 	}
 
-	private ArrayList<Sessions> jsonArrayToSessions(JSONArray jsonSessions) {
-		ArrayList<Sessions>  session= new ArrayList<Sessions>();
-
-		try {
-			JSONObject jsonWagerSession;
-			Sessions wagerSession;
-			for(int i = 0; i < jsonSessions.length(); i++) {
-				jsonWagerSession = jsonSessions.getJSONObject(i);
-				wagerSession = jsonObjectToSession(jsonWagerSession);
-				session.add(wagerSession);
-			}
-		} catch (Exception e) {
-
-		}
-
-		return session;
-	}
-	 */
 }
