@@ -36,6 +36,7 @@ public class User {
 	private ArrayList<Meeting> mMeetings;
 	private ArrayList<Sessions> mSessions;
 	private ArrayList<Course> mCourseList;
+	private ArrayList<Meeting> mMeetingList;
 
 	/* CONSTRUCTOR FOR USER */
 	private User(){
@@ -163,7 +164,9 @@ public class User {
 			in.close();
 			fis.close();
 
-			Log.i("Load File:", "Load Succeessful\n" + mFirstName + " " + mLastName + " " + mEmail);
+			Log.i("Load File:", "Load Succeessful");
+			
+			
 			return true; //load successful
 
 			//If the file doesn't exist, get data from server then make it
@@ -196,26 +199,11 @@ public class User {
 			out.write(("NumCourses:" + mCourses.size() + "\n").getBytes());	
 
 			//write course data
+			out.write("Courses".getBytes());
 			for(int i = 0;i<mCourses.size();++i){
-				out.write(("Course:" + mCourses.get(i).getCourseId()).getBytes());
-				out.write((":" + mCourses.get(i).getCourseCode()).getBytes());
-				out.write((":" + mCourses.get(i).getCourseTitle()).getBytes());
-				out.write((":" + mCourses.get(i).getSectionNumber()).getBytes());
-				out.write((":" + mCourses.get(i).getCredits()).getBytes());
-				out.write((":" + mCourses.get(i).getInstructor()).getBytes());
-
-				ArrayList<Meeting> meetings = new ArrayList<Meeting>();				
-				out.write((":" + meetings.size()+"\n").getBytes());
-
-				//write meeting data (ignoring time)
-				for(int k=0;k<meetings.size();++k){
-					out.write(("Meeting:" + meetings.get(k).getMeetingId()).getBytes());
-					out.write((":" + meetings.get(k).getBuildingCode()).getBytes());
-					out.write((":" + meetings.get(k).getRoomNumber()).getBytes());
-					out.write((":" + meetings.get(k).getMeetingDay()).getBytes());
-					out.write((":" + meetings.get(k).getPeriod()+"\n").getBytes());
-				}
+				out.write((":" + mCourses.get(i).getCourseId()).getBytes());
 			}
+			out.write("\n".getBytes());	//newline
 
 			out.write(("NumWagers:" + mWagers.size() + "\n").getBytes());
 			for(int i = mWagers.size();i >0;--i){				
@@ -235,23 +223,38 @@ public class User {
 			out = MainActivity.mContext.openFileOutput("courseList.dat", 0);	
 
 			//write course data
-			for(int i = 0;i<mCourses.size();++i){
-				out.write(("Course:" + mCourses.get(i).getCourseId()).getBytes());
-				out.write((":" + mCourses.get(i).getCourseCode()).getBytes());
-				out.write((":" + mCourses.get(i).getCourseTitle()).getBytes());
-				out.write((":" + mCourses.get(i).getSectionNumber()).getBytes());
-				out.write((":" + mCourses.get(i).getCredits()).getBytes());
-				out.write((":" + mCourses.get(i).getInstructor()).getBytes());
-
-				ArrayList<Meeting> meetings = new ArrayList<Meeting>();				
-				out.write((":" + meetings.size()+"\n").getBytes());
+			for(int i = 0;i<mCourseList.size();++i){
+				out.write(("Course:" + mCourseList.get(i).getCourseId()).getBytes());
+				out.write((":" + mCourseList.get(i).getCourseCode()).getBytes());
+				out.write((":" + mCourseList.get(i).getCourseTitle()).getBytes());
+				out.write((":" + mCourseList.get(i).getSectionNumber()).getBytes());
+				out.write((":" + mCourseList.get(i).getCredits()).getBytes());
+				out.write((":" + mCourseList.get(i).getInstructor()).getBytes());
 			}			
 
 			//close the file
 			out.close();
 
 			
-		} catch (IOException e) {
+			//write the meeting list
+			out = MainActivity.mContext.openFileOutput("meetingList.dat", 0);	
+
+			//write course data
+			for(int k=0;k<mMeetingList.size();++k){
+				out.write(("Meeting:" + mMeetingList.get(k).getMeetingId()).getBytes());
+				out.write((":" + mMeetingList.get(k).getBuildingCode()).getBytes());
+				out.write((":" + mMeetingList.get(k).getRoomNumber()).getBytes());
+				out.write((":" + mMeetingList.get(k).getMeetingDay()).getBytes());
+				out.write((":" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
+			}
+			
+			//close the file
+			out.close();
+
+			
+			
+		} catch (Exception e) {
+			Log.i("File:",e.toString());
 			return false;
 		}
 		return true;
@@ -458,6 +461,10 @@ public class User {
 	public ArrayList<Course> getCourseList(){
 		return mCourseList;
 	}
+	
+	public ArrayList<Meeting> getMeetingList(){
+		return mMeetingList;
+	}
 
 	/* SETTERS */
 
@@ -503,5 +510,9 @@ public class User {
 
 	public void setCourseList(ArrayList<Course> courseList) {
 		mCourseList = courseList;
+	}
+	
+	public void setMeetingList(ArrayList<Meeting> meetingList) {
+		mMeetingList = meetingList;
 	}
 }

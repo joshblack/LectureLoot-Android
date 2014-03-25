@@ -32,6 +32,7 @@ public abstract class HttpGetFinishedListener {
 	}
 
 	public void notifyThreadStart(){
+			Log.i("Thread:","Started, Count: " + threadCount);
 			threadCount++;
 		}
 		
