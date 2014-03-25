@@ -23,6 +23,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private LocationManager mLocationManager;
 	private Location latlong;
 	private String mProvider;
+	private User user;
 	
 	private Button mCheckInButton;
 	private TextView mUserPointsTextView;
@@ -61,6 +62,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		//this is called when the view is displayed when the app launches
 		View v = inflater.inflate(R.layout.fragment_dashboard, container, false);
 		
+		user = User.getInstance();
 		//get location manager
 		mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 				
@@ -100,6 +102,8 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		});
 		
 		mUserPointsTextView = (TextView)v.findViewById(R.id.user_points);
+		String userTotalPoints = String.valueOf(user.getPoints());
+		mUserPointsTextView.setText(userTotalPoints + "pts");
 		
 		mTimeLeftSecsTextView = (TextView)v.findViewById(R.id.timeLeftSecs);
 		mTimeLeftMinsTextView = (TextView)v.findViewById(R.id.timeLeftMins);

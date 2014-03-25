@@ -380,6 +380,8 @@ public class User {
 		HttpGetCourse courseTask = new HttpGetCourse(mAuthToken, adapter);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
+		
+		//listner.waitForThreads();
 	}
 
 	/* GETTERS */
