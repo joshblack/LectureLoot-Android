@@ -141,14 +141,10 @@ public class WagerFragment extends Fragment {
 					}
 				});
 
-				/********************************************************************************************************************************
-				 * Dummy data is present to make it look good, but there will be need to sessions to be pull to populate spinners               *
-				 * To go into a post, you need the selected date's sessionId to not match any of the current wagers sessionIds                  *
-				 * If the above condition is met, then boolean checker will switch true and allow a post to go through                          *
-				 ********************************************************************************************************************************/
+			
+//				String[] wagerDates = {"2/3/2014 - 2/7/2014","2/10/2014 - 2/14/2014","2/17/2014 - 2/21/2014","2/24/2014 - 2/28/2014",
+//						"3/3/2014 - 3/7/2014","3/10/2014 - 3/14/2014","3/17/2014 - 3/21/2014"};
 
-				//				String[] wagerDates = {"2/3/2014 - 2/7/2014","2/10/2014 - 2/14/2014","2/17/2014 - 2/21/2014","2/24/2014 - 2/28/2014",
-				//						"3/3/2014 - 3/7/2014","3/10/2014 - 3/14/2014","3/17/2014 - 3/21/2014"};
 				final Spinner wagerDateSpinner = (Spinner)dialog.findViewById(R.id.wagerDates);
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringSessions); 
 				wagerDateSpinner.setAdapter(adapter);
@@ -241,11 +237,6 @@ public class WagerFragment extends Fragment {
 							//wagersPost.setHttpPostWagersFinishedListener(this);
 							wagersPost.execute(new String[] {wagersUrl});
 
-							/********************************************************************************************************************************
-							 * Need Sessions to get Wager Post to work                                                                                       *
-							 * Current code is a hard coded version                                                                                          *
-							 * Need to find a way to get the right wagerIf for wagers on a local basis														*
-							 *********************************************************************************************************************************/
 							ArrayList<Wager> wagers = user.getWagers();
 							int countWager = wagers.size();
 							countWager++; // problem with getting the correct wagerID, since there are more wagers than array spots
@@ -370,7 +361,41 @@ public class WagerFragment extends Fragment {
 		wagerListDataHeader = new ArrayList<String>();
 		wagerListDataChild = new HashMap<String, List<Wager>>();
 
-		ArrayList<Wager> wagers = user.getWagers();
+		ArrayList<Wager> tempWagers = user.getWagers();
+		System.out.println("Here!!!!!!");
+		int j = 0;
+		for(Wager w : tempWagers)
+		{
+			System.out.println(user.getWagers().get(j).getWagerSessionCode());
+			System.out.println(w.getWagerSessionCode());
+			j++;
+		}
+		for(int i = 0;i <tempWagers.size();i++)
+		{
+
+			for(int z= i; z < tempWagers.size();z++)
+			{
+				if(tempWagers.get(i).getWagerSessionCode() >= tempWagers.get(z).getWagerSessionCode())
+				{
+					Wager tWager = tempWagers.get(i);
+					System.out.print("Yo     "+tWager);
+					tempWagers.set(i,tempWagers.get(z));
+					System.out.println("What  "+tempWagers.set(i,tempWagers.get(z)));
+					tempWagers.set(z,tWager);
+					System.out.println("Hi  "+tempWagers.set(z,tWager));
+				}
+			}
+		
+		}
+		for(Wager w : tempWagers)
+		{
+			System.out.println(w.getWagerSessionCode());
+		}
+		for(Wager w : user.getWagers())
+		{
+			System.out.println(w.getWagerSessionCode());
+		}
+		ArrayList<Wager> wagers = tempWagers;
 		System.out.println("Wagers Array List " + wagers.toString());
 
 		List<Wager> oneWagerList = null;

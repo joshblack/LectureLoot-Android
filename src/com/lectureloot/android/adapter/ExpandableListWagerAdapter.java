@@ -185,7 +185,7 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 					public void onClick(View v) {
 						
 						String userId = user.getUserId();
-						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerSessionId;
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
 						String authToken = user.getAuthToken();
 						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
