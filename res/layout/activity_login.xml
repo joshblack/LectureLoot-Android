@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFF0000"
-        android:layout_weight=".10" />
+        android:layout_weight=".05" />
     
     <ImageView
         android:id="@+id/imgLogo"
@@ -26,35 +26,43 @@
         android:layout_weight=".20"
         android:layout_gravity="center"
         android:src="@drawable/ic_launcher" />
+  
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="#FFFFFFFF"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text="Username" >
+
+        <requestFocus />
+    </EditText>
+    
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFF0000"
         android:layout_weight=".05" />
     
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_weight=".1"
-        android:textSize="20sp"
-        android:textColor="#FFFFFFFF"
-        android:gravity="center_horizontal"
-        android:text=" " 
-		/>
-    
-    <Button 
+    <EditText
+        android:id="@+id/editText2"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:background="#3B5998"
-        android:textColor="#FFFFFFFF"
         android:layout_gravity="center"
-        
-        android:text="Login With Facebook"
-        
-        />
-    
-    <Space
+        android:background="#FFFFFFFF"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="Password" />
+	
+	<Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFF0000"
@@ -66,15 +74,45 @@
         android:background="#39b54a"
         android:textColor="#FFFFFFFF"
         android:layout_gravity="center"
+        android:text="Sign In"
+        />
+   
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
+    
+    <Button 
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="#3B5998"
+        android:textColor="#FFFFFFFF"
+        android:layout_gravity="center"
+        android:text="Sign In With Facebook"
         
-        android:text="Or Not"
+        />
+    
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
+    
+    <Button 
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="#FF000000"
+        android:textColor="#FFFFFFFF"
+        android:layout_gravity="center"
+        android:text="Register"
         />
     
       <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFF0000"
-        android:layout_weight=".20" />
+        android:layout_weight=".05" />
     
     </LinearLayout>
 </LinearLayout>
