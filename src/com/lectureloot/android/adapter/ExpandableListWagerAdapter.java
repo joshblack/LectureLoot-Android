@@ -8,10 +8,12 @@ import java.util.List;
 import com.lectureloot.android.Course;
 import com.lectureloot.android.Meeting;
 import com.lectureloot.android.R;
+import com.lectureloot.android.ScheduleFragment;
 import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
 import com.lectureloot.android.User;
 import com.lectureloot.android.Wager;
+import com.lectureloot.android.WagerFragment;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpDeleteWagers;
 
@@ -56,21 +58,34 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		return childPosition;
 	}
 
-	public View getChildView(int groupPosition, final int childPosition,
+	public View getChildView(final int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
 		user = User.getInstance();
 		
 		
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();	 // getting wagerId for currect wager
+		
+		System.out.println("wagerId:   "+ wagerId);
+		
 		final int wagerSessionId = ((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode();	// get sessionId for wager
+		
+		System.out.println("wagerSessionId:   "+ wagerSessionId);
+		
 		ArrayList<Meeting> meetings = user.getMeetings();  									 // getting Meetings arraylist
 		final int wagerMeetings = meetings.size();						// finding the size of arrayList to get total Meetings
+		
+		System.out.println("wagerMeetings:   "+ wagerMeetings);	
+		
 		((Wager)getChild(groupPosition, childPosition)).setTotalMeetings(wagerMeetings); 	 // setting total Meetings
 		final int wagerUnitValue =((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting();	//getting Meetings from Wagers
-
+		
+		System.out.println("wagerUnitValue:   "+ wagerUnitValue);
+		
 		final int newTotalWager = wagerMeetings*wagerUnitValue;								// Getting new TotalWager
+		
 		System.out.println("newTotalWager:   "+ newTotalWager);								// used to verify TotalWagers is correct
+		
 		((Wager)getChild(groupPosition, childPosition)).setTotalWager(newTotalWager);		// setting new Total Wager
 		
 		
@@ -145,7 +160,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						if(tempPerClassWager< 20) // might have the valid capped differently for easy demo
 						{
 							tempPerClassWager++;
-							System.out.println(tempPerClassWager);
 						}
 						displayTempPerClassWager = String.valueOf(tempPerClassWager);
 
@@ -156,12 +170,33 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 					}
 				});
-
+/************************************
+ *       Confirm Edit Button  	    *			     
+ ************************************/
 				Button dialogEditWagerButton = (Button) dialog.findViewById(R.id.dialogEditWagerButton);
 				dialogEditWagerButton.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
+						
+						
+						((Wager)getChild(groupPosition,childPosition)).setWagerPerMeeting(tempPerClassWager);
+						System.out.println("new wagerUnitValue: "+ tempPerClassWager);
+						ArrayList<Meeting> tempMeetings = user.getMeetings();
+						int size = tempMeetings.size();
+						int nextTotal = size*tempPerClassWager;
+						System.out.println("new wagerTotalvalue: "+ nextTotal);
+						((Wager)getChild(groupPosition,childPosition)).setTotalMeetings(nextTotal);
+						
+						
+//						String userId = user.getUserId();
+//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
+//						String authToken = user.getAuthToken();
+//						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
+//						//	getter.setHttpDeleteCoursesFinishedListener(this);
+//						getter.execute(new String[] {wagersUrl});
+						
+						
 						
 						Toast.makeText(_context, "Edits have been made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
@@ -181,10 +216,10 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						getter.execute(new String[] {wagersUrl});
 						
-						
+						System.out.println("Here");
 						ArrayList<Wager> wagers = user.getWagers();
 						ArrayList<Wager> newWagers = new  ArrayList<Wager>();
-						
+						System.out.println("Wager arrayList"+wagers);
 						for(int i=0;i<wagers.size();i++)
 						{
 							if(wagerSessionId != wagers.get(i).getWagerSessionCode())
@@ -192,8 +227,18 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 								newWagers.add(wagers.get(i));
 							}
 						}
-						user.setWagers(newWagers);
+						System.out.println("Wager arrayList"+wagers);
+						System.out.println("newWager arrayList"+newWagers);
 						
+						
+						user.setWagers(newWagers);
+						//delete from view
+						WagerFragment frg = new WagerFragment();
+						_listDataHeader = frg.prepareDataHeader();
+						_listDataChild = frg.prepareDataChild();
+						notifyDataSetChanged();
+						
+						System.out.println("I survived");
 						
 //						ArrayList<Wager> wagers = new ArrayList<Wager>();
 //						wagers = user.getWagers();
@@ -266,6 +311,13 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+	
+	public void reloadItems(ArrayList<String> header, HashMap<String, List<Wager>> child)
+	{
+		this._listDataHeader = header;
+		this._listDataChild = child;
+		notifyDataSetChanged();
 	}
 
 }

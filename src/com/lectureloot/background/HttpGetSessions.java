@@ -4,7 +4,7 @@ public class HttpGetSessions extends HttpGet {
 
 	
 	public HttpGetSessions(String authToken){
-		super(authToken);
+		super(authToken, null);
 	}
 	public void returnResponse(String output) {
 		listener.onHttpGetSessionsReady(output);

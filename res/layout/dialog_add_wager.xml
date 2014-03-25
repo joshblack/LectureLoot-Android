@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="65dp"
-            android:paddingRight="65dp"
             android:layout_weight="1"
             android:prompt="@string/department_code" />
         

@@ -4,7 +4,7 @@ public class HttpGetCourseList extends HttpGet {
 
 	
 	public HttpGetCourseList(String authToken){
-		super(authToken);
+		super(authToken, null);
 	}
 	
 	public void returnResponse(String output) {

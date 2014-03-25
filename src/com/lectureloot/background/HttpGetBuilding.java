@@ -4,7 +4,7 @@ public class HttpGetBuilding extends HttpGet {
 
 	
 	public HttpGetBuilding(String authToken){
-		super(authToken);
+		super(authToken, null);
 	}
 	
 	public void returnResponse(String output) {

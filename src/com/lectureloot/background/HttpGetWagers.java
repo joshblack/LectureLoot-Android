@@ -4,7 +4,7 @@ public class HttpGetWagers extends HttpGet {
 
 	
 	public HttpGetWagers(String authToken){
-		super(authToken);
+		super(authToken, null);
 	}
 		
 	public void returnResponse(String output) {
