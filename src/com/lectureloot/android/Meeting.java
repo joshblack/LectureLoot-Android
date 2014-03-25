@@ -41,6 +41,8 @@ public class Meeting {
 		HttpGetBuilding buildingTask = new HttpGetBuilding(User.getInstance().getAuthToken());
 		buildingTask.setHttpGetFinishedListener(listner);
 		buildingTask.execute(new String[] {buildingUrl});
+		
+		listner.waitForThreads();
 	}
 	
 	public int getMeetingId() {

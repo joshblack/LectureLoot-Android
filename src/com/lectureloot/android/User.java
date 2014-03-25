@@ -231,6 +231,29 @@ public class User {
 
 			//close the file
 			out.close();
+			
+			
+			
+			//write the course-list
+			out = MainActivity.mContext.openFileOutput("courseList.dat", 0);	
+
+			//write course data
+			for(int i = 0;i<mCourses.size();++i){
+				out.write(("Course:" + mCourses.get(i).getCourseId()).getBytes());
+				out.write((":" + mCourses.get(i).getCourseCode()).getBytes());
+				out.write((":" + mCourses.get(i).getCourseTitle()).getBytes());
+				out.write((":" + mCourses.get(i).getSectionNumber()).getBytes());
+				out.write((":" + mCourses.get(i).getCredits()).getBytes());
+				out.write((":" + mCourses.get(i).getInstructor()).getBytes());
+
+				ArrayList<Meeting> meetings = new ArrayList<Meeting>();				
+				out.write((":" + meetings.size()+"\n").getBytes());
+			}			
+
+			//close the file
+			out.close();
+
+			
 		} catch (IOException e) {
 			return false;
 		}

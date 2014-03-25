@@ -124,6 +124,8 @@ public class Course {
 		HttpGetMeetings meetingTask = new HttpGetMeetings(User.getInstance().getAuthToken());
 		meetingTask.setHttpGetFinishedListener(listner);
 		meetingTask.execute(new String[] {meetingUrl});
+		
+		listner.waitForThreads();
 	}
 }
 
