@@ -8,10 +8,12 @@ import java.util.List;
 import com.lectureloot.android.Course;
 import com.lectureloot.android.Meeting;
 import com.lectureloot.android.R;
+import com.lectureloot.android.ScheduleFragment;
 import com.lectureloot.android.R.id;
 import com.lectureloot.android.R.layout;
 import com.lectureloot.android.User;
 import com.lectureloot.android.Wager;
+import com.lectureloot.android.WagerFragment;
 import com.lectureloot.background.HttpDeleteCourses;
 import com.lectureloot.background.HttpDeleteWagers;
 
@@ -205,6 +207,12 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						
 						user.setWagers(newWagers);
+						//delete from view
+						WagerFragment frg = new WagerFragment();
+						_listDataHeader = frg.prepareDataHeader();
+						_listDataChild = frg.prepareDataChild();
+						notifyDataSetChanged();
+						
 						System.out.println("I survived");
 						
 //						ArrayList<Wager> wagers = new ArrayList<Wager>();

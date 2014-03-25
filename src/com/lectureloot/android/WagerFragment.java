@@ -38,14 +38,18 @@ public class WagerFragment extends Fragment {
 
 	private ExpandableListWagerAdapter wagerListAdapter;
 	private ExpandableListView wagerExpListView;
-	private List<String> wagerListDataHeader;
-	private HashMap<String, List<Wager>> wagerListDataChild;
+	private List<String> wagerListDataHeader = null;
+	private HashMap<String, List<Wager>> wagerListDataChild = null;
 
 	private int tempPerClassWager;
 	private String displayTempPerClassWager;
 	private TextView DisplayCurrentWager;
 	private User user;
 	private int sessionId = 0;
+	
+	public WagerFragment() {
+		this.user = User.getInstance();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +86,7 @@ public class WagerFragment extends Fragment {
 		// get the listview
 		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
 		prepareWagerListData();
-		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), wagerListDataHeader, wagerListDataChild);
+		wagerListAdapter = new ExpandableListWagerAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
 		// setting list adapter
 		wagerExpListView.setAdapter(wagerListAdapter);
 
@@ -318,6 +322,46 @@ public class WagerFragment extends Fragment {
 		return rootView;
 	}
 
+	public ArrayList<String> prepareDataHeader() {
+		ArrayList<String> header = new ArrayList<String>();
+		wagerListDataChild = new HashMap<String, List<Wager>>();
+
+		ArrayList<Wager> wagers = user.getWagers();
+		System.out.println("COURSES ARRAY LIST" + wagers.toString());
+			
+		List<Wager> oneWagerList = null;
+		for (Wager wager : wagers) {
+			header.add(Integer.toString(wager.getWagerSessionCode()));
+			oneWagerList = new ArrayList<Wager>();
+			oneWagerList.add(wager);
+			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
+		}
+
+		return header;
+
+	}
+	
+	public HashMap<String, List<Wager>> prepareDataChild() {
+		ArrayList<String> header = prepareDataHeader();
+		HashMap<String, List<Wager>> child = new HashMap<String, List<Wager>>();
+		
+		ArrayList<Wager> wagers = user.getWagers();
+		System.out.println("COURSES ARRAY LIST" + wagers.toString());
+
+		List<Wager> oneWagerList = null;
+		for (Wager wager : wagers) {
+			header.add(Integer.toString(wager.getWagerSessionCode()));
+			oneWagerList = new ArrayList<Wager>();
+			oneWagerList.add(wager);
+			child.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
+			System.out.println(wager.getWagerSessionCode());
+		}	
+		return child;
+		
+	}
+	
+	
 	private void prepareWagerListData() {
 		wagerListDataHeader = new ArrayList<String>();
 		wagerListDataChild = new HashMap<String, List<Wager>>();
