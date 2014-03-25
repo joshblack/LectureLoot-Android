@@ -15,8 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Looper;
 import android.util.Log;
 import com.lectureloot.background.*;

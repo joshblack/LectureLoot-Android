@@ -1,5 +1,7 @@
 package com.lectureloot.android;
 
+import android.util.Log;
+
 public abstract class HttpGetFinishedListener {
 	protected int threadCount;
 	
@@ -21,6 +23,7 @@ public abstract class HttpGetFinishedListener {
 	/* Function will wait until all threads have executed before allowing caller to unblock */
 		synchronized(this){
 			do{
+				Log.i("Thread:","Waiting...");
 				try{
 					wait();
 				} catch (InterruptedException e){}
@@ -36,6 +39,7 @@ public abstract class HttpGetFinishedListener {
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
 			synchronized(this){
+				Log.i("Thread:","Thread Finished, Count:" + threadCount);
 				notifyAll();
 			}
 		}
