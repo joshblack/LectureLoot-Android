@@ -272,7 +272,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 							//user.setCourses(userCourses);
 
-							user.addCourseFromList(newCourse, null);
+							user.getCourses().add(newCourse);	//synchronous operation now
 							//listAdapter.notifyDataSetChanged();
 							//							for(int i = 0; i < Integer.MAX_VALUE; i++);
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();

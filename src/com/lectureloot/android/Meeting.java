@@ -1,5 +1,7 @@
 package com.lectureloot.android;
 
+import java.util.ArrayList;
+
 import com.lectureloot.background.HttpGetBuilding;
 import com.lectureloot.background.MeetingListner;
 
@@ -42,7 +44,7 @@ public class Meeting {
 		buildingTask.setHttpGetFinishedListener(listner);
 		buildingTask.execute(new String[] {buildingUrl});
 		
-		listner.waitForThreads();
+		//do this asynchronously (should catch up by end of other stuff)
 	}
 	
 	public int getMeetingId() {
@@ -102,6 +104,16 @@ public class Meeting {
 	
 	public long getTimeInMillis(){
 		return this.time;
+	}
+	
+	public static void resolveMeetings(ArrayList<Meeting> meetings, ArrayList<Course> courses){
+		for(int i=0;i<meetings.size();++i){
+			//add the meetings to the courses
+			Meeting m = meetings.get(i);
+			try{
+				courses.get(m.courseId).getMeetings().add(m);
+			} catch (ArrayIndexOutOfBoundsException e){}	//ignore extra meetings
+		}
 	}
 
 }

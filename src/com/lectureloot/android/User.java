@@ -15,12 +15,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.lectureloot.background.HttpGetCourseList;
+import com.lectureloot.background.HttpGetCourses;
+import com.lectureloot.background.HttpGetMeetingList;
+import com.lectureloot.background.HttpGetSessions;
+import com.lectureloot.background.HttpGetWagers;
+import com.lectureloot.background.UserListner;
+
 import android.os.Looper;
 import android.util.Log;
-import android.widget.ListAdapter;
 
-import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
-import com.lectureloot.background.*;
 
 public class User {
 	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
@@ -367,6 +371,25 @@ public class User {
 		/* Method will load user data from the serer in seperate threads, but will block until done */
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
+		//get the full course list from the server 
+		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
+		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
+		courseListTask.setHttpGetFinishedListener(listner);
+		courseListTask.execute(new String[] {courseListUrl});
+		
+		listner.waitForThreads();
+
+		//get the full meeting list from the server 
+		String meetingListUrl = "http://lectureloot.eu1.frbit.net/api/v1/meetings";
+		HttpGetMeetingList meetingListTask = new HttpGetMeetingList(mAuthToken);
+		meetingListTask.setHttpGetFinishedListener(listner);
+		meetingListTask.execute(new String[] {meetingListUrl});
+		
+		listner.waitForThreads();
+
+		//attach the meetings to the courses
+		Meeting.resolveMeetings(mMeetingList,mCourseList);
+		
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
@@ -385,28 +408,8 @@ public class User {
 		sessionTask.setHttpGetFinishedListener(listner);
 		sessionTask.execute(new String[] {sessionUrl});
 
-		//get the full course list from the server (does not block) 
-		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
-		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
-		courseListTask.setHttpGetFinishedListener(listner);
-		courseListTask.execute(new String[] {courseListUrl});
-
-		//wait for threads to finish before continuing
-		//listner.waitForThreads();
-	}
-
-	public void addCourseFromList(Course course, ExpandableListCourseAdapter adapter){
-		/* method to resolve incomplete course from courseList and add to user (DOESN'T POST, DOESN'T BLOCK) */
-		UserListner listner = new UserListner(this);  //setup the listner for the return
-
-		//load the courses from the server
-		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId();
-		HttpGetCourse courseTask = new HttpGetCourse(mAuthToken, adapter);
-		courseTask.setHttpGetFinishedListener(listner);
-		courseTask.execute(new String[] {courseUrl});
-		
 		listner.waitForThreads();
-	}
+}
 
 	/* GETTERS */
 	public boolean isBusy(){
