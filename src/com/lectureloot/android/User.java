@@ -389,7 +389,7 @@ public class User {
 		courseListTask.execute(new String[] {courseListUrl});
 
 		//wait for threads to finish before continuing
-		listner.waitForThreads();
+		//listner.waitForThreads();
 	}
 
 	public void addCourseFromList(Course course, ExpandableListCourseAdapter adapter){
@@ -402,7 +402,7 @@ public class User {
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
 		
-		//listner.waitForThreads();
+		listner.waitForThreads();
 	}
 
 	/* GETTERS */
