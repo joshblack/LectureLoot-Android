@@ -50,7 +50,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	private HashMap<String, List<Course>> listDataChild = null;
 	private User user;
 	private int courseId = -69; // used to setup Course Post with courseId
-	
+
 
 	public ScheduleFragment() {
 		this.user = User.getInstance();
@@ -59,13 +59,13 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		
-		
+
+
 		System.out.println("onCreateView enter");
 
 		View rootView = inflater.inflate(R.layout.fragment_schedule, container, false);
 		//final AdapterView aView = (AdapterView)rootView;
-	
+
 
 		user = User.getInstance();
 
@@ -86,7 +86,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 		prepareListData();
 		listAdapter = new ExpandableListCourseAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
-		
+
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
 
@@ -185,27 +185,27 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 						for(Course course : allCoursesArray){
 
-//							if(course.getCoursePrefix().equals(deptCodeStr)){
-//								System.out.println("equals");
-//							}
-//							else
-//								System.out.println("fail");
-//							if(course.getCourseNum().equals(courseCodeStr)){
-//								System.out.println("equals");
-//							}
-//							else
-//								System.out.println("fail");
-//							if(course.getSectionNumber().equals(sectionNumberStr)){
-//								System.out.println("equals");
-//							}
-//							else
-//								System.out.println("fail");
-//							System.out.println("Course Prefix"+course.getCoursePrefix() +".");
-//							System.out.println("Course Num"+course.getCourseNum()+ ".");
-//							System.out.println("Course Section"+course.getSectionNumber()+ ".");
+							//							if(course.getCoursePrefix().equals(deptCodeStr)){
+							//								System.out.println("equals");
+							//							}
+							//							else
+							//								System.out.println("fail");
+							//							if(course.getCourseNum().equals(courseCodeStr)){
+							//								System.out.println("equals");
+							//							}
+							//							else
+							//								System.out.println("fail");
+							//							if(course.getSectionNumber().equals(sectionNumberStr)){
+							//								System.out.println("equals");
+							//							}
+							//							else
+							//								System.out.println("fail");
+							//							System.out.println("Course Prefix"+course.getCoursePrefix() +".");
+							//							System.out.println("Course Num"+course.getCourseNum()+ ".");
+							//							System.out.println("Course Section"+course.getSectionNumber()+ ".");
 							if(course.getCoursePrefix().equals(deptCodeStr) && course.getCourseNum().equals(courseCodeStr)
 									&& course.getSectionNumber().equals(sectionNumberStr)){
-								
+
 								ArrayList<Course> userCourses = user.getCourses();
 								boolean sameCourse = false;
 								for(Course userCourse : userCourses){
@@ -220,7 +220,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 									courseId = course.getCourseId();
 									break;
 								}
-								
+
 							}
 						}
 						if(courseId != -69 && sameCourseFlag == false){
@@ -232,7 +232,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							String authToken = user.getAuthToken();
 							HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         
 							coursesPost.execute(new String[] {coursesUrl});
-							
+
 							//update locally
 							int newCourseId = courseId;
 							String newCoursePrefix = "defaultPrefix";
@@ -242,7 +242,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							String newCredits = "defaultCredits";
 							String newInstructor = "defaultInstructor";
 							//ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
-							
+
 							for(Course course : allCoursesArray){
 								if(newCourseId == course.getCourseId()){
 									newCoursePrefix = course.getCoursePrefix();
@@ -257,36 +257,36 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 							//ArrayList<Course> userCourses = user.getCourses();
 							Course newCourse = new Course(newCourseId, newCoursePrefix, newCourseNum, newCourseTitle, newSectionNum, newCredits, newInstructor);
-							
-//										Meeting meeting = new Meeting();
-//										meeting.setMeetingId(1);
-//										meeting.setBuildingCode("LIT");
-//										meeting.setRoomNumber("RoomNum");
-//										meeting.setMeetingDay("M");
-//										meeting.setPeriod("6");
-//										meeting.setCourseId(1);
-//										newMeetings.add(meeting);
-							
+
+							//										Meeting meeting = new Meeting();
+							//										meeting.setMeetingId(1);
+							//										meeting.setBuildingCode("LIT");
+							//										meeting.setRoomNumber("RoomNum");
+							//										meeting.setMeetingDay("M");
+							//										meeting.setPeriod("6");
+							//										meeting.setCourseId(1);
+							//										newMeetings.add(meeting);
+
 							//newCourse.setMeetings(newMeetings);
 							//userCourses.add(newCourse);
-							
+
 							//user.setCourses(userCourses);
-							
+
 							user.addCourseFromList(newCourse, null);
 							//listAdapter.notifyDataSetChanged();
-//							for(int i = 0; i < Integer.MAX_VALUE; i++);
+							//							for(int i = 0; i < Integer.MAX_VALUE; i++);
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
 
 							listAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
-							
-//							prepareListData();
-////							listAdapter = new ExpandableListCourseAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
-////
-////							// setting list adapter
-//							expListView.setAdapter(listAdapter);
+
+							//							prepareListData();
+							////							listAdapter = new ExpandableListCourseAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
+							////
+							////							// setting list adapter
+							//							expListView.setAdapter(listAdapter);
 							//listAdapter.notifyDataSetChanged();
 							dialog.dismiss();
-			
+
 						}
 						else 
 						{
@@ -413,15 +413,15 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 			getMeetingsReady(courseId);
 			System.out.println(courseId);
 		}
-		
+
 		return header;
 
 	}
-	
+
 	public HashMap<String, List<Course>> prepareDataChild() {
 		ArrayList<String> header = prepareDataHeader();
 		HashMap<String, List<Course>> child = new HashMap<String, List<Course>>();
-		
+
 		ArrayList<Course> courses = user.getCourses();
 		System.out.println("COURSES ARRAY LIST" + courses.toString());
 
@@ -439,12 +439,12 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 			getMeetingsReady(courseId);
 			System.out.println(courseId);
 		}
-		
+
 		return child;
-		
+
 	}
 
-	
+
 	private void prepareListData() {
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<Course>>();
@@ -538,7 +538,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		// TODO Auto-generated method stub
 
 	}
-	
-	
+
+
 
 }
