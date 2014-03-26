@@ -4,6 +4,7 @@ import java.net.URL;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -14,8 +15,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -25,16 +31,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ViewPager mViewPager;
 	private TabsPagerAdapter mAdapter;
 	private User mCurrentUser;
-	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};	
+	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
+	public static Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		mContext = getApplicationContext();	//get application context
+		
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
-		mViewPager.setOffscreenPageLimit(3);
+		
+		//keeps background tabs alive
+		//mViewPager.setOffscreenPageLimit(3);
 		final ActionBar actionBar = getActionBar();
 		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -69,10 +79,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//set the middle tab to be the default
 		mViewPager.setCurrentItem(1, false);
 		
-		//create the User, for now it'll just be static
-		mCurrentUser = mCurrentUser.getInstance("Sydney");
+		//Asynchrounously load the user (check status with user.isBusy())
+		mCurrentUser = User.getInstance();
+		System.out.println("getting user isntance");
+		//while(mCurrentUser.isBusy());
 	}
 
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -127,7 +141,27 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
-
 	
+	@Override
+	protected void onStop(){
+		//write data on app close
+		super.onStop();
+		if(mCurrentUser != null)
+			mCurrentUser.writeToFile();
+		Log.i("Main Activity:","Stopped");
+	}
+	
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
 }

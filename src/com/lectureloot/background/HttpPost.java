@@ -8,68 +8,46 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.lectureloot.android.HttpPostCoursesFinishedListener;
+import com.lectureloot.android.HttpPostWagersFinishedListener;
+
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListAdapter;
+import android.view.View.OnClickListener;
 
-import com.lectureloot.android.HttpGetFinishedListener;
-import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
-
-public abstract class HttpGet extends AsyncTask<String, Void, String> {
-
-//	protected HttpGetCoursesFinishedListener courseListener;
-//	protected HttpGetMeetingsFinishedListener meetingsListener;
-//	protected HttpGetSessionsFinishedListener sessionsListener;
-//	protected HttpGetWagersFinishedListener wagersListener;
-	protected HttpGetFinishedListener listener;
-	protected String authorizationToken;
-	protected ExpandableListCourseAdapter adapter;
-
+public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	
-	public HttpGet(String authToken, ExpandableListCourseAdapter adapter) {
+	protected HttpPostCoursesFinishedListener courseListener;
+	protected HttpPostWagersFinishedListener wagerListener; 
+	protected String authorizationToken;
+	
+	public HttpPost(String authToken) {
 		this.authorizationToken = authToken;
-		this.adapter = adapter;
 	}
 
-//	public void setHttpGetCoursesFinishedListener(HttpGetCoursesFinishedListener listener) {
-//		this.courseListener = listener;
-//	}
-//	
-//	public void setHttpGetMeetingsFinishedListener(HttpGetMeetingsFinishedListener listener) {
-//		this.meetingsListener = listener;
-//	}
-//	
-//	public void setHttpGetSessionsFinishedListener(HttpGetSessionsFinishedListener listener) {
-//		this.sessionsListener = listener;
-//	}
-//	
-//	public void setHttpGetWagersFinishedListener(HttpGetWagersFinishedListener listener) {
-//		this.wagersListener = listener;
-//	}
-	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
-	this.listener = listener;
-}
-	public void onPreExecute(){
-		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
+	public void setHttpPostCoursesFinishedListener(OnClickListener onClickListener) {
+		this.courseListener = (HttpPostCoursesFinishedListener) onClickListener;
 	}
+	
+	public void setHttpPostWagersFinishedListener(HttpPostWagersFinishedListener listener) {
+		this.wagerListener = listener;
+	}
+
 	
 	@Override
 	protected String doInBackground(String... urls) {
+		//	android.os.Debug.waitForDebugger();
 		String output = null;
 		for (String url : urls) {
 			output = getOutputFromUrl(url);
 		}
 		return output;
 	}
-
+	
 	private String getOutputFromUrl(String url) {
 		StringBuffer output = new StringBuffer("");
 		try {
 			InputStream stream = getHttpConnection(url);
-			if (stream == null){
-				Log.w("HttpGet:", "Null Stream - " + url);
-				return "";
-			}
 			BufferedReader buffer = new BufferedReader(new InputStreamReader(stream));
 			String s = "";
 			while ((s = buffer.readLine()) != null) {
@@ -77,11 +55,13 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (Exception e){
+			Log.w("HttpPost:",e.toString());
+			Log.w("HttpPost:",url);
 		}
 		return output.toString();
 	}
-
-
+	
 	private InputStream getHttpConnection(String urlString) throws  IOException{
 		InputStream stream = null;
 		URL url = new URL(urlString);
@@ -89,7 +69,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 		try {
 			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			httpConnection.setRequestMethod("GET");
+			httpConnection.setRequestMethod("POST");
 			httpConnection.setRequestProperty("Authorization", authorizationToken); //HEADER for access token
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
@@ -107,13 +87,11 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		returnResponse(output);
-		listener.notifyThreadComplete();
-		if(adapter != null) {
-			adapter.notifyDataSetChanged();
-		}
-		
+
+		System.out.println("response:" + output);
+		//returnResponse(output);
 	}
 
 	public abstract void returnResponse(String output);
+	
 }
