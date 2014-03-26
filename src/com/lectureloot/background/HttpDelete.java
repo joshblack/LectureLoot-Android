@@ -1,6 +1,7 @@
 package com.lectureloot.background;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View.OnClickListener;
 
 import com.lectureloot.android.HttpDeleteCoursesFinishedListener;
@@ -53,6 +54,8 @@ public abstract class HttpDelete extends AsyncTask<String, Void, String> {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (Exception e){
+			Log.w("HttpDelete:",e.toString());
 		}
 		return output.toString();
 	}

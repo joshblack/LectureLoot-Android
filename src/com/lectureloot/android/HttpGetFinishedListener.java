@@ -15,15 +15,14 @@ public abstract class HttpGetFinishedListener {
 
 	public void onHttpGetCourseListReady(String output){}
 
-	public void onHttpGetCourseReady(String output){}
-	
 	public void onHttpGetBuildingReady(String output){}
+	
+	public void onHttpGetMeetingListReady(String output) {}
 	
 	public void waitForThreads(){
 	/* Function will wait until all threads have executed before allowing caller to unblock */
 		synchronized(this){
 			do{
-				Log.i("Thread:","Waiting...");
 				try{
 					wait();
 				} catch (InterruptedException e){}
@@ -39,8 +38,7 @@ public abstract class HttpGetFinishedListener {
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
 			synchronized(this){
-				Log.i("Thread:","Thread Finished, Count:" + threadCount);
 				notifyAll();
 			}
-		}
+	}
 }

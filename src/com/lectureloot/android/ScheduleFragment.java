@@ -227,7 +227,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							//send server request
 							String userId = user.getUserId();
 							System.out.println(userId);
-							String coursesUrl = "http://lectureloot.eu1.frbit.net//api/v1/users/" + userId + "/courses?course_id=" + courseId;
+							String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/courses?course_id=" + courseId;
 							System.out.println(coursesUrl);
 							String authToken = user.getAuthToken();
 							HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         
@@ -241,7 +241,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							String newSectionNum = "defaultSectionNum";
 							String newCredits = "defaultCredits";
 							String newInstructor = "defaultInstructor";
-							//ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
+							ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
 
 							for(Course course : allCoursesArray){
 								if(newCourseId == course.getCourseId()){
@@ -251,7 +251,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 									newSectionNum = course.getSectionNumber();
 									newCredits = course.getCredits();
 									newInstructor = course.getInstructor();
-									//newMeetings = course.getMeetings();
+									newMeetings = course.getMeetings();
 								}
 							}
 
@@ -267,12 +267,12 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							//										meeting.setCourseId(1);
 							//										newMeetings.add(meeting);
 
-							//newCourse.setMeetings(newMeetings);
+							newCourse.setMeetings(newMeetings);
 							//userCourses.add(newCourse);
 
 							//user.setCourses(userCourses);
 
-							user.addCourseFromList(newCourse, null);
+							user.getCourses().add(newCourse);	//synchronous operation now
 							//listAdapter.notifyDataSetChanged();
 							//							for(int i = 0; i < Integer.MAX_VALUE; i++);
 							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
