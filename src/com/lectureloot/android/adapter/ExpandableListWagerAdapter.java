@@ -197,6 +197,11 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 //						getter.execute(new String[] {wagersUrl});
 						
 						
+						WagerFragment frg = new WagerFragment();
+						_listDataHeader = frg.prepareDataHeader();
+						_listDataChild = frg.prepareDataChild();
+						notifyDataSetChanged();
+						
 						
 						Toast.makeText(_context, "Edits have been made", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
