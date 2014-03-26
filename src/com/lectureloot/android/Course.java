@@ -2,7 +2,6 @@ package com.lectureloot.android;
 
 import java.util.ArrayList;
 
-import com.lectureloot.background.CourseListner;
 import com.lectureloot.background.HttpGetMeetings;
 import com.lectureloot.background.UserListner;
 
@@ -23,6 +22,8 @@ public class Course {
 	private String sectionNumber;
 	private String credits;
 	private String instructor;
+	private String semester;
+	private String year;	
 	private ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 
 	public Course () {
@@ -30,6 +31,19 @@ public class Course {
 	}
 
 	/* constructor for current course setup */
+	public Course(int courseID, String coursePrefix, String courseNum, String courseTitle, String sectionNumber, String credits,
+			String instructor, String semester, String year) {
+		this.courseId = courseID;
+		this.coursePrefix = coursePrefix;
+		this.courseNum = courseNum;
+		this.courseTitle = courseTitle;
+		this.sectionNumber = sectionNumber;
+		this.credits = credits;
+		this.instructor = instructor;
+		this.semester = semester;
+		this.year = year;		
+	}
+	
 	public Course(int courseID, String coursePrefix, String courseNum, String courseTitle, String sectionNumber, String credits,
 			String instructor) {
 		this.courseId = courseID;
@@ -39,6 +53,8 @@ public class Course {
 		this.sectionNumber = sectionNumber;
 		this.credits = credits;
 		this.instructor = instructor;
+		this.semester = "";
+		this.year = "";		
 	}
 	
 	public int getCourseId() {
@@ -114,18 +130,20 @@ public class Course {
 		this.meetings = meetings;
 	}
 
+	public String getSemester(){
+		return semester;
+	}
 	
-	public void loadMeetings(UserListner user){
-		/* method to load meetings from server for multiple courses (use internal threads/listner) */
-		CourseListner listner = new CourseListner(this, user);
-		
-		//load the courses from the server
-		String meetingUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + courseId + "/meetings";
-		HttpGetMeetings meetingTask = new HttpGetMeetings(User.getInstance().getAuthToken());
-		meetingTask.setHttpGetFinishedListener(listner);
-		meetingTask.execute(new String[] {meetingUrl});
-		
-		listner.waitForThreads();
+	public String getYear(){
+		return year;
+	}
+	
+	public void setSemester(String semester){
+		this.semester = semester; 
+	}
+	
+	public void setYear(String year){
+		this.year = year;
 	}
 }
 

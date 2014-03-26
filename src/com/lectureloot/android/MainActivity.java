@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mContext = this;	//get application context
+		mContext = getApplicationContext();	//get application context
 		
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
@@ -147,7 +147,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//write data on app close
 		super.onStop();
 		if(mCurrentUser != null)
-			//FOUND THE PROBLEM
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
 	}
