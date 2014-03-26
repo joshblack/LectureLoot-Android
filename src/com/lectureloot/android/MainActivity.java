@@ -33,6 +33,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private User mCurrentUser;
 	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
 	public static Context mContext;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
+				
 	}
 	
 	
