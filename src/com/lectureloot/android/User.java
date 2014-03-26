@@ -86,8 +86,8 @@ public class User {
 				if(!loadFromFile()){	//try to get from file
 					if(!login()){		//try login to server (generate auth token)
 						register();		//register user
-						loadUserData();	//either way, get the data from the server afterwards
 					}
+					loadUserData();	//either way, get the data from the server afterwards
 				}
 				busyFlag = false;
 			}
@@ -419,6 +419,8 @@ public class User {
 		/* Method will load user data from the serer in seperate threads, but will block until done */
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
+		Log.i("LoadUserData","Entered");
+		
 		//get the full course list from the server 
 		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
 		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
@@ -456,6 +458,8 @@ public class User {
 		sessionTask.setHttpGetFinishedListener(listner);
 		sessionTask.execute(new String[] {sessionUrl});
 
+		Log.i("LoadUserData","Completed");
+		
 		listner.waitForThreads();
 }
 
