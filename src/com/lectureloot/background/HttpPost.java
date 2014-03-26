@@ -12,6 +12,7 @@ import com.lectureloot.android.HttpPostCoursesFinishedListener;
 import com.lectureloot.android.HttpPostWagersFinishedListener;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View.OnClickListener;
 
 public abstract class HttpPost extends AsyncTask<String, Void, String> {
@@ -54,6 +55,9 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (Exception e){
+			Log.w("HttpPost:",e.toString());
+			Log.w("HttpPost:",url);
 		}
 		return output.toString();
 	}

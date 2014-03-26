@@ -2,6 +2,8 @@ package com.lectureloot.android;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.lectureloot.background.HttpGetBuilding;
 import com.lectureloot.background.MeetingListner;
 
@@ -111,8 +113,10 @@ public class Meeting {
 			//add the meetings to the courses
 			Meeting m = meetings.get(i);
 			try{
-				courses.get(m.courseId).getMeetings().add(m);
-			} catch (ArrayIndexOutOfBoundsException e){}	//ignore extra meetings
+				courses.get(m.courseId - 1).getMeetings().add(m);
+			} catch (IndexOutOfBoundsException e){
+				Log.w("ResolveMeetings:",e.toString());
+			}	//ignore extra meetings
 		}
 	}
 

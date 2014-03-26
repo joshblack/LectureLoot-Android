@@ -227,7 +227,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							//send server request
 							String userId = user.getUserId();
 							System.out.println(userId);
-							String coursesUrl = "http://lectureloot.eu1.frbit.net//api/v1/users/" + userId + "/courses?course_id=" + courseId;
+							String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/courses?course_id=" + courseId;
 							System.out.println(coursesUrl);
 							String authToken = user.getAuthToken();
 							HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         

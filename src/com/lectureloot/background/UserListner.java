@@ -104,6 +104,7 @@ public class UserListner extends HttpGetFinishedListener{
 				courseList.add(course);
 			}
 			user.setCourseList(courseList);
+			Log.i("CourseList:","Complete, Size: " + courseList.size());
 		} catch (Exception e) {
 			//Toast
 		}
@@ -122,7 +123,7 @@ public class UserListner extends HttpGetFinishedListener{
 
 				meeting = new Meeting(	
 						(Integer)jsonMeeting.get("id"),
-						Integer.parseInt((String)jsonMeeting.get("course_id")),
+						Integer.parseInt(jsonMeeting.getString("course_id")),
 						(String)jsonMeeting.getString("roomNumber"),
 						(String)jsonMeeting.getString("meetingDay"),
 						(String)jsonMeeting.getString("period")
@@ -133,6 +134,7 @@ public class UserListner extends HttpGetFinishedListener{
 				meeting.addBuildingById((Integer)jsonMeeting.get("building_id"));
 			}
 			user.setMeetingList(meetingList);
+			Log.i("MeetingList:","Completed, Size: " + meetingList.size());
 		} catch (Exception e) {
 			Log.i("MeetingList:",e.toString());
 		}

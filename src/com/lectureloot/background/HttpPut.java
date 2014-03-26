@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View.OnClickListener;
 
 import com.lectureloot.android.HttpPutWagersFinishedListener;
@@ -47,6 +48,8 @@ public abstract class HttpPut extends AsyncTask<String, Void, String> {
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		} catch (Exception e){
+			Log.w("HttpPut:",e.toString());
 		}
 		return output.toString();
 	}

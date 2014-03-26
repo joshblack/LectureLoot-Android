@@ -6,7 +6,6 @@ Email:<email>
 Password:<password> (plaintext is insecure, but I'll add security later)
 Points:<Points>
 WageredPoints:<WageredPoints>
-NumCourses:<numCourses> (2 in example)
 Courses:<CourseID1>:<CourseID2>
 NumWagers:<numWagers> (2 or so)
 Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
@@ -15,8 +14,8 @@ Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager
 
 
 ---Formatting for the courseList.dat file---
-ID:<courseID>
-deptCode:<CEN>
+Course:<courseID>
+deptCode:<deptCode>
 courseNumber:<3031>
 sectionNumber:<5842>
 credits:<3>
@@ -24,7 +23,7 @@ instructor:<Manuel Bermudez>
 courseTitle:<Software Engineering>
 semester:<fall>
 year:<2014>
-
+END
 
 ---Formatting for the meetingList.dat file---
 ID:<ID>
@@ -35,3 +34,4 @@ Longitude:<num>
 roomNumber:<109>
 meetingDay:<m>
 period:<6>
+END

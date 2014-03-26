@@ -22,6 +22,7 @@ import com.lectureloot.background.HttpGetSessions;
 import com.lectureloot.background.HttpGetWagers;
 import com.lectureloot.background.UserListner;
 
+import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
 
@@ -83,10 +84,10 @@ public class User {
 			public void run(){
 				Looper.prepare();
 				if(!loadFromFile()){	//try to get from file
-					if(!login())		//try login to server (generate auth token)
+					if(!login()){		//try login to server (generate auth token)
 						register();		//register user
-
-					loadUserData();		//either way, get the data from the server afterwards
+						loadUserData();	//either way, get the data from the server afterwards
+					}
 				}
 				busyFlag = false;
 			}
@@ -98,7 +99,6 @@ public class User {
 	public boolean loadFromFile(){
 		//try to open file. If it exists, load the data
 		try{
-			MainActivity.mContext.deleteFile("user.dat");
 			FileInputStream fis = MainActivity.mContext.openFileInput("user.dat");
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
@@ -110,44 +110,10 @@ public class User {
 			this.mPassword = in.readLine().split(":")[1];
 			this.mPoints = Integer.parseInt(in.readLine().split(":")[1]);
 			this.mWageredPoints = Integer.parseInt(in.readLine().split(":")[1]);
-
-			//grab the courses
-			int numCourses = Integer.parseInt(in.readLine().split(":")[1]);
-			ArrayList<Course> courses = new ArrayList<Course>();
-			while(numCourses-- > 0){
-				Course course = new Course();	//creat new course
-				String[] inLine = in.readLine().split(":");	//get the input data
-
-				//Fill course with data
-				course.setCourseId(Integer.parseInt(inLine[1]));
-				course.setCourseCode(inLine[2]);
-				course.setCourseTitle(inLine[3]);
-				course.setSectionNumber(inLine[4]);
-				course.setCredits(inLine[5]);
-				course.setInstructor(inLine[6]);
-
-				//get the course's meetings
-				ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-				int numMeetings = Integer.parseInt(inLine[6]);
-				while(numMeetings-- >0){
-					Meeting meeting = new Meeting();
-					inLine = in.readLine().split(":");	//get intput data
-
-					//fill in meeting data
-					meeting.setMeetingId(Integer.parseInt(inLine[1]));
-					meeting.setBuildingCode(inLine[2]);
-					meeting.setRoomNumber(inLine[3]);
-					meeting.setMeetingDay(inLine[4]);
-					meeting.setPeriod(inLine[5]);
-					meeting.setCourseId(course.getCourseId());
-
-					meetings.add(meeting);	//add to arrayList
-				}
-				course.setMeetings(meetings);	//add the meetings to the course
-				courses.add(course);	//add the course to the arrayList
-			}
-			this.mCourses = courses;	//add courses
-
+			String[] courseIDs = in.readLine().split(":");
+			
+			Log.i("Load File:", "User Loaded");
+			
 			//get the Wagers
 			ArrayList<Wager> wagers = new ArrayList<Wager>();
 			int numWagers = Integer.parseInt(in.readLine().split(":")[1]);
@@ -165,26 +131,85 @@ public class User {
 				wagers.add(wager);	//add to arrayList
 			}
 			this.mWagers = wagers;
-
-			doLogin();
-
+			
+			Log.i("Load File:", "Wagers Loaded");
+			
+			//close user file and open the next one
 			in.close();
 			fis.close();
+			fis = MainActivity.mContext.openFileInput("courseList.dat");
+			in = new BufferedReader(new InputStreamReader(fis));	
+			
+			//grab the courses
+			ArrayList<Course> courses = new ArrayList<Course>();
+			String[] inLine = in.readLine().split(":");	//get the input data
+			while(!inLine[0].equals("END")){
+				Course course = new Course();	//creat new course
+
+				//Fill course with data
+				course.setCourseId(Integer.parseInt(inLine[1]));
+				course.setCoursePrefix(in.readLine().split(":")[1]);
+				course.setCourseNum(in.readLine().split(":")[1]);
+				course.setSectionNumber(in.readLine().split(":")[1]);
+				course.setCredits(in.readLine().split(":")[1]);
+				course.setInstructor(in.readLine().split(":")[1]);
+				course.setCourseTitle(in.readLine().split(":")[1]);
+				course.setSemester(in.readLine().split(":")[1]);
+				course.setYear(in.readLine().split(":")[1]);
+				
+				courses.add(course);	//add the course to the arrayList
+				inLine = in.readLine().split(":");
+			}
+			this.mCourseList = courses;	//add courses
+
+			Log.i("Load File:", "Courses Loaded");
+			
+			//close user file and open the next one
+			in.close();
+			fis.close();
+			fis = MainActivity.mContext.openFileInput("meetingList.dat");
+			in = new BufferedReader(new InputStreamReader(fis));	
+			
+			//parse the meetings
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+			inLine = in.readLine().split(":");	//get the input data
+			while(!inLine[0].equals("END")){
+				Meeting meeting = new Meeting();	//creat new meeting
+				
+				//Fill meeting with data
+				meeting.setMeetingId(Integer.parseInt(inLine[1]));
+				meeting.setCourseId(Integer.parseInt(in.readLine().split(":")[1]));
+				meeting.setBuildingCode(in.readLine().split(":")[1]);
+				meeting.setLatitude(Double.parseDouble(in.readLine().split(":")[1]));
+				meeting.setLongitude(Double.parseDouble(in.readLine().split(":")[1]));
+				meeting.setRoomNumber(in.readLine().split(":")[1]);
+				meeting.setMeetingDay(in.readLine().split(":")[1]);
+				meeting.setPeriod(in.readLine().split(":")[1]);
+				
+				meetings.add(meeting);	//add the meeting to the arrayList
+				inLine = in.readLine().split(":");
+			}
+			this.mMeetingList = meetings;	//add meetings
+			
+			in.close();
+			fis.close();
+					
+			doLogin();
+			
+			Meeting.resolveMeetings(mMeetingList,mCourseList);
+			
+			for(int i=1;i<courseIDs.length;++i)
+				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
 
 			Log.i("Load File:", "Load Succeessful");
-			
-			
+					
 			return true; //load successful
 
-			//If the file doesn't exist, get data from server then make it
+		//If the file doesn't exist, get data from server then make it
 		} catch (FileNotFoundException e){
-			//file doesn not exist, do nothing
-		} catch (NumberFormatException e) {
-			//TOAST
-		} catch (IOException e) {
-			//TOAST
-		} catch (ArrayIndexOutOfBoundsException e){
 			Log.i("LoadFile:",e.toString());
+		} catch (Exception e){
+			Log.w("LoadFile:",e.toString());
 		}
 		Log.i("Load File:", "Load Failed");
 		return false; //load failed
@@ -193,17 +218,20 @@ public class User {
 	public synchronized boolean writeToFile(){
 		/* method will write the user class to the file, only one write allowed at a time */
 		try{
-			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", 0);	
+			Log.i("WriteFile:","Begin File Write");
+			
+			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", Context.MODE_PRIVATE);
+			
+			Log.i("WriteFile:","File Created");
 
 			//write user data
 			out.write(("ID:" + mUserId + "\n").getBytes());
 			out.write(("First:" + mFirstName + "\n").getBytes());
 			out.write(("Last:" + mLastName + "\n").getBytes());
-			out.write(("Email:" + mPassword + "\n").getBytes());
+			out.write(("Email:" + mEmail + "\n").getBytes());
 			out.write(("Password:" + mPassword + "\n").getBytes());
 			out.write(("Points:" + mPoints + "\n").getBytes());
 			out.write(("WageredPoints:" + mWageredPoints + "\n").getBytes());
-			out.write(("NumCourses:" + mCourses.size() + "\n").getBytes());	
 
 			//write course data
 			out.write("Courses".getBytes());
@@ -213,7 +241,7 @@ public class User {
 			out.write("\n".getBytes());	//newline
 
 			out.write(("NumWagers:" + mWagers.size() + "\n").getBytes());
-			for(int i = mWagers.size();i >0;--i){				
+			for(int i=0; mWagers.size() > i;++i){				
 				out.write(("Wager:" + mWagers.get(i).getWagerId()).getBytes());
 				out.write((":" + mWagers.get(i).getWagerSessionCode()).getBytes());
 				out.write((":" + mWagers.get(i).getWagerPerMeeting()).getBytes());
@@ -223,41 +251,51 @@ public class User {
 
 			//close the file
 			out.close();
-			
+			Log.i("WriteFile:","User Data Written");
 			
 			
 			//write the course-list
-			out = MainActivity.mContext.openFileOutput("courseList.dat", 0);	
+			out = MainActivity.mContext.openFileOutput("courseList.dat", Context.MODE_PRIVATE);	
 
 			//write course data
 			for(int i = 0;i<mCourseList.size();++i){
-				out.write(("Course:" + mCourseList.get(i).getCourseId()).getBytes());
-				out.write((":" + mCourseList.get(i).getCourseCode()).getBytes());
-				out.write((":" + mCourseList.get(i).getCourseTitle()).getBytes());
-				out.write((":" + mCourseList.get(i).getSectionNumber()).getBytes());
-				out.write((":" + mCourseList.get(i).getCredits()).getBytes());
-				out.write((":" + mCourseList.get(i).getInstructor()).getBytes());
+				out.write(("Course:" + mCourseList.get(i).getCourseId() + "\n").getBytes());
+				out.write(("deptCode:" + mCourseList.get(i).getCoursePrefix() + "\n").getBytes());
+				out.write(("courseNum:" + mCourseList.get(i).getCourseNum() + "\n").getBytes());
+				out.write(("sectionNum:" + mCourseList.get(i).getSectionNumber() + "\n").getBytes());
+				out.write(("credits:" + mCourseList.get(i).getCredits() + "\n").getBytes());
+				out.write(("instructor:" + mCourseList.get(i).getInstructor() + "\n").getBytes());
+				out.write(("title:" + mCourseList.get(i).getCourseTitle() + "\n").getBytes());
+				out.write(("semester:" + mCourseList.get(i).getSemester() + "\n").getBytes());
+				out.write(("year:" + mCourseList.get(i).getYear() + "\n").getBytes());
 			}			
-
+			out.write("END".getBytes());
+			
 			//close the file
 			out.close();
-
+			Log.i("WriteFile:","Course Data Written");
+			
 			
 			//write the meeting list
-			out = MainActivity.mContext.openFileOutput("meetingList.dat", 0);	
+			out = MainActivity.mContext.openFileOutput("meetingList.dat", Context.MODE_PRIVATE);	
 
 			//write course data
 			for(int k=0;k<mMeetingList.size();++k){
-				out.write(("Meeting:" + mMeetingList.get(k).getMeetingId()).getBytes());
-				out.write((":" + mMeetingList.get(k).getBuildingCode()).getBytes());
-				out.write((":" + mMeetingList.get(k).getRoomNumber()).getBytes());
-				out.write((":" + mMeetingList.get(k).getMeetingDay()).getBytes());
-				out.write((":" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
+				out.write(("Meeting:" + mMeetingList.get(k).getMeetingId()+"\n").getBytes());
+				out.write(("CourseID:" + mMeetingList.get(k).getCourseId()+"\n").getBytes());
+				out.write(("buildingCode:" + mMeetingList.get(k).getBuildingCode()+"\n").getBytes());
+				out.write(("Lat:" + mMeetingList.get(k).getLatitude()+"\n").getBytes());
+				out.write(("Long:" + mMeetingList.get(k).getLongitude()+"\n").getBytes());
+				out.write(("Room:" + mMeetingList.get(k).getRoomNumber()+"\n").getBytes());
+				out.write(("Day:" + mMeetingList.get(k).getMeetingDay()+"\n").getBytes());
+				out.write(("Period:" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
 			}
+			out.write("END".getBytes());
+			Log.i("WriteFile:","Meeting Data Written");
 			
 			//close the file
 			out.close();
-
+			
 			
 			
 		} catch (Exception e) {
@@ -266,11 +304,12 @@ public class User {
 		}
 		return true;
 	}
+	
 
 	public boolean doLogin(){
 		/*automaticly log the user in and generate authToken (will block)*/
 
-		//TODO: display some sort of 'logging in' popup here (currently just blocking)
+		//TODO: display some sort of 'logging in' popup here
 
 		//get the info from the server
 		URL url;
@@ -305,6 +344,7 @@ public class User {
 		return false;		
 	}
 
+	
 	public boolean doRegister(){
 		/*try to register the user and generate an auth token (will block)*/
 
@@ -344,6 +384,7 @@ public class User {
 		return false;	//logged in successfully
 	}
 
+	
 	public boolean login(){
 	/*prompt for Email/password from the UI element and try to login */
 		
@@ -356,6 +397,7 @@ public class User {
 		
 		return doLogin();
 	}
+	
 
 	public boolean register(){
 	/*prompt for Email/Name/password from the UI element and try to register */		
@@ -366,6 +408,12 @@ public class User {
 
 
 	}
+	
+	public void clearData(){
+	//clear the cached data (for debug purposes)
+		MainActivity.mContext.deleteFile("user.dat");				
+	}
+	
 
 	public void loadUserData(){
 		/* Method will load user data from the serer in seperate threads, but will block until done */
