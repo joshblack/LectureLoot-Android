@@ -90,6 +90,14 @@ public class User {
 					loadUserData();	//either way, get the data from the server afterwards
 				}
 				busyFlag = false;
+				try{
+					synchronized(this){
+						wait(10000);
+					}
+				}catch(InterruptedException e){}
+				synchronized(MainActivity.mContext){
+					MainActivity.mContext.notifyAll();
+				}
 			}
 		});
 		

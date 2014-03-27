@@ -37,8 +37,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		mContext = getApplicationContext();	//get application context
+		Intent intent = new Intent(this, activity_splash.class);
+		startActivity(intent);
+		
+		//Asynchrounously load the user (check status with user.isBusy())
+		mCurrentUser = User.getInstance();
+		System.out.println("getting user isntance");
+		do{
+			try{
+				synchronized(mContext){
+					mContext.wait();
+				}
+			} catch (InterruptedException e){}
+		}while(mCurrentUser.isBusy());
+
+		
+		//----------Load Main-------------
+		setContentView(R.layout.activity_main);
 		
 		//Initialization of the tabs
 		mViewPager = (ViewPager)findViewById(R.id.pager);
@@ -79,10 +95,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		//set the middle tab to be the default
 		mViewPager.setCurrentItem(1, false);
 		
-		//Asynchrounously load the user (check status with user.isBusy())
-		mCurrentUser = User.getInstance();
-		System.out.println("getting user isntance");
-		//while(mCurrentUser.isBusy());
+
 	}
 
 	
