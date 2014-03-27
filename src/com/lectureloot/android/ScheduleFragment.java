@@ -176,11 +176,11 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 						// TODO Auto-generated method stub
 
 						String deptCodeStr = deptCodeView.getText().toString();
-						//System.out.println(deptCodeStr + ".");
+						System.out.println(deptCodeStr + ". DFKASKDFKASDKF");
 						String courseCodeStr = courseCodeView.getText().toString();
-						//System.out.println(courseCodeStr + ".");
+						System.out.println(courseCodeStr + ".");
 						String sectionNumberStr = sectionNumberView.getText().toString();
-						//System.out.println(sectionNumberStr + ".");
+						System.out.println(sectionNumberStr + ".");
 						boolean sameCourseFlag = false;
 
 						for(Course course : allCoursesArray){
@@ -271,7 +271,8 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							//userCourses.add(newCourse);
 
 							//user.setCourses(userCourses);
-
+							
+							
 							user.getCourses().add(newCourse);	//synchronous operation now
 							//listAdapter.notifyDataSetChanged();
 							//							for(int i = 0; i < Integer.MAX_VALUE; i++);
@@ -285,6 +286,9 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							////							// setting list adapter
 							//							expListView.setAdapter(listAdapter);
 							//listAdapter.notifyDataSetChanged();
+							
+							courseId = -69;
+							
 							dialog.dismiss();
 
 						}
