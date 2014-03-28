@@ -16,18 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="12dp"
         >
 
         <ImageView
             android:id="@+id/user_profile_pic"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginRight="12dp"
-        
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_marginTop="4dp"
+            
             android:src="@drawable/user_circle" />
 
         <LinearLayout
@@ -39,10 +38,10 @@
                 android:id="@+id/user_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                
                 android:text="@string/user_total_points"
                 android:textColor="#FFFFFFFF"
-                android:textSize="50sp" />
+                android:textSize="70sp" />
 
         </LinearLayout>
     </LinearLayout>
