@@ -5,14 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 
-public class SplashActivity extends Activity {
 
+public class SplashActivity extends Activity {	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.activity_splash);
-
 		setContentView(R.layout.activity_splash1);
 		
 		System.out.println("getting user isntance");
@@ -24,7 +21,6 @@ public class SplashActivity extends Activity {
 			} catch (InterruptedException e){}
 		}while(User.getInstance().isBusy());
 
-		User.getInstance().clearData();
 		finish();		
 
 	}

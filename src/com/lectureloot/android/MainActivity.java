@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext = getApplicationContext();	//get application context
+		mContext = this;	//get application context
 		
 		mCurrentUser = User.getInstance();
 		Intent intent = new Intent(this, SplashActivity.class);

@@ -68,6 +68,7 @@
         android:layout_weight=".05" />
     
     <Button 
+        android:id="@+id/loginButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#39b54a"
@@ -82,7 +83,8 @@
         android:background="#FFFF0000"
         android:layout_weight=".05" />
     
-    <Button 
+    <Button
+        android:id="@+id/facebookButton" 
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#3B5998"
@@ -99,6 +101,7 @@
         android:layout_weight=".05" />
     
     <Button 
+        android:id="@+id/registerButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#FF000000"
