@@ -57,7 +57,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="  Password"
+        android:text="Password"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" />
 	
