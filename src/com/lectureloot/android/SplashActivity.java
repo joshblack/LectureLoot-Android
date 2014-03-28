@@ -21,6 +21,7 @@ public class SplashActivity extends Activity {
 			} catch (InterruptedException e){}
 		}while(User.getInstance().isBusy());
 
+		User.getInstance().clearData();
 		finish();		
 	}
 
