@@ -14,13 +14,13 @@
     
     <ImageView
         android:id="@+id/imgLogo"
-        android:scaleX="3"
-        android:scaleY="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".20"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
+        android:layout_weight=".30"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/logo_512" />
   
     <Space
         android:layout_width="match_parent"
@@ -36,7 +36,9 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="Username" >
+        android:text="  Username"
+        android:textColor="#FF000000"
+        android:textColorHint="#000000" >
 
         <requestFocus />
     </EditText>
@@ -55,7 +57,9 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="Password" />
+        android:text="  Password"
+        android:textColor="#FF000000"
+        android:textColorHint="#aa000000" />
 	
 	<Space
         android:layout_width="match_parent"

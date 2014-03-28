@@ -35,3 +35,9 @@ roomNumber:<109>
 meetingDay:<m>
 period:<6>
 END
+
+---Formatting for the sessions.dat file---
+ID:<ID>
+StartDate:<Date>
+EndDate:<Date>
+END

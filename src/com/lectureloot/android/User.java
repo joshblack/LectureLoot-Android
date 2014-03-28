@@ -1,5 +1,6 @@
 package com.lectureloot.android;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -197,6 +198,28 @@ public class User {
 			}
 			this.mMeetingList = meetings;	//add meetings
 			
+			//close user file and open the next one
+			in.close();
+			fis.close();
+			fis = MainActivity.mContext.openFileInput("sessions.dat");
+			in = new BufferedReader(new InputStreamReader(fis));	
+			
+			//parse the sessions
+			ArrayList<Sessions> sessions = new ArrayList<Sessions>();
+			inLine = in.readLine().split(":");	//get the input data
+			while(!inLine[0].equals("END")){
+				Sessions session = new Sessions();	//creat new session
+				
+				//Fill session with data
+				session.setSessionId(Integer.parseInt(inLine[1]));
+				session.setStartDate(Date.valueOf(in.readLine().split(":")[1]));
+				session.setEndDate(Date.valueOf(in.readLine().split(":")[1]));
+				
+				sessions.add(session);	//add the session to the arrayList
+				inLine = in.readLine().split(":");
+			}
+			this.mSessions = sessions;	//add sessions
+			
 			in.close();
 			fis.close();
 					
@@ -224,12 +247,8 @@ public class User {
 
 	public synchronized boolean writeToFile(){
 		/* method will write the user class to the file, only one write allowed at a time */
-		try{
-			Log.i("WriteFile:","Begin File Write");
-			
+		try{			
 			FileOutputStream out = MainActivity.mContext.openFileOutput("user.dat", Context.MODE_PRIVATE);
-			
-			Log.i("WriteFile:","File Created");
 
 			//write user data
 			out.write(("ID:" + mUserId + "\n").getBytes());
@@ -258,7 +277,6 @@ public class User {
 
 			//close the file
 			out.close();
-			Log.i("WriteFile:","User Data Written");
 			
 			
 			//write the course-list
@@ -280,7 +298,6 @@ public class User {
 			
 			//close the file
 			out.close();
-			Log.i("WriteFile:","Course Data Written");
 			
 			
 			//write the meeting list
@@ -298,11 +315,26 @@ public class User {
 				out.write(("Period:" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
 			}
 			out.write("END".getBytes());
-			Log.i("WriteFile:","Meeting Data Written");
 			
 			//close the file
 			out.close();
 			
+			
+			//write the sessions
+			out = MainActivity.mContext.openFileOutput("sessions.dat", Context.MODE_PRIVATE);	
+
+			//write course data
+			for(int k=0;k<mSessions.size();++k){
+				out.write(("Session:" + mSessions.get(k).getSessionId()+"\n").getBytes());
+				out.write(("StartDate:" + mSessions.get(k).getStartDate()+"\n").getBytes());
+				out.write(("EndDate:" + mSessions.get(k).getEndDate()+"\n").getBytes());
+			}
+			out.write("END".getBytes());
+			
+			//close the file
+			out.close();
+
+			Log.i("WriteFile:","All Data Written");
 			
 			
 		} catch (Exception e) {
@@ -388,7 +420,6 @@ public class User {
 		return false;		
 	}
 
-	
 	public boolean doRegister(){
 		/*try to register the user and generate an auth token (will block)*/
 
@@ -427,7 +458,6 @@ public class User {
 		Log.i("Register:","Registration Failed");
 		return false;	//logged in successfully
 	}
-
 	
 	public void login(){
 	/*prompt for Email/password from the UI element and try to login */
@@ -435,7 +465,6 @@ public class User {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		MainActivity.mContext.startActivity(intent);		
 	}
-	
 
 	public boolean register(){
 	/*prompt for Email/Name/password from the UI element and try to register */		
@@ -451,7 +480,6 @@ public class User {
 	//clear the cached data (for debug purposes)
 		MainActivity.mContext.deleteFile("user.dat");				
 	}
-	
 
 	public void loadUserData(){
 		/* Method will load user data from the serer in seperate threads, but will block until done */
