@@ -39,21 +39,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		super.onCreate(savedInstanceState);
 		mContext = getApplicationContext();	//get application context
 		
-		Intent intent = new Intent(this, activity_splash.class);
+		mCurrentUser = User.getInstance();
+		Intent intent = new Intent(this, SplashActivity.class);
 		startActivity(intent);
 		
-		//Asynchrounously load the user (check status with user.isBusy())
-		mCurrentUser = User.getInstance();
-		System.out.println("getting user isntance");
-		do{
-			try{
-				synchronized(mContext){
-					mContext.wait();
-				}
-			} catch (InterruptedException e){}
-		}while(mCurrentUser.isBusy());
-
-		
+			
 		//----------Load Main-------------
 		setContentView(R.layout.activity_main);
 		
