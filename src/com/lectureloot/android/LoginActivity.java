@@ -7,6 +7,8 @@ import com.lectureloot.background.HttpPostCourses;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
+import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,29 +26,30 @@ public class LoginActivity extends Activity {
 		
 		final Activity thisActivity = this;
 		
-		final Dialog spinnerDialog = new Dialog(this);
-        spinnerDialog.getWindow().getCurrentFocus();
-        spinnerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        spinnerDialog.setContentView(R.layout.dialog_temp_load);
-        spinnerDialog.setCancelable(false);
-        spinnerDialog.setOwnerActivity(this);
-
 		Button loginButton;
 		loginButton = (Button)this.findViewById(R.id.loginButton);
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				EditText email = (EditText)thisActivity.findViewById(R.id.editText1);
 				EditText password = (EditText)thisActivity.findViewById(R.id.editText2);
 				
-				User user = User.getInstance();
+				final User user = User.getInstance();
 				user.doLogin(email.getText().toString(),password.getText().toString());
 				
-				spinnerDialog.show();
-				while(!user.loginFlag);	//wait for login to finish
-				spinnerDialog.dismiss();
+				Log.i("LoginActivity:","Attempting Login, Email:" + email.getText().toString() + " password:" + password.getText().toString());
+				while(user.loginFlag);	//wait for login to finish
 				
-				if(!user.getAuthToken().equals(" "))
+				if(!user.getAuthToken().equals(" ")){
+					Thread thread = new Thread( new Runnable(){
+						public void run(){
+							user.loadUserData();
+						}
+					});
+					thread.start();
 					finish();
+				}
+					
 			}
 		});
 	}

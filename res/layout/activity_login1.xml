@@ -36,7 +36,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="  Username"
+        android:text="joshS@ufl.edu"
         android:textColor="#FF000000"
         android:textColorHint="#000000" >
 
@@ -57,7 +57,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="  Password"
+        android:text="password"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" />
 	

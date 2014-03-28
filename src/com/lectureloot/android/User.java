@@ -3,6 +3,7 @@ package com.lectureloot.android;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -79,28 +80,26 @@ public class User {
 	/* Methods By Josh */
 	public void load(){
 		/* load() will either get data from file, or from database if no file exists */
-		
+
 		busyFlag = true;	//user is being loaded
-		clearData();	//Force Login Screen TODO: DEBUG
-		
-		
-		//load data in seperate thread
-		Thread loadThread = new Thread(new Runnable(){
-			public void run(){
-				Looper.prepare();
-				if(!loadFromFile()){	//try to get from file
-					/* Depreciated by new Activities
-					 * if(!login()){		//try login to server (generate auth token)
-						register();		//register user
-					}
-					loadUserData();	//either way, get the data from the server afterwards
-					*/
-					login();
+		//clearData();	//Force Login Screen TODO: DEBUG
+
+		if((new File("user.dat")).exists()){
+
+
+			//load data in seperate thread
+			Thread loadThread = new Thread(new Runnable(){
+				public void run(){
+					Looper.prepare();
+					loadFromFile();
 				}
-			}
-		});
-		
-		loadThread.start();
+			});
+
+			loadThread.start();
+		}
+		else{
+			login();
+		}
 	}
 
 	public boolean loadFromFile(){
@@ -118,9 +117,9 @@ public class User {
 			this.mPoints = Integer.parseInt(in.readLine().split(":")[1]);
 			this.mWageredPoints = Integer.parseInt(in.readLine().split(":")[1]);
 			String[] courseIDs = in.readLine().split(":");
-			
+
 			Log.i("Load File:", "User Loaded");
-			
+
 			//get the Wagers
 			ArrayList<Wager> wagers = new ArrayList<Wager>();
 			int numWagers = Integer.parseInt(in.readLine().split(":")[1]);
@@ -138,15 +137,15 @@ public class User {
 				wagers.add(wager);	//add to arrayList
 			}
 			this.mWagers = wagers;
-			
+
 			Log.i("Load File:", "Wagers Loaded");
-			
+
 			//close user file and open the next one
 			in.close();
 			fis.close();
 			fis = MainActivity.mContext.openFileInput("courseList.dat");
 			in = new BufferedReader(new InputStreamReader(fis));	
-			
+
 			//grab the courses
 			ArrayList<Course> courses = new ArrayList<Course>();
 			String[] inLine = in.readLine().split(":");	//get the input data
@@ -163,26 +162,26 @@ public class User {
 				course.setCourseTitle(in.readLine().split(":")[1]);
 				course.setSemester(in.readLine().split(":")[1]);
 				course.setYear(in.readLine().split(":")[1]);
-				
+
 				courses.add(course);	//add the course to the arrayList
 				inLine = in.readLine().split(":");
 			}
 			this.mCourseList = courses;	//add courses
 
 			Log.i("Load File:", "Courses Loaded");
-			
+
 			//close user file and open the next one
 			in.close();
 			fis.close();
 			fis = MainActivity.mContext.openFileInput("meetingList.dat");
 			in = new BufferedReader(new InputStreamReader(fis));	
-			
+
 			//parse the meetings
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 			inLine = in.readLine().split(":");	//get the input data
 			while(!inLine[0].equals("END")){
 				Meeting meeting = new Meeting();	//creat new meeting
-				
+
 				//Fill meeting with data
 				meeting.setMeetingId(Integer.parseInt(inLine[1]));
 				meeting.setCourseId(Integer.parseInt(in.readLine().split(":")[1]));
@@ -192,50 +191,50 @@ public class User {
 				meeting.setRoomNumber(in.readLine().split(":")[1]);
 				meeting.setMeetingDay(in.readLine().split(":")[1]);
 				meeting.setPeriod(in.readLine().split(":")[1]);
-				
+
 				meetings.add(meeting);	//add the meeting to the arrayList
 				inLine = in.readLine().split(":");
 			}
 			this.mMeetingList = meetings;	//add meetings
-			
+
 			//close user file and open the next one
 			in.close();
 			fis.close();
 			fis = MainActivity.mContext.openFileInput("sessions.dat");
 			in = new BufferedReader(new InputStreamReader(fis));	
-			
+
 			//parse the sessions
 			ArrayList<Sessions> sessions = new ArrayList<Sessions>();
 			inLine = in.readLine().split(":");	//get the input data
 			while(!inLine[0].equals("END")){
 				Sessions session = new Sessions();	//creat new session
-				
+
 				//Fill session with data
 				session.setSessionId(Integer.parseInt(inLine[1]));
 				session.setStartDate(Date.valueOf(in.readLine().split(":")[1]));
 				session.setEndDate(Date.valueOf(in.readLine().split(":")[1]));
-				
+
 				sessions.add(session);	//add the session to the arrayList
 				inLine = in.readLine().split(":");
 			}
 			this.mSessions = sessions;	//add sessions
-			
+
 			in.close();
 			fis.close();
-					
+
 			doLogin();
-			
+
 			Meeting.resolveMeetings(mMeetingList,mCourseList);
-			
+
 			for(int i=1;i<courseIDs.length;++i)
 				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
 
 			Log.i("Load File:", "Load Succeessful");
-			
-			clearFlag();
+
+			busyFlag = false;
 			return true; //load successful
 
-		//If the file doesn't exist, get data from server then make it
+			//If the file doesn't exist, get data from server then make it
 		} catch (FileNotFoundException e){
 			Log.i("LoadFile:",e.toString());
 		} catch (Exception e){
@@ -277,8 +276,8 @@ public class User {
 
 			//close the file
 			out.close();
-			
-			
+
+
 			//write the course-list
 			out = MainActivity.mContext.openFileOutput("courseList.dat", Context.MODE_PRIVATE);	
 
@@ -295,11 +294,11 @@ public class User {
 				out.write(("year:" + mCourseList.get(i).getYear() + "\n").getBytes());
 			}			
 			out.write("END".getBytes());
-			
+
 			//close the file
 			out.close();
-			
-			
+
+
 			//write the meeting list
 			out = MainActivity.mContext.openFileOutput("meetingList.dat", Context.MODE_PRIVATE);	
 
@@ -315,11 +314,11 @@ public class User {
 				out.write(("Period:" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
 			}
 			out.write("END".getBytes());
-			
+
 			//close the file
 			out.close();
-			
-			
+
+
 			//write the sessions
 			out = MainActivity.mContext.openFileOutput("sessions.dat", Context.MODE_PRIVATE);	
 
@@ -330,29 +329,29 @@ public class User {
 				out.write(("EndDate:" + mSessions.get(k).getEndDate()+"\n").getBytes());
 			}
 			out.write("END".getBytes());
-			
+
 			//close the file
 			out.close();
 
 			Log.i("WriteFile:","All Data Written");
-			
-			
+
+
 		} catch (Exception e) {
 			Log.i("File:",e.toString());
 			return false;
 		}
 		return true;
 	}
-	
-	public void doLogin(String email, String password){
+
+	public void doLogin(final String email, final String password){
 		/*automaticly log the user in and generate authToken (will block)*/				
-		loginFlag = false;
+		loginFlag = true;
 		Thread thread = new Thread(new Runnable(){
 			public void run(){
 				//get the info from the server
 				URL url;
 				try {
-					String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword;
+					String urlParamaters = "emailAddress=" + email + "&password=" + password;
 					url = new URL(URL_BASE + "/users/login?" + urlParamaters);
 					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 					urlConnection.setRequestMethod("POST");
@@ -364,27 +363,29 @@ public class User {
 							mAuthToken = input.getString("token");	//logged in successfully
 							mUserId = input.getString("user_id");
 							Log.i("Login:", "Login Succeeded");		//DEBUG
-							loginFlag = true;
+							mPassword = password;
+							mEmail = email;
+							loginFlag = false;
 						}
 					} catch (JSONException e) {
-						//Toast
+						Log.i("Login:", "Login Failed");		//DEBUG
 					} catch (ClassCastException e){
 						Log.w("Login:",e.toString());
 					}finally {
 						urlConnection.disconnect();
 					}
 				} catch (MalformedURLException e) {
-					//Toast
+					Log.i("Login:", "Login Failed");		//DEBUG
 				} catch (IOException e) {
-					//Toast
+					Log.i("Login:", "Login Failed");		//DEBUG
 				}
-				Log.i("Login:", "Login Failed");		//DEBUG	
+				loginFlag = false;
 			}
 		});
 		thread.start();
 
 	}
-	
+
 	public boolean doLogin(){
 		/*automaticly log the user in and generate authToken (will block)*/
 		//get the info from the server
@@ -458,16 +459,16 @@ public class User {
 		Log.i("Register:","Registration Failed");
 		return false;	//logged in successfully
 	}
-	
+
 	public void login(){
-	/*prompt for Email/password from the UI element and try to login */
+		/*prompt for Email/password from the UI element and try to login */
 		Intent intent = new Intent(MainActivity.mContext, LoginActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		MainActivity.mContext.startActivity(intent);		
 	}
 
 	public boolean register(){
-	/*prompt for Email/Name/password from the UI element and try to register */		
+		/*prompt for Email/Name/password from the UI element and try to register */		
 
 		//TODO: Throw to UI element to get infos
 
@@ -475,9 +476,9 @@ public class User {
 
 
 	}
-	
+
 	public void clearData(){
-	//clear the cached data (for debug purposes)
+		//clear the cached data (for debug purposes)
 		MainActivity.mContext.deleteFile("user.dat");				
 	}
 
@@ -486,13 +487,13 @@ public class User {
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
 		Log.i("LoadUserData","Entered");
-		
+
 		//get the full course list from the server 
 		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
 		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
 		courseListTask.setHttpGetFinishedListener(listner);
 		courseListTask.execute(new String[] {courseListUrl});
-		
+
 		listner.waitForThreads();
 
 		//get the full meeting list from the server 
@@ -500,12 +501,12 @@ public class User {
 		HttpGetMeetingList meetingListTask = new HttpGetMeetingList(mAuthToken);
 		meetingListTask.setHttpGetFinishedListener(listner);
 		meetingListTask.execute(new String[] {meetingListUrl});
-		
+
 		listner.waitForThreads();
 
 		//attach the meetings to the courses
 		Meeting.resolveMeetings(mMeetingList,mCourseList);
-		
+
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
@@ -525,23 +526,16 @@ public class User {
 		sessionTask.execute(new String[] {sessionUrl});
 
 		Log.i("LoadUserData","Completed");
-		
-		listner.waitForThreads();
-		clearFlag();
-}
 
-	private void clearFlag(){
+		listner.waitForThreads();
 		busyFlag = false;
-		synchronized(MainActivity.mContext){
-			MainActivity.mContext.notifyAll();
-		}
 	}
-	
+
 	/* GETTERS */
 	public boolean isBusy(){
 		return busyFlag;
 	}
-	
+
 	public String getUserId(){
 		return mUserId;
 	}
@@ -593,7 +587,7 @@ public class User {
 	public ArrayList<Course> getCourseList(){
 		return mCourseList;
 	}
-	
+
 	public ArrayList<Meeting> getMeetingList(){
 		return mMeetingList;
 	}
@@ -643,7 +637,7 @@ public class User {
 	public void setCourseList(ArrayList<Course> courseList) {
 		mCourseList = courseList;
 	}
-	
+
 	public void setMeetingList(ArrayList<Meeting> meetingList) {
 		mMeetingList = meetingList;
 	}
