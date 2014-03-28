@@ -14,13 +14,13 @@
     
     <ImageView
         android:id="@+id/imgLogo"
-        android:scaleX="3"
-        android:scaleY="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".20"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher" />
+        android:layout_weight=".30"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/logo_512" />
   
     <Space
         android:layout_width="match_parent"
@@ -36,9 +36,9 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="  Username"
+        android:text="joshS@ufl.edu"
         android:textColor="#FF000000"
-        android:textColorHint="#FF000000" >
+        android:textColorHint="#aa000000" >
 
         <requestFocus />
     </EditText>
@@ -57,9 +57,9 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="  Password"
+        android:text="password"
         android:textColor="#FF000000"
-        android:textColorHint="#FF000000" />
+        android:textColorHint="#aa000000" />
 	
 	<Space
         android:layout_width="match_parent"
@@ -68,6 +68,7 @@
         android:layout_weight=".05" />
     
     <Button 
+        android:id="@+id/loginButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#39b54a"
@@ -82,7 +83,8 @@
         android:background="#FFFF0000"
         android:layout_weight=".05" />
     
-    <Button 
+    <Button
+        android:id="@+id/facebookButton" 
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#3B5998"
@@ -99,6 +101,7 @@
         android:layout_weight=".05" />
     
     <Button 
+        android:id="@+id/registerButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:background="#FF000000"

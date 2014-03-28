@@ -33,26 +33,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private User mCurrentUser;
 	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
 	public static Context mContext;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext = getApplicationContext();	//get application context
-		Intent intent = new Intent(this, activity_splash.class);
+		mContext = this;	//get application context
+		
+		mCurrentUser = User.getInstance();
+		Intent intent = new Intent(this, SplashActivity.class);
 		startActivity(intent);
 		
-		//Asynchrounously load the user (check status with user.isBusy())
-		mCurrentUser = User.getInstance();
-		System.out.println("getting user isntance");
-		do{
-			try{
-				synchronized(mContext){
-					mContext.wait();
-				}
-			} catch (InterruptedException e){}
-		}while(mCurrentUser.isBusy());
-
-		
+			
 		//----------Load Main-------------
 		setContentView(R.layout.activity_main);
 		
@@ -162,6 +154,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
+				
 	}
 	
 	

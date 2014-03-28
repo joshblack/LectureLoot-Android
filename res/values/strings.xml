@@ -29,5 +29,9 @@
     <string name="sectionNumHint">e.g. 5842</string>
     <string name="settings_notification">Example Notification</string>
     <string name="dialog_drop_course_text">Are you sure you want to drop this course?</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
 </resources>
