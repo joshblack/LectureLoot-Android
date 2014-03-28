@@ -24,6 +24,7 @@ import com.lectureloot.background.HttpGetWagers;
 import com.lectureloot.background.UserListner;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Looper;
 import android.util.Log;
 
@@ -91,11 +92,6 @@ public class User {
 					loadUserData();	//either way, get the data from the server afterwards
 				}
 				busyFlag = false;
-				try{
-					synchronized(this){
-						wait(10000);
-					}
-				}catch(InterruptedException e){}
 				synchronized(MainActivity.mContext){
 					MainActivity.mContext.notifyAll();
 				}
@@ -425,7 +421,9 @@ public class User {
 	public boolean login(){
 	/*prompt for Email/password from the UI element and try to login */
 		
-		//TODO: Throw to UI element for login
+		Intent intent = new Intent(MainActivity.mContext, LoginActivity.class);
+		MainActivity.mContext.startActivity(intent);
+		
 		
 		//test Data
 		 mEmail = "kthnxbai5921@ufl.edu";
