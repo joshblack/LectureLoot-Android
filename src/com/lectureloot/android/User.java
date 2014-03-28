@@ -32,6 +32,7 @@ public class User {
 	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
 	private static User mInstance = null;
 	private boolean busyFlag;
+	public  boolean loginFlag;
 	private String mUserId;
 	private String mFirstName;
 	private String mLastName;
@@ -79,20 +80,21 @@ public class User {
 		/* load() will either get data from file, or from database if no file exists */
 		
 		busyFlag = true;	//user is being loaded
+		clearData();	//Force Login Screen TODO: DEBUG
+		
 		
 		//load data in seperate thread
 		Thread loadThread = new Thread(new Runnable(){
 			public void run(){
 				Looper.prepare();
 				if(!loadFromFile()){	//try to get from file
-					if(!login()){		//try login to server (generate auth token)
+					/* Depreciated by new Activities
+					 * if(!login()){		//try login to server (generate auth token)
 						register();		//register user
 					}
 					loadUserData();	//either way, get the data from the server afterwards
-				}
-				busyFlag = false;
-				synchronized(MainActivity.mContext){
-					MainActivity.mContext.notifyAll();
+					*/
+					login();
 				}
 			}
 		});
@@ -206,7 +208,8 @@ public class User {
 				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
 
 			Log.i("Load File:", "Load Succeessful");
-					
+			
+			clearFlag();
 			return true; //load successful
 
 		//If the file doesn't exist, get data from server then make it
@@ -309,12 +312,49 @@ public class User {
 		return true;
 	}
 	
+	public void doLogin(String email, String password){
+		/*automaticly log the user in and generate authToken (will block)*/				
+		loginFlag = false;
+		Thread thread = new Thread(new Runnable(){
+			public void run(){
+				//get the info from the server
+				URL url;
+				try {
+					String urlParamaters = "emailAddress=" + mEmail + "&password=" + mPassword;
+					url = new URL(URL_BASE + "/users/login?" + urlParamaters);
+					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					urlConnection.setRequestMethod("POST");
+					try {
+						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						JSONTokener tokener = new JSONTokener(in.readLine());
+						JSONObject input = (JSONObject) tokener.nextValue();
+						if(input.getString("message").equals("Success, valid credentials")){
+							mAuthToken = input.getString("token");	//logged in successfully
+							mUserId = input.getString("user_id");
+							Log.i("Login:", "Login Succeeded");		//DEBUG
+							loginFlag = true;
+						}
+					} catch (JSONException e) {
+						//Toast
+					} catch (ClassCastException e){
+						Log.w("Login:",e.toString());
+					}finally {
+						urlConnection.disconnect();
+					}
+				} catch (MalformedURLException e) {
+					//Toast
+				} catch (IOException e) {
+					//Toast
+				}
+				Log.i("Login:", "Login Failed");		//DEBUG	
+			}
+		});
+		thread.start();
 
+	}
+	
 	public boolean doLogin(){
 		/*automaticly log the user in and generate authToken (will block)*/
-
-		//TODO: display some sort of 'logging in' popup here
-
 		//get the info from the server
 		URL url;
 		try {
@@ -389,19 +429,11 @@ public class User {
 	}
 
 	
-	public boolean login(){
+	public void login(){
 	/*prompt for Email/password from the UI element and try to login */
-		
 		Intent intent = new Intent(MainActivity.mContext, LoginActivity.class);
-		MainActivity.mContext.startActivity(intent);
-		
-		
-		//test Data
-		 mEmail = "kthnxbai5921@ufl.edu";
-		 mPassword = "password";
-		
-		
-		return doLogin();
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		MainActivity.mContext.startActivity(intent);		
 	}
 	
 
@@ -467,8 +499,16 @@ public class User {
 		Log.i("LoadUserData","Completed");
 		
 		listner.waitForThreads();
+		clearFlag();
 }
 
+	private void clearFlag(){
+		busyFlag = false;
+		synchronized(MainActivity.mContext){
+			MainActivity.mContext.notifyAll();
+		}
+	}
+	
 	/* GETTERS */
 	public boolean isBusy(){
 		return busyFlag;
