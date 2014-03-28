@@ -31,6 +31,8 @@ public class LoginActivity extends Activity {
         spinnerDialog.setCancelable(false);
         spinnerDialog.setOwnerActivity(this);
 
+        getActionBar().setTitle("Begin Looting"); 
+        
 		Button loginButton;
 		loginButton = (Button)this.findViewById(R.id.loginButton);
 		loginButton.setOnClickListener(new OnClickListener() {
@@ -54,7 +56,7 @@ public class LoginActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login, menu);
+		//getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
 

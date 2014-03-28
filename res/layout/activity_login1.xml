@@ -36,9 +36,9 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="  Username"
+        android:text="  Email Address"
         android:textColor="#FF000000"
-        android:textColorHint="#000000" >
+        android:textColorHint="#aa000000" >
 
         <requestFocus />
     </EditText>
