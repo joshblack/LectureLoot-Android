@@ -7,6 +7,13 @@ import android.view.Menu;
 
 
 public class SplashActivity extends Activity {	
+	private Thread workThread =new Thread(new Runnable(){
+		public void run(){
+			User.getInstance().loadUserData();
+			finish();
+		}
+	});
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,13 +31,12 @@ public class SplashActivity extends Activity {
 	protected void onResume(){
 		super.onResume();
 		Log.i("Splash:","Getting User Data");
-		Thread thread = new Thread(new Runnable(){
-			public void run(){
-				User.getInstance().loadUserData();
-				finish();
-			}
-		});
-		thread.start();
+		
+			workThread.start();
 	}
-
+	
+	@Override
+	public void onBackPressed(){
+		//do nothing (Back button is disabled)
+	}
 }

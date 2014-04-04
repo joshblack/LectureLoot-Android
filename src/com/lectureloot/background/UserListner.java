@@ -64,7 +64,7 @@ public class UserListner extends HttpGetFinishedListener{
 			for(int i = 0; i < array.length(); i++) {
 				Course course;
 				jsonCourse = array.getJSONObject(i);
-				course = user.getCourseList().get(jsonCourse.getInt("id"));
+				course = user.getCourseList().get(jsonCourse.getInt("id") - 1);
 				courses.add(course);
 				for(int j=0; j<course.getMeetings().size();++j){
 					meetings.add(course.getMeetings().get(j));

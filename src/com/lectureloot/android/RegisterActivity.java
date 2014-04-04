@@ -19,4 +19,8 @@ public class RegisterActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	public void onBackPressed(){
+		//do nothing (Back button is disabled)
+	}
 }

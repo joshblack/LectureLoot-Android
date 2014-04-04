@@ -3,7 +3,6 @@ package com.lectureloot.android;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,15 +24,13 @@ import com.lectureloot.background.HttpGetWagers;
 import com.lectureloot.background.UserListner;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Looper;
 import android.util.Log;
 
 
 public class User {
 	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
 	private static User mInstance = null;
-	private boolean busyFlag;
+	private boolean loadedFlag;
 	public  boolean loginFlag;
 	private String mUserId;
 	private String mFirstName;
@@ -65,7 +62,8 @@ public class User {
 		mWagers = new ArrayList<Wager>();
 		mSessions = new ArrayList<Sessions>();
 		mCourseList = new ArrayList<Course>();
-		busyFlag = false;
+		loadedFlag = false;
+		loginFlag = false;
 	}
 
 	public static User getInstance(){
@@ -196,7 +194,11 @@ public class User {
 			in.close();
 			fis.close();
 
-			doLogin();
+			new Thread(new Runnable(){
+				public void run(){
+					doLogin();
+				}
+			}).start();
 
 			Meeting.resolveMeetings(mMeetingList,mCourseList);
 
@@ -204,6 +206,8 @@ public class User {
 				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
 
 			Log.i("Load File:", "Load Succeessful");
+			
+			loadedFlag = true;
 
 			return true; //load successful
 
@@ -336,6 +340,7 @@ public class User {
 					Log.i("Login:", "Login Succeeded");		//DEBUG
 					mPassword = password;
 					mEmail = email;
+					loginFlag = true;
 					return true;
 				}
 			} catch (JSONException e) {
@@ -370,6 +375,7 @@ public class User {
 					mAuthToken = input.getString("token");	//logged in successfully
 					mUserId = input.getString("user_id");
 					Log.i("Login:", "Login Succeeded");		//DEBUG
+					loginFlag = true;
 					return true;
 				}
 			} catch (JSONException e) {
@@ -390,9 +396,7 @@ public class User {
 
 	public boolean doRegister(){
 		/*try to register the user and generate an auth token (will block)*/
-
-		//TODO: display some sort of 'logging in' popup here (currently just blocking)
-
+		
 		//get the info from the server
 		URL url;
 		try {
@@ -408,6 +412,7 @@ public class User {
 					mAuthToken = input.getString("token");	//registered successfully
 					mUserId = input.getString("user_id");
 					Log.i("Register:","Registration Successful");
+					loginFlag = true;
 					return true;
 				}
 			} catch (JSONException e) {
@@ -444,8 +449,7 @@ public class User {
 	}
 
 	public void loadUserData(){
-		/* Method will load user data from the serer in seperate threads, but will block until done */		
-		busyFlag = true;
+		/* Method will load user data from the serer in seperate threads, but will block until done */
 
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
@@ -492,14 +496,18 @@ public class User {
 
 		listner.waitForThreads();
 
-		busyFlag = false;
+		loadedFlag = true;
 	}
 
 	/* GETTERS */
-	public boolean isBusy(){
-		return busyFlag;
+	public boolean loaded(){
+		return loadedFlag;
 	}
 
+	public boolean loggedIn(){
+		return loginFlag;
+	}
+	
 	public String getUserId(){
 		return mUserId;
 	}

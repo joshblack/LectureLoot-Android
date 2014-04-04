@@ -1,10 +1,7 @@
 package com.lectureloot.android;	
 
-import java.net.URL;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,10 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -42,17 +35,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 		mCurrentUser = User.getInstance();
 		
+		mCurrentUser.clearData();
+		
 		//if the user doesn't exist yet, and no file is found, load the data
-		if(mCurrentUser.getAuthToken().equals(" ") && !mCurrentUser.loadFromFile()){
+		if(!mCurrentUser.loaded() && !mCurrentUser.loadFromFile()){
 			//get the data
 			Intent splashIntent = new Intent(this, SplashActivity.class);
 			splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivityForResult(splashIntent,0);
+			startActivity(splashIntent);
 		
 			//Login (second because activities display in a stack
 			Intent loginIntent = new Intent(this, LoginActivity.class);
 			loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivityForResult(loginIntent,0);
+			startActivity(loginIntent);
 		}
 			
 		//----------Load Main-------------

@@ -30,8 +30,7 @@ public class LoginActivity extends Activity {
 		final Activity thisActivity = this;
 		Log.i("Login:","Created Login Activity");
 
-		Button loginButton;
-		loginButton = (Button)this.findViewById(R.id.loginButton);
+		Button loginButton = (Button)this.findViewById(R.id.loginButton);
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -54,6 +53,20 @@ public class LoginActivity extends Activity {
 				Log.i("LoginActivity:","Attempting Login, Email:" + email.getText().toString() + " password:" + password.getText().toString());
 			}
 		});
+		
+		Button registerButton = (Button)this.findViewById(R.id.registerButton);
+		registerButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				
+				//Throw to register screen and end this activity
+				Intent intent = new Intent(thisActivity, RegisterActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+				finish();
+			}
+		});
+
 	}
 
 	@Override
@@ -63,4 +76,8 @@ public class LoginActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	public void onBackPressed(){
+		//do nothing (Back button is disabled)
+	}
 }
