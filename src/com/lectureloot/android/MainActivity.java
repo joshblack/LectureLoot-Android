@@ -1,4 +1,4 @@
-package com.lectureloot.android;
+package com.lectureloot.android;	
 
 import java.net.URL;
 
@@ -41,9 +41,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mContext = this;	//get application context
 		
 		mCurrentUser = User.getInstance();
-		Intent intent = new Intent(this, SplashActivity.class);
-		startActivity(intent);
 		
+		//if the user doesn't exist yet, and no file is found, load the data
+		if(mCurrentUser.getAuthToken().equals(" ") && !mCurrentUser.loadFromFile()){
+			//get the data
+			Intent splashIntent = new Intent(this, SplashActivity.class);
+			splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivityForResult(splashIntent,0);
+		
+			//Login (second because activities display in a stack
+			Intent loginIntent = new Intent(this, LoginActivity.class);
+			loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivityForResult(loginIntent,0);
+		}
 			
 		//----------Load Main-------------
 		setContentView(R.layout.activity_main);
@@ -148,13 +158,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 	
 	@Override
-	protected void onStop(){
+	protected void onDestroy(){
 		//write data on app close
-		super.onStop();
+		super.onDestroy();
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
-				
 	}
 	
 	

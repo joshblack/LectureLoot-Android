@@ -72,34 +72,8 @@ public class User {
 		/* create new user and load data, or return existing user */	
 		if(mInstance == null){
 			mInstance = new User();
-			mInstance.load();
 		}
 		return mInstance;
-	}
-
-	/* Methods By Josh */
-	public void load(){
-		/* load() will either get data from file, or from database if no file exists */
-
-		busyFlag = true;	//user is being loaded
-		//clearData();	//Force Login Screen TODO: DEBUG
-
-		if((new File("user.dat")).exists()){
-
-
-			//load data in seperate thread
-			Thread loadThread = new Thread(new Runnable(){
-				public void run(){
-					Looper.prepare();
-					loadFromFile();
-				}
-			});
-
-			loadThread.start();
-		}
-		else{
-			login();
-		}
 	}
 
 	public boolean loadFromFile(){
@@ -231,7 +205,6 @@ public class User {
 
 			Log.i("Load File:", "Load Succeessful");
 
-			busyFlag = false;
 			return true; //load successful
 
 			//If the file doesn't exist, get data from server then make it
@@ -343,47 +316,41 @@ public class User {
 		return true;
 	}
 
-	public void doLogin(final String email, final String password){
-		/*automaticly log the user in and generate authToken (will block)*/				
-		loginFlag = true;
-		Thread thread = new Thread(new Runnable(){
-			public void run(){
-				//get the info from the server
-				URL url;
-				try {
-					String urlParamaters = "emailAddress=" + email + "&password=" + password;
-					url = new URL(URL_BASE + "/users/login?" + urlParamaters);
-					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-					urlConnection.setRequestMethod("POST");
-					try {
-						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-						JSONTokener tokener = new JSONTokener(in.readLine());
-						JSONObject input = (JSONObject) tokener.nextValue();
-						if(input.getString("message").equals("Success, valid credentials")){
-							mAuthToken = input.getString("token");	//logged in successfully
-							mUserId = input.getString("user_id");
-							Log.i("Login:", "Login Succeeded");		//DEBUG
-							mPassword = password;
-							mEmail = email;
-							loginFlag = false;
-						}
-					} catch (JSONException e) {
-						Log.i("Login:", "Login Failed");		//DEBUG
-					} catch (ClassCastException e){
-						Log.w("Login:",e.toString());
-					}finally {
-						urlConnection.disconnect();
-					}
-				} catch (MalformedURLException e) {
-					Log.i("Login:", "Login Failed");		//DEBUG
-				} catch (IOException e) {
-					Log.i("Login:", "Login Failed");		//DEBUG
+	public boolean doLogin(final String email, final String password){
+		/*automaticly log the user in and generate authToken (will block)*/	
+		
+		//get the info from the server
+		URL url;
+		try {
+			String urlParamaters = "emailAddress=" + email + "&password=" + password;
+			url = new URL(URL_BASE + "/users/login?" + urlParamaters);
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("POST");
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				JSONTokener tokener = new JSONTokener(in.readLine());
+				JSONObject input = (JSONObject) tokener.nextValue();
+				if(input.getString("message").equals("Success, valid credentials")){
+					mAuthToken = input.getString("token");	//logged in successfully
+					mUserId = input.getString("user_id");
+					Log.i("Login:", "Login Succeeded");		//DEBUG
+					mPassword = password;
+					mEmail = email;
+					return true;
 				}
-				loginFlag = false;
+			} catch (JSONException e) {
+				Log.i("Login:", "Login Failed");		//DEBUG
+			} catch (ClassCastException e){
+				Log.w("Login:",e.toString());
+			}finally {
+				urlConnection.disconnect();
 			}
-		});
-		thread.start();
-
+		} catch (MalformedURLException e) {
+			Log.i("Login:", "Login Failed");		//DEBUG
+		} catch (IOException e) {
+			Log.i("Login:", "Login Failed");		//DEBUG
+		}
+		return false;
 	}
 
 	public boolean doLogin(){
@@ -460,12 +427,6 @@ public class User {
 		return false;	//logged in successfully
 	}
 
-	public void login(){
-		/*prompt for Email/password from the UI element and try to login */
-		Intent intent = new Intent(MainActivity.mContext, LoginActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		MainActivity.mContext.startActivity(intent);		
-	}
 
 	public boolean register(){
 		/*prompt for Email/Name/password from the UI element and try to register */		
@@ -483,7 +444,9 @@ public class User {
 	}
 
 	public void loadUserData(){
-		/* Method will load user data from the serer in seperate threads, but will block until done */
+		/* Method will load user data from the serer in seperate threads, but will block until done */		
+		busyFlag = true;
+
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
 		Log.i("LoadUserData","Entered");
@@ -528,6 +491,7 @@ public class User {
 		Log.i("LoadUserData","Completed");
 
 		listner.waitForThreads();
+
 		busyFlag = false;
 	}
 

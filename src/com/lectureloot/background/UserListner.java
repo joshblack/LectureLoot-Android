@@ -78,6 +78,7 @@ public class UserListner extends HttpGetFinishedListener{
 	}
 
 	public void onHttpGetCourseListReady(String output) {
+		Log.i("CourseList:","Entered Method");
 		try {
 			JSONTokener tokener = new JSONTokener(output);
 			JSONArray array = null;
