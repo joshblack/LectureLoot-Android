@@ -408,7 +408,7 @@ public class User {
 				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				JSONTokener tokener = new JSONTokener(in.readLine());
 				JSONObject input = (JSONObject) tokener.nextValue();
-				if(input.get("message").equals("Success, the user was registered")){
+				if(input.getString("message").equals("Success, the user was registered")){
 					mAuthToken = input.getString("token");	//registered successfully
 					mUserId = input.getString("user_id");
 					Log.i("Register:","Registration Successful");
@@ -432,6 +432,50 @@ public class User {
 		return false;	//logged in successfully
 	}
 
+	public boolean doRegister(String email, String password, String first, String last){
+		/*try to register the user and generate an auth token (will block)*/
+		
+		//get the info from the server
+		URL url;
+		try {
+			String urlParamaters = "emailAddress=" + email + "&password=" + password + "&firstName=" + first + "&lastName=" + last + "&pointBalance=0";
+			Log.i("Register:",urlParamaters);
+			url = new URL(URL_BASE + "/users?" + urlParamaters);
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("POST");
+			try {
+				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				JSONTokener tokener = new JSONTokener(in.readLine());
+				JSONObject input = (JSONObject) tokener.nextValue();
+				if(input.getString("message").equals("Success, the user was registered")){
+					mAuthToken = input.getString("token");	//registered successfully
+					mUserId = input.getString("user_id");
+					Log.i("Register:","Registration Successful");
+					loginFlag = true;
+					mEmail = email;
+					mPassword = password;
+					mFirstName = first;
+					mLastName = last;
+					return true;
+				} else {
+					Log.i("Register:",input.getString("message"));
+				}
+			} catch (JSONException e) {
+				//Toast
+			} finally {
+				urlConnection.disconnect();
+			}
+		} catch (MalformedURLException e) {
+			Log.i("Register:",e.toString());
+		} catch (IOException e) {
+			Log.i("Register:",e.toString());
+		} catch (ClassCastException e){
+			Log.i("Register:",e.toString());
+		}
+
+		Log.i("Register:","Registration Failed");
+		return false;	//logged in successfully
+	}
 
 	public boolean register(){
 		/*prompt for Email/Name/password from the UI element and try to register */		
