@@ -2,7 +2,6 @@ package com.lectureloot.android;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.app.Activity;
 import android.content.Intent;
@@ -51,7 +50,10 @@ public class RegisterActivity extends Activity {
 						//try to register, if successful, kill the activity
 						if(User.getInstance().doRegister(email.getText().toString(),password.getText().toString(),
 								first.getText().toString(),last.getText().toString())){
-							finish();
+							//tell the login function that we're done here
+							Intent returnIntent = new Intent();
+							setResult(RESULT_OK, returnIntent);        
+							finish();	//kill the activity
 						} else {	//toast otherwise
 							Message msg = toaster.obtainMessage();
 							msg.obj = "Registration Failed";
@@ -76,9 +78,8 @@ public class RegisterActivity extends Activity {
 	@Override
 	public void onBackPressed(){
 		//return to login activity
-		Intent intent = new Intent(this, RegisterActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
+		Intent returnIntent = new Intent();
+		setResult(RESULT_CANCELED, returnIntent);        
 		finish();
 	}
 }

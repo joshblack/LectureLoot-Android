@@ -71,8 +71,7 @@ public class LoginActivity extends Activity {
 				//Throw to register screen and end this activity
 				Intent intent = new Intent(thisActivity, RegisterActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
-				finish();
+				startActivityForResult(intent,1);
 			}
 		});
 
@@ -88,5 +87,12 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onBackPressed(){
 		//do nothing (Back button is disabled)
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//kill the activity if registration was successfull
+		if (requestCode == 1) 
+		     if(resultCode == RESULT_OK)      
+		         finish();          
 	}
 }
