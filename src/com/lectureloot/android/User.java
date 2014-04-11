@@ -26,6 +26,7 @@ import com.lectureloot.background.UserListner;
 import android.content.Context;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class User {
@@ -89,6 +90,7 @@ public class User {
 						register();		//register user
 					}
 					loadUserData();	//either way, get the data from the server afterwards
+					Toast.makeText(MainActivity.mContext, "Accessed Server",Toast.LENGTH_LONG).show();
 				}
 				busyFlag = false;
 			}
@@ -231,6 +233,8 @@ public class User {
 		//If the file doesn't exist, get data from server then make it
 		} catch (FileNotFoundException e){
 			Log.i("LoadFile:",e.toString());
+			Toast.makeText(MainActivity.mContext, "Accessed Server - FILE NOT FOUND",Toast.LENGTH_LONG).show();
+			
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
 		}

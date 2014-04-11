@@ -189,12 +189,12 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						((Wager)getChild(groupPosition,childPosition)).setTotalMeetings(nextTotal);
 						
 						
-//						String userId = user.getUserId();
-//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
-//						String authToken = user.getAuthToken();
-//						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
-//						//	getter.setHttpDeleteCoursesFinishedListener(this);
-//						getter.execute(new String[] {wagersUrl});
+						String userId = user.getUserId();
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
+						String authToken = user.getAuthToken();
+						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
+						//	getter.setHttpDeleteCoursesFinishedListener(this);
+						getter.execute(new String[] {wagersUrl});
 						
 						
 						WagerFragment frg = new WagerFragment();

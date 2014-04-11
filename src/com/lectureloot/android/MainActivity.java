@@ -104,6 +104,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.action_stats:
+			mCurrentUser.clearData();
 			//bring up statistics
 			Toast.makeText(this, "Statistics Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
@@ -147,6 +148,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	protected void onStop(){
 		//write data on app close
 		super.onStop();
+//		mCurrentUser.clearData();
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");

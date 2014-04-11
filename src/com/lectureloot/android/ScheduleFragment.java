@@ -230,7 +230,23 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/courses?course_id=" + courseId;
 							System.out.println(coursesUrl);
 							String authToken = user.getAuthToken();
-							HttpPostCourses coursesPost = new HttpPostCourses(authToken);			         
+							HttpPostCourses coursesPost = new HttpPostCourses(authToken);	
+							
+							//listener to handle POST course response
+							HttpPostCoursesFinishedListener listener = new HttpPostCoursesFinishedListener(){								
+								@Override
+								public void onHttpPostCoursesReady(String output){
+									try {
+										Log.i("Add Course:","Output: " + output);
+										JSONTokener tokener = new JSONTokener(output);
+										JSONObject jsonReturn = (JSONObject) tokener.nextValue();
+									} catch (Exception e) {
+										Log.i("Add Course:",e.toString());
+									}
+								}	
+							};
+							coursesPost.setHttpPostCoursesFinishedListener(listener);
+							
 							coursesPost.execute(new String[] {coursesUrl});
 
 							//update locally
