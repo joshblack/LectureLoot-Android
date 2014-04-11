@@ -5,20 +5,28 @@
     android:background="#FF454545"
     android:orientation="vertical" >
 
+    
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
+        
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:padding="12dp" >
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="12dp"
+        >
 
         <ImageView
             android:id="@+id/user_profile_pic"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginRight="12dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_marginTop="4dp"
+            
             android:src="@drawable/user_circle" />
 
         <LinearLayout
@@ -30,94 +38,29 @@
                 android:id="@+id/user_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                
                 android:text="@string/user_total_points"
                 android:textColor="#FFFFFFFF"
-                android:textSize="50sp" />
+                android:textSize="70sp" />
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
+    
+    <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#39b54a"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
 
-        <TextView
-            android:id="@+id/user_statistics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_statistics"
-            android:textColor="#FFFFFFFF"
-            android:textSize="16sp" />
-    </LinearLayout>
 
-    <LinearLayout
+        
+    <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="12dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
-
-        <TextView
-            android:id="@+id/user_streak1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_streak1"
-            android:textColor="#FFFFFFFF"
-            android:textSize="17sp" />
-
-        <TextView
-            android:id="@+id/user_streak_variable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="3.5dp"
-            android:paddingRight="3.5dp"
-            android:text="25"
-            android:textColor="#39b54a"
-            android:textSize="19sp" />
-
-        <TextView
-            android:id="@+id/user_streak2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_streak2"
-            android:textColor="#FFFFFFFF"
-            android:textSize="17sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="12dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
-
-        <TextView
-            android:id="@+id/user_lectures_remaining_notice_variable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="4dp"
-            android:text="14"
-            android:textColor="#39b54a"
-            android:textSize="19sp" />
-
-        <TextView
-            android:id="@+id/user_lectures_remaining_notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_lectures_remaining_notice"
-            android:textColor="#FFFFFFFF"
-            android:textSize="17sp" />
-    </LinearLayout>
-
+        android:background="#FFFF0000"
+        android:layout_weight=".05" />
+        
+    
     <LinearLayout
         android:id="@+id/needs_to_check_in_layout"
         android:layout_width="match_parent"

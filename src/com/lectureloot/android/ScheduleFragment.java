@@ -319,8 +319,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 				dialog.show();
 
-				//				String deptCodeStr = deptCodeView.getEditableText().toString();
-				//				System.out.println("deptCodeString: " + deptCodeStr);
+
 
 
 
