@@ -47,8 +47,8 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 //		this.wagersListener = listener;
 //	}
 	public void setHttpGetFinishedListener(HttpGetFinishedListener listener) {
-	this.listener = listener;
-}
+		this.listener = listener;
+	}
 	public void onPreExecute(){
 		listener.notifyThreadStart();	//notify listnener that a new thread has starteds
 	}
@@ -59,6 +59,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		for (String url : urls) {
 			output = getOutputFromUrl(url);
 		}
+		Log.i("URLGet","Returning output");
 		return output;
 	}
 
@@ -107,12 +108,12 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
+		Log.i("URLGet","Returning output(onPost)");
 		returnResponse(output);
 		listener.notifyThreadComplete();
 		if(adapter != null) {
 			adapter.notifyDataSetChanged();
-		}
-		
+		}	
 	}
 
 	public abstract void returnResponse(String output);

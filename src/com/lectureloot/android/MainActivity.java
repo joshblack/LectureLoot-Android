@@ -1,10 +1,7 @@
-package com.lectureloot.android;
-
-import java.net.URL;
+package com.lectureloot.android;	
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,10 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -41,9 +34,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mContext = this;	//get application context
 		
 		mCurrentUser = User.getInstance();
-		Intent intent = new Intent(this, SplashActivity.class);
-		startActivity(intent);
 		
+		mCurrentUser.clearData();
+		
+		//if the user doesn't exist yet, and no file is found, load the data
+		if(!mCurrentUser.loaded() && !mCurrentUser.loadFromFile()){
+			//get the data
+			Intent splashIntent = new Intent(this, SplashActivity.class);
+			splashIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(splashIntent);
+		
+			//Login (second because activities display in a stack
+			Intent loginIntent = new Intent(this, LoginActivity.class);
+			loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(loginIntent);
+		}
 			
 		//----------Load Main-------------
 		setContentView(R.layout.activity_main);
@@ -149,14 +154,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 	
 	@Override
-	protected void onStop(){
+	protected void onDestroy(){
 		//write data on app close
-		super.onStop();
-//		mCurrentUser.clearData();
+
+		super.onDestroy();
+
 		if(mCurrentUser != null)
 			mCurrentUser.writeToFile();
 		Log.i("Main Activity:","Stopped");
-				
 	}
 	
 	

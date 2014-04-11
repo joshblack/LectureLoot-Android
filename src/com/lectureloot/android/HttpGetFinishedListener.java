@@ -24,6 +24,7 @@ public abstract class HttpGetFinishedListener {
 		synchronized(this){
 			do{
 				try{
+					Log.i("Threads:","Waiting...");
 					wait();
 				} catch (InterruptedException e){}
 			} while (threadCount > 0);
@@ -32,11 +33,13 @@ public abstract class HttpGetFinishedListener {
 
 	public void notifyThreadStart(){
 			threadCount++;
+			Log.i("Threads:","Thread Started, " + threadCount);
 		}
 		
 	public void notifyThreadComplete(){
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
+			Log.i("Threads:","Thread Ended, " + threadCount);
 			synchronized(this){
 				notifyAll();
 			}

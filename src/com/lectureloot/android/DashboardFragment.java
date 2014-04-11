@@ -86,7 +86,8 @@ public class DashboardFragment extends Fragment implements LocationListener{
 				getLocation();
 				
 				//compare with the ideal location
-				//TODO
+				//TODO:
+				
 				boolean response = true;
 				
 				if(response){
