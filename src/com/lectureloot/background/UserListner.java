@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -22,6 +23,21 @@ public class UserListner extends HttpGetFinishedListener{
 	public UserListner(User user){
 		this.user = user;
 		threadCount = 0;
+	}
+	
+	public void onHttpGetUserReady(String output){
+		JSONTokener tokener = new JSONTokener(output);
+		JSONArray array = null;
+		try {
+			array = (JSONArray) tokener.nextValue();
+			JSONObject jsonCourse;
+			jsonCourse = array.getJSONObject(0);
+			user.setFirstName(jsonCourse.getString("firstName"));
+			user.setLastName(jsonCourse.getString("lastName"));
+			user.setPoints((Integer)jsonCourse.get("pointBalance"));
+		} catch (Exception e) {
+			Log.w("GetUser:",e.toString());
+		}
 	}
 
 	public void onHttpGetWagersReady(String output) {

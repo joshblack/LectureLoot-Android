@@ -29,7 +29,6 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login1);
 
 		final Activity thisActivity = this;
-		Log.i("Login:","Created Login Activity");
 
 		 final Handler toaster = new Handler() {
 			 public void handleMessage(Message msg) {
@@ -58,8 +57,6 @@ public class LoginActivity extends Activity {
 					}
 				});
 				thread.start();
-
-				Log.i("LoginActivity:","Attempting Login, Email:" + email.getText().toString() + " password:" + password.getText().toString());
 			}
 		});
 		

@@ -7,9 +7,9 @@ import android.view.Menu;
 
 
 public class SplashActivity extends Activity {	
-	private Thread workThread =new Thread(new Runnable(){
+	private Thread workThread = new Thread(new Runnable(){
 		public void run(){
-			User.getInstance().loadUserData();
+			User.getInstance().loadUserData(false);
 			finish();
 		}
 	});

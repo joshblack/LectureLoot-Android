@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,6 +21,7 @@ import com.lectureloot.background.HttpGetCourseList;
 import com.lectureloot.background.HttpGetCourses;
 import com.lectureloot.background.HttpGetMeetingList;
 import com.lectureloot.background.HttpGetSessions;
+import com.lectureloot.background.HttpGetUser;
 import com.lectureloot.background.HttpGetWagers;
 import com.lectureloot.background.UserListner;
 
@@ -75,7 +77,13 @@ public class User {
 	}
 
 	public boolean loadFromFile(){
-		//try to open file. If it exists, load the data
+	/* Method will attempt to load as much data from as many files as possible,
+	 * and will return false if any load failed, but only after the loads are done */
+		
+		//try to load as much as possible anyway, don't short circut
+		boolean loaded = loadCoursesFromFile();
+		loaded = loadMeetingsFromFile() && loaded;
+		loaded = loadSessionsFromFile() && loaded;
 		try{
 			FileInputStream fis = MainActivity.mContext.openFileInput("user.dat");
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
@@ -115,8 +123,42 @@ public class User {
 			//close user file and open the next one
 			in.close();
 			fis.close();
-			fis = MainActivity.mContext.openFileInput("courseList.dat");
-			in = new BufferedReader(new InputStreamReader(fis));	
+			
+			//only continue if data is valid
+			if(!loaded) return false;
+
+			new Thread(new Runnable(){
+				public void run(){
+					//don't care if this works, validateData will catch it
+					doLogin();	
+				}
+			}).start();
+
+			Meeting.resolveMeetings(mMeetingList,mCourseList);
+
+			for(int i=1;i<courseIDs.length;++i)
+				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
+
+			Log.i("Load File:", "Load Succeessful");
+
+			loadedFlag = true;
+
+			return true; //load successful
+
+			//If the file doesn't exist, get data from server then make it
+		} catch (FileNotFoundException e){
+			Log.i("LoadFile:",e.toString());
+		} catch (Exception e){
+			Log.w("LoadFile:",e.toString());
+		}
+		Log.i("Load File:", "Load Failed");
+		return false; //load failed
+	}
+
+	public boolean loadCoursesFromFile(){
+		try{
+			FileInputStream fis = MainActivity.mContext.openFileInput("courseList.dat");
+			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
 			//grab the courses
 			ArrayList<Course> courses = new ArrayList<Course>();
@@ -145,12 +187,25 @@ public class User {
 			//close user file and open the next one
 			in.close();
 			fis.close();
-			fis = MainActivity.mContext.openFileInput("meetingList.dat");
-			in = new BufferedReader(new InputStreamReader(fis));	
+			return true;
+
+		} catch (FileNotFoundException e){
+			Log.i("LoadFile:",e.toString());
+		} catch (Exception e){
+			Log.w("LoadFile:",e.toString());
+		}
+		Log.i("Load File:", "Course Load Failed");
+		return false; //load failed
+	}
+
+	public boolean loadMeetingsFromFile(){
+		try{
+			FileInputStream fis = MainActivity.mContext.openFileInput("meetingList.dat");
+			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
 			//parse the meetings
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
-			inLine = in.readLine().split(":");	//get the input data
+			String[] inLine = in.readLine().split(":");	//get the input data
 			while(!inLine[0].equals("END")){
 				Meeting meeting = new Meeting();	//creat new meeting
 
@@ -172,12 +227,25 @@ public class User {
 			//close user file and open the next one
 			in.close();
 			fis.close();
-			fis = MainActivity.mContext.openFileInput("sessions.dat");
-			in = new BufferedReader(new InputStreamReader(fis));	
+			return true;
+
+		} catch (FileNotFoundException e){
+			Log.i("LoadFile:",e.toString());
+		} catch (Exception e){
+			Log.w("LoadFile:",e.toString());
+		}
+		Log.i("Load File:", "Meeting Load Failed");
+		return false; //load failed
+	}
+
+	public boolean loadSessionsFromFile(){
+		try{
+			FileInputStream fis = MainActivity.mContext.openFileInput("sessions.dat");
+			BufferedReader in = new BufferedReader(new InputStreamReader(fis));	
 
 			//parse the sessions
 			ArrayList<Sessions> sessions = new ArrayList<Sessions>();
-			inLine = in.readLine().split(":");	//get the input data
+			String[] inLine = in.readLine().split(":");	//get the input data
 			while(!inLine[0].equals("END")){
 				Sessions session = new Sessions();	//creat new session
 
@@ -193,31 +261,14 @@ public class User {
 
 			in.close();
 			fis.close();
-
-			new Thread(new Runnable(){
-				public void run(){
-					doLogin();
-				}
-			}).start();
-
-			Meeting.resolveMeetings(mMeetingList,mCourseList);
-
-			for(int i=1;i<courseIDs.length;++i)
-				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
-
-			Log.i("Load File:", "Load Succeessful");
+			return true;
 			
-			loadedFlag = true;
-
-			return true; //load successful
-
-			//If the file doesn't exist, get data from server then make it
 		} catch (FileNotFoundException e){
 			Log.i("LoadFile:",e.toString());
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
 		}
-		Log.i("Load File:", "Load Failed");
+		Log.i("Load File:", "Session Load Failed");
 		return false; //load failed
 	}
 
@@ -432,17 +483,17 @@ public class User {
 		return false;	//logged in successfully
 	}
 
-	public boolean doRegister(String email, String password, String first, String last){
+	public boolean doRegister(final String email, final String password, final String first, final String last){
 		/*try to register the user and generate an auth token (will block)*/
 		
 		//get the info from the server
 		URL url;
 		try {
 			String urlParamaters = "emailAddress=" + email + "&password=" + password + "&firstName=" + first + "&lastName=" + last + "&pointBalance=0";
-			Log.i("Register:",urlParamaters);
 			url = new URL(URL_BASE + "/users?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestMethod("POST");
+			urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestMethod("POST");          
 			try {
 				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				JSONTokener tokener = new JSONTokener(in.readLine());
@@ -487,36 +538,48 @@ public class User {
 
 	}
 
-	public void clearData(){
-		//clear the cached data (for debug purposes)
-		MainActivity.mContext.deleteFile("user.dat");				
+	public void clearData(boolean userData, boolean courseData, boolean meetingData, boolean sessionData){
+		if(userData) MainActivity.mContext.deleteFile("user.dat");	//clear the user's data
+		if(meetingData) MainActivity.mContext.deleteFile("meetingList.dat");	//clear the user's data
+		if(courseData) MainActivity.mContext.deleteFile("courseList.dat");	//clear the course data
+		if(sessionData) MainActivity.mContext.deleteFile("sessions.dat");	//clear the user's data
 	}
 
-	public void loadUserData(){
+	public void loadUserData(boolean forceUpdate){
 		/* Method will load user data from the serer in seperate threads, but will block until done */
 
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
 		Log.i("LoadUserData","Entered");
 
-		//get the full course list from the server 
-		String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
-		HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
-		courseListTask.setHttpGetFinishedListener(listner);
-		courseListTask.execute(new String[] {courseListUrl});
+		if(forceUpdate || mCourseList.size() == 0){
+			//get the full course list from the server 
+			String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
+			HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
+			courseListTask.setHttpGetFinishedListener(listner);
+			courseListTask.execute(new String[] {courseListUrl});
 
-		listner.waitForThreads();
+			listner.waitForThreads();
+		}
 
-		//get the full meeting list from the server 
-		String meetingListUrl = "http://lectureloot.eu1.frbit.net/api/v1/meetings";
-		HttpGetMeetingList meetingListTask = new HttpGetMeetingList(mAuthToken);
-		meetingListTask.setHttpGetFinishedListener(listner);
-		meetingListTask.execute(new String[] {meetingListUrl});
+		if(forceUpdate || mMeetingList.size() == 0){
+			//get the full meeting list from the server 
+			String meetingListUrl = "http://lectureloot.eu1.frbit.net/api/v1/meetings";
+			HttpGetMeetingList meetingListTask = new HttpGetMeetingList(mAuthToken);
+			meetingListTask.setHttpGetFinishedListener(listner);
+			meetingListTask.execute(new String[] {meetingListUrl});
 
-		listner.waitForThreads();
+			listner.waitForThreads();
+		}
 
 		//attach the meetings to the courses
 		Meeting.resolveMeetings(mMeetingList,mCourseList);
+
+		//can't skip this (load the user)
+		String userUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId;
+		HttpGetUser userTask = new HttpGetUser(mAuthToken);
+		userTask.setHttpGetFinishedListener(listner);
+		userTask.execute(new String[] {userUrl});		
 
 		//load the courses from the server
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
@@ -530,12 +593,13 @@ public class User {
 		wagerTask.setHttpGetFinishedListener(listner);
 		wagerTask.execute(new String[] {wagerUrl});
 
-		//get the sessions frm the server
-		String sessionUrl = "http://lectureloot.eu1.frbit.net/api/v1/sessions";	//TODO: check this later
-		HttpGetSessions sessionTask = new HttpGetSessions(mAuthToken);
-		sessionTask.setHttpGetFinishedListener(listner);
-		sessionTask.execute(new String[] {sessionUrl});
-
+		if(forceUpdate || mSessions.size() == 0){
+			//get the sessions frm the server
+			String sessionUrl = "http://lectureloot.eu1.frbit.net/api/v1/sessions";
+			HttpGetSessions sessionTask = new HttpGetSessions(mAuthToken);
+			sessionTask.setHttpGetFinishedListener(listner);
+			sessionTask.execute(new String[] {sessionUrl});
+		}
 		Log.i("LoadUserData","Completed");
 
 		listner.waitForThreads();
@@ -543,6 +607,57 @@ public class User {
 		loadedFlag = true;
 	}
 
+	public boolean validateData(){
+	/* method will check if user data is valid, and will try to correct it if it's bad *
+	 * Will return false only in the case of a critical failure						   */
+		User user = new User();		
+		
+		//check if user exists on server
+		if(!user.doLogin(mEmail,mPassword)){
+			clearData(true, false, false, true); //delete user specific files only
+			return false;
+		}
+		
+		//get the data for the user and force the update
+		user.loadUserData(true);
+		
+		//check if the data stored in the files is ok
+		if(!user.mCourses.equals(mCourses))   clearData(false,true,false,false);
+		if(!user.mMeetings.equals(mMeetings)) clearData(false,false,true,false);
+		if(!user.mSessions.equals(mSessions)) clearData(false,false,false,true);
+		
+		//compare to the list
+		if(!user.equals(this)){
+			User.mInstance = user;	//set the new user instance
+			user.clearData(true,false,false,false);	//clear the bad data
+			user.writeToFile();		//write updated data we grabbed
+			return false;
+			//would prefer reloading screen and returning true, but idk how
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		User user;
+		
+		//make sure object is actually a user
+		try{
+			user = (User) o;
+		} catch (ClassCastException e){
+			return false;
+		}
+		
+		//return result of long list of comparisons
+		return (user.mUserId.equals(mUserId) 		&& user.mFirstName.equals(mFirstName) 		&&
+				user.mLastName.equals(mLastName) 	&& user.mAuthToken.equals(mAuthToken) 		&&
+				user.mEmail.equals(mEmail)		 	&& user.mPassword.equals(mPassword) 		&&
+				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints	&&
+				user.mWagers.equals(mWagers) 		&& user.mCourses.equals(mCourses) 			&&
+				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions) 		&&
+				user.mCourseList.equals(mCourseList)&& user.mMeetingList.equals(mMeetingList));
+	}
+	
 	/* GETTERS */
 	public boolean loaded(){
 		return loadedFlag;
