@@ -128,7 +128,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.action_stats:
-			mCurrentUser.clearData();
+			mCurrentUser.clearData(true,true,true,true);
 			//bring up statistics
 			Toast.makeText(this, "Statistics Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
