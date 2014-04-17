@@ -92,7 +92,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 		Button addNewCourseButton;
 		addNewCourseButton = (Button)rootView.findViewById(R.id.addButton);
-		addNewCourseButton.setOnClickListener(new OnClickListener() {
+		/*addNewCourseButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -310,7 +310,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 
 			}
-		});
+		});*/
 		return rootView;
 	}
 

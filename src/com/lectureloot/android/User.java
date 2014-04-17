@@ -46,8 +46,6 @@ public class User {
 	private ArrayList<Course> mCourses;
 	private ArrayList<Meeting> mMeetings;
 	private ArrayList<Sessions> mSessions;
-	private ArrayList<Course> mCourseList;
-	private ArrayList<Meeting> mMeetingList;
 
 	/* CONSTRUCTOR FOR USER */
 	private User(){
@@ -63,7 +61,6 @@ public class User {
 		mMeetings = new ArrayList<Meeting>();
 		mWagers = new ArrayList<Wager>();
 		mSessions = new ArrayList<Sessions>();
-		mCourseList = new ArrayList<Course>();
 		loadedFlag = false;
 		loginFlag = false;
 	}
@@ -96,7 +93,6 @@ public class User {
 			this.mPassword = in.readLine().split(":")[1];
 			this.mPoints = Integer.parseInt(in.readLine().split(":")[1]);
 			this.mWageredPoints = Integer.parseInt(in.readLine().split(":")[1]);
-			String[] courseIDs = in.readLine().split(":");
 
 			Log.i("Load File:", "User Loaded");
 
@@ -134,10 +130,7 @@ public class User {
 				}
 			}).start();
 
-			Meeting.resolveMeetings(mMeetingList,mCourseList);
-
-			for(int i=1;i<courseIDs.length;++i)
-				mCourses.add(mCourseList.get(Integer.parseInt(courseIDs[i])-1));
+			Meeting.resolveMeetings(mMeetings,mCourses);
 
 			Log.i("Load File:", "Load Succeessful");
 
@@ -180,7 +173,7 @@ public class User {
 				courses.add(course);	//add the course to the arrayList
 				inLine = in.readLine().split(":");
 			}
-			this.mCourseList = courses;	//add courses
+			this.mCourses = courses;	//add courses
 
 			Log.i("Load File:", "Courses Loaded");
 
@@ -222,7 +215,7 @@ public class User {
 				meetings.add(meeting);	//add the meeting to the arrayList
 				inLine = in.readLine().split(":");
 			}
-			this.mMeetingList = meetings;	//add meetings
+			this.mMeetings = meetings;	//add meetings
 
 			//close user file and open the next one
 			in.close();
@@ -285,14 +278,8 @@ public class User {
 			out.write(("Password:" + mPassword + "\n").getBytes());
 			out.write(("Points:" + mPoints + "\n").getBytes());
 			out.write(("WageredPoints:" + mWageredPoints + "\n").getBytes());
-
-			//write course data
-			out.write("Courses".getBytes());
-			for(int i = 0;i<mCourses.size();++i){
-				out.write((":" + mCourses.get(i).getCourseId()).getBytes());
-			}
-			out.write("\n".getBytes());	//newline
-
+			
+			//write the wagers (might seperate this later, idk)
 			out.write(("NumWagers:" + mWagers.size() + "\n").getBytes());
 			for(int i=0; mWagers.size() > i;++i){				
 				out.write(("Wager:" + mWagers.get(i).getWagerId()).getBytes());
@@ -310,16 +297,16 @@ public class User {
 			out = MainActivity.mContext.openFileOutput("courseList.dat", Context.MODE_PRIVATE);	
 
 			//write course data
-			for(int i = 0;i<mCourseList.size();++i){
-				out.write(("Course:" + mCourseList.get(i).getCourseId() + "\n").getBytes());
-				out.write(("deptCode:" + mCourseList.get(i).getCoursePrefix() + "\n").getBytes());
-				out.write(("courseNum:" + mCourseList.get(i).getCourseNum() + "\n").getBytes());
-				out.write(("sectionNum:" + mCourseList.get(i).getSectionNumber() + "\n").getBytes());
-				out.write(("credits:" + mCourseList.get(i).getCredits() + "\n").getBytes());
-				out.write(("instructor:" + mCourseList.get(i).getInstructor() + "\n").getBytes());
-				out.write(("title:" + mCourseList.get(i).getCourseTitle() + "\n").getBytes());
-				out.write(("semester:" + mCourseList.get(i).getSemester() + "\n").getBytes());
-				out.write(("year:" + mCourseList.get(i).getYear() + "\n").getBytes());
+			for(int i = 0;i<mCourses.size();++i){
+				out.write(("Course:" + mCourses.get(i).getCourseId() + "\n").getBytes());
+				out.write(("deptCode:" + mCourses.get(i).getCoursePrefix() + "\n").getBytes());
+				out.write(("courseNum:" + mCourses.get(i).getCourseNum() + "\n").getBytes());
+				out.write(("sectionNum:" + mCourses.get(i).getSectionNumber() + "\n").getBytes());
+				out.write(("credits:" + mCourses.get(i).getCredits() + "\n").getBytes());
+				out.write(("instructor:" + mCourses.get(i).getInstructor() + "\n").getBytes());
+				out.write(("title:" + mCourses.get(i).getCourseTitle() + "\n").getBytes());
+				out.write(("semester:" + mCourses.get(i).getSemester() + "\n").getBytes());
+				out.write(("year:" + mCourses.get(i).getYear() + "\n").getBytes());
 			}			
 			out.write("END".getBytes());
 
@@ -331,15 +318,15 @@ public class User {
 			out = MainActivity.mContext.openFileOutput("meetingList.dat", Context.MODE_PRIVATE);	
 
 			//write course data
-			for(int k=0;k<mMeetingList.size();++k){
-				out.write(("Meeting:" + mMeetingList.get(k).getMeetingId()+"\n").getBytes());
-				out.write(("CourseID:" + mMeetingList.get(k).getCourseId()+"\n").getBytes());
-				out.write(("buildingCode:" + mMeetingList.get(k).getBuildingCode()+"\n").getBytes());
-				out.write(("Lat:" + mMeetingList.get(k).getLatitude()+"\n").getBytes());
-				out.write(("Long:" + mMeetingList.get(k).getLongitude()+"\n").getBytes());
-				out.write(("Room:" + mMeetingList.get(k).getRoomNumber()+"\n").getBytes());
-				out.write(("Day:" + mMeetingList.get(k).getMeetingDay()+"\n").getBytes());
-				out.write(("Period:" + mMeetingList.get(k).getPeriod()+"\n").getBytes());
+			for(int k=0;k<mMeetings.size();++k){
+				out.write(("Meeting:" + mMeetings.get(k).getMeetingId()+"\n").getBytes());
+				out.write(("CourseID:" + mMeetings.get(k).getCourseId()+"\n").getBytes());
+				out.write(("buildingCode:" + mMeetings.get(k).getBuildingCode()+"\n").getBytes());
+				out.write(("Lat:" + mMeetings.get(k).getLatitude()+"\n").getBytes());
+				out.write(("Long:" + mMeetings.get(k).getLongitude()+"\n").getBytes());
+				out.write(("Room:" + mMeetings.get(k).getRoomNumber()+"\n").getBytes());
+				out.write(("Day:" + mMeetings.get(k).getMeetingDay()+"\n").getBytes());
+				out.write(("Period:" + mMeetings.get(k).getPeriod()+"\n").getBytes());
 			}
 			out.write("END".getBytes());
 
@@ -528,16 +515,6 @@ public class User {
 		return false;	//logged in successfully
 	}
 
-	public boolean register(){
-		/*prompt for Email/Name/password from the UI element and try to register */		
-
-		//TODO: Throw to UI element to get infos
-
-		return doRegister();	//call login method
-
-
-	}
-
 	public void clearData(boolean userData, boolean courseData, boolean meetingData, boolean sessionData){
 		if(userData) MainActivity.mContext.deleteFile("user.dat");	//clear the user's data
 		if(meetingData) MainActivity.mContext.deleteFile("meetingList.dat");	//clear the user's data
@@ -551,29 +528,6 @@ public class User {
 		UserListner listner = new UserListner(this);  //setup the listner for the return
 
 		Log.i("LoadUserData","Entered");
-
-		if(forceUpdate || mCourseList.size() == 0){
-			//get the full course list from the server 
-			String courseListUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses";
-			HttpGetCourseList courseListTask = new HttpGetCourseList(mAuthToken);
-			courseListTask.setHttpGetFinishedListener(listner);
-			courseListTask.execute(new String[] {courseListUrl});
-
-			listner.waitForThreads();
-		}
-
-		if(forceUpdate || mMeetingList.size() == 0){
-			//get the full meeting list from the server 
-			String meetingListUrl = "http://lectureloot.eu1.frbit.net/api/v1/meetings";
-			HttpGetMeetingList meetingListTask = new HttpGetMeetingList(mAuthToken);
-			meetingListTask.setHttpGetFinishedListener(listner);
-			meetingListTask.execute(new String[] {meetingListUrl});
-
-			listner.waitForThreads();
-		}
-
-		//attach the meetings to the courses
-		Meeting.resolveMeetings(mMeetingList,mCourseList);
 
 		//can't skip this (load the user)
 		String userUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId;
@@ -611,6 +565,7 @@ public class User {
 	/* method will check if user data is valid, and will try to correct it if it's bad *
 	 * Will return false only in the case of a critical failure						   */
 		User user = new User();		
+		Log.i("Validation:","Started Validation");
 		
 		//check if user exists on server
 		if(!user.doLogin(mEmail,mPassword)){
@@ -634,6 +589,7 @@ public class User {
 			return false;
 			//would prefer reloading screen and returning true, but idk how
 		}
+		Log.i("Validation:","Validation Good");
 		return true;
 	}
 	
@@ -654,8 +610,18 @@ public class User {
 				user.mEmail.equals(mEmail)		 	&& user.mPassword.equals(mPassword) 		&&
 				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints	&&
 				user.mWagers.equals(mWagers) 		&& user.mCourses.equals(mCourses) 			&&
-				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions) 		&&
-				user.mCourseList.equals(mCourseList)&& user.mMeetingList.equals(mMeetingList));
+				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions));
+	}
+	
+	public void addCourse(String section){
+		if(section.length() <= 3) return; //invalid request
+		
+		//load the courses from the server
+		UserListner listner = new UserListner(this);
+		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + section + "/section";
+		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
+		courseTask.setHttpGetFinishedListener(listner);
+		courseTask.execute(new String[] {courseUrl});
 	}
 	
 	/* GETTERS */
@@ -715,14 +681,6 @@ public class User {
 		return mSessions;
 	}
 
-	public ArrayList<Course> getCourseList(){
-		return mCourseList;
-	}
-
-	public ArrayList<Meeting> getMeetingList(){
-		return mMeetingList;
-	}
-
 	/* SETTERS */
 
 	public void setFirstName(String name) {
@@ -763,13 +721,5 @@ public class User {
 
 	public void setSessions(ArrayList<Sessions> sessions) {
 		mSessions = sessions;
-	}
-
-	public void setCourseList(ArrayList<Course> courseList) {
-		mCourseList = courseList;
-	}
-
-	public void setMeetingList(ArrayList<Meeting> meetingList) {
-		mMeetingList = meetingList;
 	}
 }

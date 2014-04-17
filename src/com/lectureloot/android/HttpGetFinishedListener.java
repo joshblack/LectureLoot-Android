@@ -2,8 +2,11 @@ package com.lectureloot.android;
 
 import android.util.Log;
 
+
 public abstract class HttpGetFinishedListener {
 	protected int threadCount;
+	
+	public void onHttpGetReady(String output){}	//generic case
 	
 	public void onHttpGetCoursesReady(String output){}
 
@@ -39,6 +42,7 @@ public abstract class HttpGetFinishedListener {
 	public void notifyThreadComplete(){
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
+			Log.i("Threads:","Thread Count" + threadCount);
 			synchronized(this){
 				notifyAll();
 			}

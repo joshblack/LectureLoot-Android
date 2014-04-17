@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private User mCurrentUser;
 	private int[] nTabNames = {R.string.schedule_title, R.string.dashboard_title, R.string.wager_title};
 	public static Context mContext;
+	private Thread workThread;
 	
 
 	@Override
@@ -34,6 +36,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mContext = this;	//get application context
 		
 		mCurrentUser = User.getInstance();
+		mCurrentUser.clearData(true, true, true, true);	//DEBUG: Wipe the Data
 		
 		//if the user doesn't exist yet, and no file is found, load the data
 		if(!mCurrentUser.loaded()){
@@ -49,15 +52,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					startActivity(loginIntent);
 				} else {	//validate the itegrity of the file
 					final FragmentActivity thisActivity = this; 
-					Thread thread  = new Thread(new Runnable(){
+					workThread  = new Thread(new Runnable(){
 						public void run(){
 							if(!mCurrentUser.validateData()){
+								Looper.prepare();
 								Toast.makeText(thisActivity, "Data Error: Restarting App", Toast.LENGTH_LONG).show();
 								finish();					//kill the app
 							}
 						}
 					});
-					thread.start();
+					workThread.start();
 				}
 		}
 			

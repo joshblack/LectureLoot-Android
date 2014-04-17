@@ -6,7 +6,6 @@ Email:<email>
 Password:<password> (plaintext is insecure, but I'll add security later)
 Points:<Points>
 WageredPoints:<WageredPoints>
-Courses:<CourseID1>:<CourseID2>
 NumWagers:<numWagers> (2 or so)
 Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>
 Wager:<wagerId>:<wagerSessionCode>:<wagerPerMeeting>:<totalMeetings>:<totalWager>

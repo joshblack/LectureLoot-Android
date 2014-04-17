@@ -1,10 +1,13 @@
 package com.lectureloot.background;
 
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Date;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -27,16 +30,14 @@ public class UserListner extends HttpGetFinishedListener{
 	
 	public void onHttpGetUserReady(String output){
 		JSONTokener tokener = new JSONTokener(output);
-		JSONArray array = null;
+		JSONObject jsonCourse = null;
 		try {
-			array = (JSONArray) tokener.nextValue();
-			JSONObject jsonCourse;
-			jsonCourse = array.getJSONObject(0);
+			jsonCourse = (JSONObject) tokener.nextValue();
 			user.setFirstName(jsonCourse.getString("firstName"));
 			user.setLastName(jsonCourse.getString("lastName"));
 			user.setPoints((Integer)jsonCourse.get("pointBalance"));
 		} catch (Exception e) {
-			Log.w("GetUser:",e.toString());
+			Log.w("GetUser:",e.toString() + " - " + output);
 		}
 	}
 
@@ -70,70 +71,48 @@ public class UserListner extends HttpGetFinishedListener{
 	}	
 
 	public void onHttpGetCoursesReady(String output) {
-		ArrayList<Course> courses = new ArrayList<Course>();
-		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 		try {
 			JSONTokener tokener = new JSONTokener(output);
 			JSONArray array = null;
 			array = (JSONArray) tokener.nextValue();
 			JSONObject jsonCourse;
 			for(int i = 0; i < array.length(); i++) {
-				Course course;
 				jsonCourse = array.getJSONObject(i);
-				course = user.getCourseList().get(jsonCourse.getInt("id") - 1);
-				courses.add(course);
-				for(int j=0; j<course.getMeetings().size();++j){
-					meetings.add(course.getMeetings().get(j));
-				}
+				Course course = new Course(jsonCourse.getInt("id"),
+						jsonCourse.getString("deptCode"),
+						jsonCourse.getString("courseNumber"),
+						jsonCourse.getString("courseTitle"),
+						jsonCourse.getString("sectionNumber"),
+						jsonCourse.getString("credits"),
+						jsonCourse.getString("instructor"),
+						jsonCourse.getString("semester"),
+						jsonCourse.getString("year"));
+				user.getCourses().add(course);				
+				
+				//synchronously get the meetings (avoid starting too many threads)
+				URL url = new URL("http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId() + "/meetings");
+				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				onHttpGetMeetingsReady(in.readLine());
+				
+				/*UserListner listner = new UserListner(user);
+				String meetingUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId() + "/meetings";
+				HttpGetMeetings meetingTask = new HttpGetMeetings(user.getAuthToken());
+				meetingTask.setHttpGetFinishedListener(listner);
+				meetingTask.execute(new String[] {meetingUrl});
+				listner.waitForThreads();*/
 			}
 		} catch (Exception e) {
-			Log.i("CourseLoad:",e.toString());
-		}
-		user.setCourses(courses);
-		user.setMeetings(meetings);
-	}
-
-	public void onHttpGetCourseListReady(String output) {
-		Log.i("CourseList:","Entered Method");
-		try {
-			JSONTokener tokener = new JSONTokener(output);
-			JSONArray array = null;
-			array = (JSONArray) tokener.nextValue();
-			JSONObject jsonCourse;
-			ArrayList<Course> courseList = new ArrayList<Course>();
-			Course course;
-			for(int i = 0; i < array.length(); i++) {
-				jsonCourse = array.getJSONObject(i);
-
-				course = new Course(	
-						(Integer)jsonCourse.get("id"),
-						(String)jsonCourse.getString("deptCode"),
-						(String)jsonCourse.getString("courseNumber"),
-						(String)jsonCourse.getString("courseTitle"),
-						(String)jsonCourse.getString("sectionNumber"),
-						(String)jsonCourse.getString("credits"),
-						(String)jsonCourse.getString("instructor"),
-						(String)jsonCourse.getString("semester"),
-						(String)jsonCourse.getString("year")
-						);
-
-				//ignore meetings
-				courseList.add(course);
-			}
-			user.setCourseList(courseList);
-			Log.i("CourseList:","Complete, Size: " + courseList.size());
-		} catch (Exception e) {
-			//Toast
+			Log.i("CourseLoad:",e.toString() + " - " + output);
 		}
 	}
 	
-	public void onHttpGetMeetingListReady(String output) {
+	public void onHttpGetMeetingsReady(String output) {
 		try {
 			JSONTokener tokener = new JSONTokener(output);
 			JSONArray array = null;
 			array = (JSONArray) tokener.nextValue();
 			JSONObject jsonMeeting;
-			ArrayList<Meeting> meetingList = new ArrayList<Meeting>();
 			Meeting meeting;
 			for(int i = 0; i < array.length(); i++) {
 				jsonMeeting = array.getJSONObject(i);
@@ -147,13 +126,11 @@ public class UserListner extends HttpGetFinishedListener{
 						);
 
 				//ignore meetings
-				meetingList.add(meeting);
+				user.getMeetings().add(meeting);
 				meeting.addBuildingById((Integer)jsonMeeting.get("building_id"));
 			}
-			user.setMeetingList(meetingList);
-			Log.i("MeetingList:","Completed, Size: " + meetingList.size());
 		} catch (Exception e) {
-			Log.i("MeetingList:",e.toString());
+			Log.i("Meetings:",e.toString());
 		}
 	}
 
