@@ -622,7 +622,7 @@ public class User {
 		
 		//load the courses from the server
 		UserListner listner = new UserListner(this);
-		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + section + "/section";
+		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/course/" + section + "/section";
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
