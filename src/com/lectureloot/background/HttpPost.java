@@ -25,8 +25,8 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 		this.authorizationToken = authToken;
 	}
 
-	public void setHttpPostCoursesFinishedListener(OnClickListener onClickListener) {
-		this.courseListener = (HttpPostCoursesFinishedListener) onClickListener;
+	public void setHttpPostCoursesFinishedListener(HttpPostCoursesFinishedListener listener) {
+		this.courseListener = (HttpPostCoursesFinishedListener) listener;
 	}
 	
 	public void setHttpPostWagersFinishedListener(HttpPostWagersFinishedListener listener) {
@@ -89,7 +89,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	protected void onPostExecute(String output) {
 
 		System.out.println("response:" + output);
-		//returnResponse(output);
+		returnResponse(output);
 	}
 
 	public abstract void returnResponse(String output);

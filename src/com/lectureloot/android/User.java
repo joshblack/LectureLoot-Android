@@ -27,6 +27,7 @@ import com.lectureloot.background.UserListner;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class User {
@@ -72,6 +73,7 @@ public class User {
 		}
 		return mInstance;
 	}
+
 
 	public boolean loadFromFile(){
 	/* Method will attempt to load as much data from as many files as possible,
@@ -258,6 +260,8 @@ public class User {
 			
 		} catch (FileNotFoundException e){
 			Log.i("LoadFile:",e.toString());
+			Toast.makeText(MainActivity.mContext, "Accessed Server - FILE NOT FOUND",Toast.LENGTH_LONG).show();
+			
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
 		}

@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -226,22 +227,48 @@ public class WagerFragment extends Fragment {
 
 						if(checker == true)
 						{
-							String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/wagers?user_id="+userId+"&session_id="+sessionId+"&wagerUnitValue="
+							String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/users/" + user.getUserId() + "/wagers?session_id="+sessionId+"&wagerUnitValue="
 									+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
 
 							//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
 							//								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
-							String authToken = user.getAuthToken();
-							HttpPostWagers wagersPost = new HttpPostWagers(authToken);
-
-							//wagersPost.setHttpPostWagersFinishedListener(this);
-							wagersPost.execute(new String[] {wagersUrl});
-
 							ArrayList<Wager> wagers = user.getWagers();
 							int countWager = wagers.size();
 							countWager++; // problem with getting the correct wagerID, since there are more wagers than array spots
 							Wager newWager = new Wager(-1, sessionId, tempPerClassWager,newTotalWager, 0);
 							ArrayList<Wager> newWagers = new  ArrayList<Wager>();
+							
+							
+							String authToken = user.getAuthToken();
+							HttpPostWagers wagersPost = new HttpPostWagers(authToken);
+
+							HttpPostWagersFinishedListener listener = new HttpPostWagersFinishedListener(){
+								Wager w;
+								
+								@Override
+								public void onHttpPostWagersReady(String output){
+									try {
+										Log.i("Add Wager:","Output: " + output);
+										JSONTokener tokener = new JSONTokener(output);
+										JSONObject jsonReturn = (JSONObject) tokener.nextValue();
+										w.setWagerId(jsonReturn.getInt("id"));	
+										Log.i("Add Wager:", "Completed Successfully" + w.getWagerId());
+									} catch (Exception e) {
+										Log.i("Add Wager:",e.toString());
+									}
+								}
+								
+								public void setWager(Wager w){
+									this.w = w;
+								}
+							};
+							listener.setWager(newWager);
+							wagersPost.setHttpPostWagersFinishedListener(listener);
+							wagersPost.execute(new String[] {wagersUrl});
+							
+							
+
+							
 
 							// need sessionsId to be use to add the right wagers						
 							System.out.println("newwagers:   "+ newWagers);
