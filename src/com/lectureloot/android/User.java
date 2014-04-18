@@ -24,7 +24,6 @@ import com.lectureloot.background.UserListner;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 
 public class User {
