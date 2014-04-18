@@ -70,16 +70,16 @@ public class WagerFragment extends Fragment {
 		final ArrayList<String> stringSessions = new ArrayList<String>();		// new ArrayLisy for formated date strings
 		ArrayList<Sessions> tempSessions = user.getSessions();			// ArrayList copy of User's sessions
 		String formatModel;												// String used to format the dates
-		System.out.println("Date Strings: "+stringSessions);
-		for(Sessions s : tempSessions)
-		{
-			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
-			stringSessions.add(formatModel);
-		}
-
-		System.out.println("User Sessions: "+user.getSessions());
-		System.out.println(tempSessions);
-		System.out.println("Date Strings: "+stringSessions);
+//		System.out.println("Date Strings: "+stringSessions);
+//		for(Sessions s : tempSessions)
+//		{
+//			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
+//			stringSessions.add(formatModel);
+//		}
+//
+//		System.out.println("User Sessions: "+user.getSessions());
+//		System.out.println(tempSessions);
+//		System.out.println("Date Strings: "+stringSessions);
 
 		//		System.out.println();
 
@@ -166,9 +166,6 @@ public class WagerFragment extends Fragment {
 						{
 							for(int i = 0;i < stringSessions.size();i++)
 							{
-								//									System.out.println(formatedDate);
-								//									System.out.println(stringSessions.get(i));
-								String dummyTest = stringSessions.get(i);
 								boolean plzWork = false;
 								if(formatedDate.equals(stringSessions.get(i)))
 								{
@@ -178,10 +175,7 @@ public class WagerFragment extends Fragment {
 								if(plzWork == true)
 								{
 									sessionId = i+1;
-									//										System.out.println("SessionId is HERE:    "+sessionId);
-									//										System.out.println("true");
 								}
-								//									System.out.println("false");
 							}
 						}
 						//						else
@@ -193,23 +187,15 @@ public class WagerFragment extends Fragment {
 						ArrayList<Meeting> meetings = user.getMeetings();
 						int wagerMeetings = meetings.size();
 						int newTotalWager = tempPerClassWager*wagerMeetings;
-						System.out.println("UserId: "+ userId);
-						System.out.println("Wager Per Class:  "+tempPerClassWager);
-						System.out.println("Wager Meetings: "+ wagerMeetings);
-						System.out.println("Total Wager Value: "+ newTotalWager);
-						// I want to see if the value for the variables are correct
-						//if they are, I will insert them into the url for post
 
 						boolean checker = true;
 						ArrayList<Wager> wagersChecker = user.getWagers();
 						for(Wager w: wagersChecker)
 						{
-							//							System.out.println("sessionId"+ sessionId);
-							//							System.out.println("w's sessionId is here:   "+w.getWagerSessionCode());
+
 							if(w.getWagerSessionCode() == sessionId)
 							{
 								checker = false;
-								//								System.out.println("False");
 							}
 							else
 							{
@@ -220,8 +206,8 @@ public class WagerFragment extends Fragment {
 						/*******************************************************************************************************************************
 						 * user_id    	- user.getUserId;                                                                                              *
 						 * session_id	- TBD (probably from comparing dates or position in array                                                      *
-						 * wagerUnitValue  - use tempPerClassWager                                                                                      *
-						 * wagerTotalValue - usetempPerClassWager* meetings size                                                                        *
+						 * wagerUnitValue  - use tempPerClassWager                                                                                     *
+						 * wagerTotalValue - usetempPerClassWager* meetings size                                                                       *
 						 * lostPoints	- 0 ( gets defaulted to zero)                                                                                  *
 						 ********************************************************************************************************************************/
 
@@ -275,55 +261,33 @@ public class WagerFragment extends Fragment {
 							System.out.println("Obvious basic print");
 							for(int i=0;i<countWager;i++)
 							{
-								//								System.out.println("WTF WHY ARE THINGS NOT GOING LIKE I WANT THEM TO");
+								
 								if(wagers.size()==0)
 								{
 									newWagers.add(newWager);
-									//									System.out.println("newwagers1: (adds newWager)  "+ newWagers);
 									break;
 								}
 
 								else if(newWager.getWagerSessionCode() > wagers.get(0).getWagerSessionCode())
 								{
-									//									System.out.println("newwagers2: (orignal)  "+ newWagers);
 									newWagers.add(wagers.get(0));
-									//									System.out.println("newwagers2: (adds from wagers)  "+ newWagers);
-									//									System.out.println("wagers2_1: (original wagers)  "+ wagers);
 									wagers.remove(0);
-									//									System.out.println("wagers2_2: (-1 wagers)  "+ wagers);
 								}
 								else
 								{
-									//									System.out.println("newwagers3: (original) "+ newWagers);
 									newWagers.add(newWager);
-									//									System.out.println("newwagers3: (+ newWager)  "+ newWagers);
-									//									System.out.println("wagers3_1: (wagers)  "+ wagers);
 									break;
 								}
-								//								System.out.println("PLZ FOR LOOP WORK.... JUST WORK T.T");
 							}
 							if(wagers.size()>0){
 								for(int j=0;j<wagers.size();j++)
 								{
-									//									System.out.println("It prolly should not go in here");
-									//									System.out.println("newwagers4: (Before complete print)  "+ newWagers);
-									//									System.out.println("wagers4_1: (wagerlist)  "+ wagers);
 									newWagers.add(wagers.get(j));
-									System.out.println("newwagers4: (should have wagerlist inside now)  "+ newWagers);
 								}					
 							}
-							System.out.println("newwagers: (new)  "+ newWagers);
-							for(Wager w : newWagers)
-							{
-								System.out.println(w.getWagerSessionCode());
-							}
+							
 							user.setWagers(newWagers);
 
-							System.out.println("List of Wagers:"+user.getWagers());
-							for(Wager w : user.getWagers())
-							{
-								System.out.println(w.getWagerSessionCode());
-							}
 							Toast.makeText(getActivity(), "Wager Made", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
 							System.out.println("Test Test Test");
@@ -349,7 +313,6 @@ public class WagerFragment extends Fragment {
 		wagerListDataChild = new HashMap<String, List<Wager>>();
 
 		ArrayList<Wager> wagers = user.getWagers();
-		System.out.println("COURSES ARRAY LIST" + wagers.toString());
 
 		List<Wager> oneWagerList = null;
 		for (Wager wager : wagers) {
@@ -357,7 +320,6 @@ public class WagerFragment extends Fragment {
 			oneWagerList = new ArrayList<Wager>();
 			oneWagerList.add(wager);
 			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
-			System.out.println(wager.getWagerSessionCode());
 		}
 
 		return header;
@@ -369,7 +331,6 @@ public class WagerFragment extends Fragment {
 		HashMap<String, List<Wager>> child = new HashMap<String, List<Wager>>();
 
 		ArrayList<Wager> wagers = user.getWagers();
-		System.out.println("COURSES ARRAY LIST" + wagers.toString());
 
 		List<Wager> oneWagerList = null;
 		for (Wager wager : wagers) {
@@ -377,7 +338,6 @@ public class WagerFragment extends Fragment {
 			oneWagerList = new ArrayList<Wager>();
 			oneWagerList.add(wager);
 			child.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
-			System.out.println(wager.getWagerSessionCode());
 		}	
 		return child;
 
@@ -390,40 +350,21 @@ public class WagerFragment extends Fragment {
 
 		ArrayList<Wager> tempWagers = user.getWagers();
 		System.out.println("Here!!!!!!");
-		int j = 0;
-		for(Wager w : tempWagers)
-		{
-			System.out.println(user.getWagers().get(j).getWagerSessionCode());
-			System.out.println(w.getWagerSessionCode());
-			j++;
-		}
 		for(int i = 0;i <tempWagers.size();i++)
 		{
-
 			for(int z= i; z < tempWagers.size();z++)
 			{
 				if(tempWagers.get(i).getWagerSessionCode() >= tempWagers.get(z).getWagerSessionCode())
 				{
 					Wager tWager = tempWagers.get(i);
-					System.out.print("Yo     "+tWager);
 					tempWagers.set(i,tempWagers.get(z));
-					System.out.println("What  "+tempWagers.set(i,tempWagers.get(z)));
 					tempWagers.set(z,tWager);
-					System.out.println("Hi  "+tempWagers.set(z,tWager));
 				}
 			}
 		
 		}
-		for(Wager w : tempWagers)
-		{
-			System.out.println(w.getWagerSessionCode());
-		}
-		for(Wager w : user.getWagers())
-		{
-			System.out.println(w.getWagerSessionCode());
-		}
+		
 		ArrayList<Wager> wagers = tempWagers;
-		System.out.println("Wagers Array List " + wagers.toString());
 
 		List<Wager> oneWagerList = null;
 		for (Wager wager : wagers) {
@@ -431,7 +372,6 @@ public class WagerFragment extends Fragment {
 			oneWagerList = new ArrayList<Wager>();
 			oneWagerList.add(wager);
 			wagerListDataChild.put(Integer.toString(wager.getWagerSessionCode()),oneWagerList);
-			System.out.println(wager.getWagerSessionCode());
 
 		}
 	}

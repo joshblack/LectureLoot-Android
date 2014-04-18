@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 
@@ -22,10 +23,12 @@ import com.lectureloot.android.Wager;
 
 public class UserListner extends HttpGetFinishedListener{
 	private User user;
+	private ArrayList<Thread> threads;
 
 	public UserListner(User user){
 		this.user = user;
 		threadCount = 0;
+		threads = new ArrayList<Thread>();
 	}
 	
 	public void onHttpGetUserReady(String output){
@@ -88,12 +91,28 @@ public class UserListner extends HttpGetFinishedListener{
 						jsonCourse.getString("semester"),
 						jsonCourse.getString("year"));
 				user.getCourses().add(course);				
+				final int id = course.getCourseId(); 
 				
-				//synchronously get the meetings (avoid starting too many threads)
-				URL url = new URL("http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId() + "/meetings");
-				HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-				onHttpGetMeetingsReady(in.readLine());
+				Thread thread = new Thread(new Runnable(){
+					public void run(){
+						notifyThreadStart();
+						//synchronously get the meetings (avoid starting too many threads)
+						URL url;
+						try {
+							url = new URL("http://lectureloot.eu1.frbit.net/api/v1/courses/" + id + "/meetings");
+							HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+							urlConnection.setRequestMethod("GET");
+							urlConnection.setRequestProperty("Authorization", user.getAuthToken()); //HEADER for access token
+							BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+							onHttpGetMeetingsReady(in.readLine());
+						} catch (Exception e) {
+							Log.i("Meeting Load:",e.toString());						}
+						threads.remove(this);
+						notifyThreadComplete();
+					}
+				});
+				threads.add(thread);
+				thread.start();
 				
 				/*UserListner listner = new UserListner(user);
 				String meetingUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId() + "/meetings";
