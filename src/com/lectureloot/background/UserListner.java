@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 
@@ -93,6 +92,7 @@ public class UserListner extends HttpGetFinishedListener{
 				user.getCourses().add(course);				
 				final int id = course.getCourseId(); 
 				
+				//spawn worker thread to grab the meetings (can't use Async Task because of thread limit)
 				Thread thread = new Thread(new Runnable(){
 					public void run(){
 						notifyThreadStart();
@@ -111,15 +111,8 @@ public class UserListner extends HttpGetFinishedListener{
 						notifyThreadComplete();
 					}
 				});
-				threads.add(thread);
+				threads.add(thread);	//track thread to prevent garbage collection
 				thread.start();
-				
-				/*UserListner listner = new UserListner(user);
-				String meetingUrl = "http://lectureloot.eu1.frbit.net/api/v1/courses/" + course.getCourseId() + "/meetings";
-				HttpGetMeetings meetingTask = new HttpGetMeetings(user.getAuthToken());
-				meetingTask.setHttpGetFinishedListener(listner);
-				meetingTask.execute(new String[] {meetingUrl});
-				listner.waitForThreads();*/
 			}
 		} catch (Exception e) {
 			Log.i("CourseLoad:",e.toString() + " - " + output);
@@ -135,7 +128,6 @@ public class UserListner extends HttpGetFinishedListener{
 			Meeting meeting;
 			for(int i = 0; i < array.length(); i++) {
 				jsonMeeting = array.getJSONObject(i);
-
 				meeting = new Meeting(	
 						(Integer)jsonMeeting.get("id"),
 						Integer.parseInt(jsonMeeting.getString("course_id")),
@@ -163,20 +155,17 @@ public class UserListner extends HttpGetFinishedListener{
 			Sessions session;
 			for(int i = 0; i < array.length(); i++) {
 				jsonCourse = array.getJSONObject(i);
-				
 				session = new Sessions(
 						(Integer)jsonCourse.get("id"),
 						Date.valueOf(jsonCourse.getString("startDate")),
 						Date.valueOf(jsonCourse.getString("endDate"))
 						);
-
 				sessions.add(session);
 			}
+			Log.i("Sessions:","Completed, length is " + sessions.size());
 		} catch (Exception e) {
 			Log.i("Sessions:",e.toString());
 		}
 		user.setSessions(sessions);
-
 	}
-
 }

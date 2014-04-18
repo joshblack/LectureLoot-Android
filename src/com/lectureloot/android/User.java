@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,9 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.lectureloot.background.HttpGetCourseList;
 import com.lectureloot.background.HttpGetCourses;
-import com.lectureloot.background.HttpGetMeetingList;
 import com.lectureloot.background.HttpGetSessions;
 import com.lectureloot.background.HttpGetUser;
 import com.lectureloot.background.HttpGetWagers;
@@ -73,7 +70,6 @@ public class User {
 		}
 		return mInstance;
 	}
-
 
 	public boolean loadFromFile(){
 	/* Method will attempt to load as much data from as many files as possible,
@@ -188,6 +184,7 @@ public class User {
 			Log.i("LoadFile:",e.toString());
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
+			mCourses = new ArrayList<Course>();
 		}
 		Log.i("Load File:", "Course Load Failed");
 		return false; //load failed
@@ -228,6 +225,7 @@ public class User {
 			Log.i("LoadFile:",e.toString());
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
+			mMeetings = new ArrayList<Meeting>();
 		}
 		Log.i("Load File:", "Meeting Load Failed");
 		return false; //load failed
@@ -260,10 +258,9 @@ public class User {
 			
 		} catch (FileNotFoundException e){
 			Log.i("LoadFile:",e.toString());
-			Toast.makeText(MainActivity.mContext, "Accessed Server - FILE NOT FOUND",Toast.LENGTH_LONG).show();
-			
 		} catch (Exception e){
 			Log.w("LoadFile:",e.toString());
+			mSessions = new ArrayList<Sessions>();
 		}
 		Log.i("Load File:", "Session Load Failed");
 		return false; //load failed
@@ -539,11 +536,14 @@ public class User {
 		userTask.setHttpGetFinishedListener(listner);
 		userTask.execute(new String[] {userUrl});		
 
-		//load the courses from the server
-		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
-		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
-		courseTask.setHttpGetFinishedListener(listner);
-		courseTask.execute(new String[] {courseUrl});
+		if(forceUpdate || mCourses.isEmpty() || mMeetings.isEmpty()){
+			//load the courses from the server
+			Log.i("LoadUserData:","Loading Courses/Meetings");
+			String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/courses";
+			HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
+			courseTask.setHttpGetFinishedListener(listner);
+			courseTask.execute(new String[] {courseUrl});
+		}
 
 		//get the wagers frm the server
 		String wagerUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + mUserId + "/wagers";
@@ -551,8 +551,9 @@ public class User {
 		wagerTask.setHttpGetFinishedListener(listner);
 		wagerTask.execute(new String[] {wagerUrl});
 
-		if(forceUpdate || mSessions.size() == 0){
+		if(forceUpdate || mSessions.isEmpty()){
 			//get the sessions frm the server
+			Log.i("LoadUserData:","Loading Sessions");
 			String sessionUrl = "http://lectureloot.eu1.frbit.net/api/v1/sessions";
 			HttpGetSessions sessionTask = new HttpGetSessions(mAuthToken);
 			sessionTask.setHttpGetFinishedListener(listner);
@@ -573,7 +574,7 @@ public class User {
 		
 		//check if user exists on server
 		if(!user.doLogin(mEmail,mPassword)){
-			clearData(true, false, false, true); //delete user specific files only
+			clearData(true, true, true, false); //delete user specific files only
 			return false;
 		}
 		
@@ -617,7 +618,7 @@ public class User {
 				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions));
 	}
 	
-	public void addCourse(String section){
+	public void addCourse(String section,boolean wait){
 		if(section.length() <= 3) return; //invalid request
 		
 		//load the courses from the server
@@ -626,6 +627,7 @@ public class User {
 		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});
+		if(wait) listner.waitForThreads();	//wait if requested
 	}
 	
 	/* GETTERS */
