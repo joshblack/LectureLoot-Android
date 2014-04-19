@@ -273,7 +273,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							coursesPost.setHttpPostCoursesFinishedListener(listener);
 
 							//							coursesPost.execute(new String[] {coursesUrl});
-							user.addCourse(sectionNumStr);
+							user.addCourse(sectionNumStr, listAdapter);
 
 
 							//update locally
