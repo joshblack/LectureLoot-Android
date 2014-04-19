@@ -70,18 +70,17 @@ public class WagerFragment extends Fragment {
 		final ArrayList<String> stringSessions = new ArrayList<String>();		// new ArrayLisy for formated date strings
 		ArrayList<Sessions> tempSessions = user.getSessions();			// ArrayList copy of User's sessions
 		String formatModel;												// String used to format the dates
-//		System.out.println("Date Strings: "+stringSessions);
-//		for(Sessions s : tempSessions)
-//		{
-//			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
-//			stringSessions.add(formatModel);
-//		}
-//
+		System.out.println("Date Strings: "+stringSessions);
+		for(Sessions s : tempSessions)
+		{
+			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
+			stringSessions.add(formatModel);
+		}
+
 //		System.out.println("User Sessions: "+user.getSessions());
 //		System.out.println(tempSessions);
 //		System.out.println("Date Strings: "+stringSessions);
 
-		//		System.out.println();
 
 
 		// get the listview
