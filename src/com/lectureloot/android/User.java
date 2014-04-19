@@ -16,7 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.lectureloot.android.adapter.ExpandableListCourseAdapter;
 import com.lectureloot.background.HttpGetCourses;
+import com.lectureloot.background.HttpGetNewCourse;
 import com.lectureloot.background.HttpGetSessions;
 import com.lectureloot.background.HttpGetUser;
 import com.lectureloot.background.HttpGetWagers;
@@ -618,16 +620,15 @@ public class User {
 				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions));
 	}
 	
-	public void addCourse(String section,boolean wait){
+	public void addCourse(String section, ExpandableListCourseAdapter adapter){
 		if(section.length() <= 3) return; //invalid request
 		
 		//load the courses from the server
 		UserListner listner = new UserListner(this);
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/course/" + section + "/section";
-		HttpGetCourses courseTask = new HttpGetCourses(mAuthToken, null);
+		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, adapter);
 		courseTask.setHttpGetFinishedListener(listner);
-		courseTask.execute(new String[] {courseUrl});
-		if(wait) listner.waitForThreads();	//wait if requested
+		courseTask.execute(new String[] {courseUrl});		
 	}
 	
 	/* GETTERS */

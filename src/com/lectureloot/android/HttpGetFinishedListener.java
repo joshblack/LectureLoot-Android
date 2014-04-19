@@ -16,6 +16,8 @@ public abstract class HttpGetFinishedListener {
 	
 	public void onHttpGetSessionsReady(String output){}
 
+	public void onHttpGetNewCourseReady(String output){}
+	
 	public void onHttpGetCourseListReady(String output){}
 
 	public void onHttpGetBuildingReady(String output){}
