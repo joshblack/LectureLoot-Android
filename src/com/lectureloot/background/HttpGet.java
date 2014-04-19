@@ -10,6 +10,7 @@ import java.net.URLConnection;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ExpandableListAdapter;
 import android.widget.ListAdapter;
 
 import com.lectureloot.android.HttpGetFinishedListener;
@@ -114,6 +115,10 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		if(adapter != null) {
 			adapter.notifyDataSetChanged();
 		}	
+	}
+	
+	public void setAdapter(ExpandableListCourseAdapter adapter){
+		this.adapter = adapter;
 	}
 
 	public abstract void returnResponse(String output);

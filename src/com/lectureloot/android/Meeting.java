@@ -98,6 +98,16 @@ public class Meeting {
 		return longitude;
 	}
 	
+	public boolean equals(Object o){
+		Meeting m;
+		try{
+			m = (Meeting) o;
+		} catch (ClassCastException e){ return false; }
+		return (meetingId == m.meetingId			&& courseId == m.courseId			&&
+				latitude == m.latitude				&& longitude == m.longitude			&&
+				buildingCode.equals(m.buildingCode) && roomNumber.equals(m.roomNumber)	&&
+				meetingDay.equals(m.meetingDay)		&& period.equals(m.period));
+	}
 	
 	//this can be deleted later, for testing purposes
 	public void setTime(long timeInMillis){

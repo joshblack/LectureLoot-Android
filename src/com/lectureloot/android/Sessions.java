@@ -1,7 +1,6 @@
 package com.lectureloot.android;
 
 import java.util.Date;
-import java.security.Timestamp;
 
 public class Sessions {
 
@@ -22,6 +21,14 @@ public class Sessions {
 		this.endDate = endDate;
 	}
 
+	public boolean equals(Object o){
+		Sessions s;
+		try{
+			s = (Sessions) o;
+		} catch (ClassCastException e){ return false; }
+		return (SessionId == s.SessionId && startDate.equals(s.startDate) && endDate.equals(s.endDate));
+	}
+	
 	public int getSessionId() {
 		return SessionId;
 	}

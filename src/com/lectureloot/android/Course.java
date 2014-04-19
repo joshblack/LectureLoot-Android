@@ -2,9 +2,6 @@ package com.lectureloot.android;
 
 import java.util.ArrayList;
 
-import com.lectureloot.background.HttpGetMeetings;
-import com.lectureloot.background.UserListner;
-
 /**
  * Course Model
  * @author Austin
@@ -55,6 +52,18 @@ public class Course {
 		this.instructor = instructor;
 		this.semester = "";
 		this.year = "";		
+	}
+	
+	public boolean equals(Object o){
+		Course c;
+		try{
+			c = (Course) o;
+		} catch(ClassCastException e){ return false;}
+		return (courseId == c.courseId					&& coursePrefix.equals(c.coursePrefix)	&&
+				courseNum.equals(c.courseNum)			&& courseTitle.equals(c.courseTitle) 	&&
+				sectionNumber.equals(c.sectionNumber)	&& credits.equals(c.credits) 			&&
+				instructor.equals(c.instructor)			&& semester.equals(c.semester) 			&&
+				year.equals(c.year) 					&& meetings.equals(c.meetings));
 	}
 	
 	public int getCourseId() {
