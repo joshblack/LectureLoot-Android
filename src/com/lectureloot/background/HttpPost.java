@@ -23,6 +23,8 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	
 	public HttpPost(String authToken) {
 		this.authorizationToken = authToken;
+		courseListener = null;
+		wagerListener = null;
 	}
 
 	public void setHttpPostCoursesFinishedListener(HttpPostCoursesFinishedListener listener) {
@@ -33,6 +35,10 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 		this.wagerListener = listener;
 	}
 
+	@Override
+	public void onPreExecute(){
+		if(courseListener != null)courseListener.notifyThreadStart();
+	}
 	
 	@Override
 	protected String doInBackground(String... urls) {
@@ -74,7 +80,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
 
-			System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
+			//System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
 			if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				stream = httpConnection.getInputStream();
 			} 
@@ -87,9 +93,9 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-
-		System.out.println("response:" + output);
+		//System.out.println("response:" + output);
 		returnResponse(output);
+		if(courseListener != null)courseListener.notifyThreadComplete();
 	}
 
 	public abstract void returnResponse(String output);

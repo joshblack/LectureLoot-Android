@@ -10,6 +10,7 @@ import java.net.URLConnection;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ExpandableListAdapter;
 import android.widget.ListAdapter;
 
 import com.lectureloot.android.HttpGetFinishedListener;
@@ -59,7 +60,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 		for (String url : urls) {
 			output = getOutputFromUrl(url);
 		}
-		Log.i("URLGet","Returning output");
+		//Log.i("URLGet","Returning output");
 		return output;
 	}
 
@@ -95,7 +96,7 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
 
-			System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
+			//System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
 			if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				stream = httpConnection.getInputStream();
 			} 
@@ -108,12 +109,16 @@ public abstract class HttpGet extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		Log.i("URLGet","Returning output(onPost)");
+		//Log.i("URLGet","Returning output(onPost)");
 		returnResponse(output);
 		listener.notifyThreadComplete();
 		if(adapter != null) {
 			adapter.notifyDataSetChanged();
 		}	
+	}
+	
+	public void setAdapter(ExpandableListCourseAdapter adapter){
+		this.adapter = adapter;
 	}
 
 	public abstract void returnResponse(String output);

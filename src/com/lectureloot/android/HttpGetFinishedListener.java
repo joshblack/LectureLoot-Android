@@ -16,6 +16,8 @@ public abstract class HttpGetFinishedListener {
 	
 	public void onHttpGetSessionsReady(String output){}
 
+	public void onHttpGetNewCourseReady(String output){}
+	
 	public void onHttpGetCourseListReady(String output){}
 
 	public void onHttpGetBuildingReady(String output){}
@@ -42,7 +44,7 @@ public abstract class HttpGetFinishedListener {
 	public void notifyThreadComplete(){
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
-			Log.i("Threads:","Thread Count" + threadCount);
+			//Log.i("Threads:","Thread Count" + threadCount);
 			synchronized(this){
 				notifyAll();
 			}

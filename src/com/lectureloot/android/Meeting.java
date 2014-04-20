@@ -36,6 +36,19 @@ public class Meeting {
 		this.period = period;
 	}
 	
+	public Meeting(Meeting m){
+		meetingId = m.meetingId;
+		courseId = m.courseId;
+		latitude = m.latitude;
+		longitude = m.longitude;
+		buildingCode = m.buildingCode;
+		roomNumber = m.roomNumber;
+		meetingDay = m.meetingDay;
+		period = m.period;
+		time = m.time;	//is this even used?
+		
+	}
+	
 	public void addBuildingById(int buildingId){
 		/* method to load meetings from server for multiple courses (use internal threads/listner) */
 		MeetingListner listner = new MeetingListner(this);
@@ -102,11 +115,20 @@ public class Meeting {
 		Meeting m;
 		try{
 			m = (Meeting) o;
-		} catch (ClassCastException e){ return false; }
-		return (meetingId == m.meetingId			&& courseId == m.courseId			&&
-				latitude == m.latitude				&& longitude == m.longitude			&&
-				buildingCode.equals(m.buildingCode) && roomNumber.equals(m.roomNumber)	&&
-				meetingDay.equals(m.meetingDay)		&& period.equals(m.period));
+			
+			if	 (!(meetingId == m.meetingId			&& courseId == m.courseId			&&
+					buildingCode.equals(m.buildingCode) && roomNumber.equals(m.roomNumber)	&&
+					meetingDay.equals(m.meetingDay)		&& period.equals(m.period))) return false;
+
+			//range check the double values (lat/long) (5% allowable error)
+			if((Math.abs(latitude - m.latitude) > Math.abs(latitude) * .05	||
+					Math.abs(longitude - m.longitude) > Math.abs(longitude) * .05)){
+				Log.i("Meetings:","Lat/Long comparison failure");
+				return false;
+			}
+
+		} catch (Exception e){ return false; }
+		return true;
 	}
 	
 	//this can be deleted later, for testing purposes

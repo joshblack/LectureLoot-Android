@@ -7,9 +7,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingBottom="20dp" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Enter your course&apos;s section number:"
+            android:textColor="#FFFFFFFF"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/SectionNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/sectionNumHint"
+            android:paddingTop="5dp" 
+            android:text="">
+        </EditText>
+
+        <!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,8 +105,8 @@
                 android:inputType="textCapCharacters"
                 android:hint="@string/sectionNumHint" >
             </AutoCompleteTextView>
-        </LinearLayout>
-
+        </LinearLayout>
+        -->
         <!--
     <Spinner
             android:id="@+id/deptCodeSpinner"
@@ -111,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:prompt="@string/department_code" />
+            android:prompt="@string/department_code" />
         -->
     </LinearLayout>
 
