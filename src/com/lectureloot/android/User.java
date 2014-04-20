@@ -577,6 +577,7 @@ public class User {
 		//check if user exists on server
 		if(!user.doLogin(mEmail,mPassword)){
 			clearData(true, true, true, false); //delete user specific files only
+			Log.i("Validate Data","Bad Login");
 			return false;
 		}
 		
@@ -584,12 +585,20 @@ public class User {
 		user.loadUserData(true);
 		
 		//check if the data stored in the files is ok
-		if(!user.mCourses.equals(mCourses))   clearData(false,true,false,false);
-		if(!user.mMeetings.equals(mMeetings)) clearData(false,false,true,false);
-		if(!user.mSessions.equals(mSessions)) clearData(false,false,false,true);
+		if(!(user.mCourses.containsAll(mWagers) && mCourses.containsAll(user.mWagers)))   
+			clearData(false,true,false,false);
+		Log.i("Validate Data","Courses are " + ((user.mCourses.equals(mCourses))?"Equal":"Different"));
+		/*if(!(user.mMeetings.containsAll(mMeetings) && mMeetings.containsAll(user.mMeetings))) 
+			clearData(false,false,true,false);
+		Log.i("Validate Data","Meetings are " + ((user.mMeetings.equals(mMeetings))?"Equal ":"Different " + mMeetings.size()  + " - " + user.mMeetings.size()));
+		*/
+		if(!(user.mSessions.containsAll(mSessions) && mSessions.containsAll(user.mSessions))) 
+			clearData(false,false,false,true);
+		Log.i("Validate Data","Sessions are " + ((user.mSessions.equals(mSessions))?"Equal":"Different"));
 		
 		//compare to the list
 		if(!user.equals(this)){
+			Log.i("Validate Data","User not equal");
 			User.mInstance = user;	//set the new user instance
 			user.clearData(true,false,false,false);	//clear the bad data
 			user.writeToFile();		//write updated data we grabbed
@@ -609,15 +618,23 @@ public class User {
 			user = (User) o;
 		} catch (ClassCastException e){
 			return false;
-		}
+		}		
 		
-		//return result of long list of comparisons
-		return (user.mUserId.equals(mUserId) 		&& user.mFirstName.equals(mFirstName) 		&&
+		//check the easy stuff first
+		boolean data =	 (!(user.mUserId.equals(mUserId) 		&& user.mFirstName.equals(mFirstName) 		&&
 				user.mLastName.equals(mLastName) 	&& user.mAuthToken.equals(mAuthToken) 		&&
 				user.mEmail.equals(mEmail)		 	&& user.mPassword.equals(mPassword) 		&&
-				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints	&&
-				user.mWagers.equals(mWagers) 		&& user.mCourses.equals(mCourses) 			&&
-				user.mMeetings.equals(mMeetings) 	&& user.mSessions.equals(mSessions));
+				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints));
+		if(data){
+			Log.i("Equals:","User Data is bad");
+			return false;
+		}
+				
+		//do longer operations
+		return(	user.mWagers.containsAll(mWagers)		&& mWagers.containsAll(user.mWagers)		&& 
+				user.mCourses.containsAll(mCourses)		&& mCourses.containsAll(user.mCourses)		&&
+				//user.mMeetings.containsAll(mMeetings)	&& mMeetings.containsAll(user.mMeetings)	&&
+				user.mSessions.containsAll(mSessions)	&& mSessions.containsAll(user.mSessions));
 	}
 	
 	public void addCourse(String section, ExpandableListCourseAdapter adapter){

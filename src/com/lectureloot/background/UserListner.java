@@ -185,7 +185,7 @@ public class UserListner extends HttpGetFinishedListener{
 			threads.add(thread);	//track thread to prevent garbage collection
 			thread.start();
 		} catch (Exception e) {
-			Log.i("CourseLoad:",e.toString() + " - " + output);
+			Log.i("New Course:",e.toString() + " - " + output);
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class UserListner extends HttpGetFinishedListener{
 						);
 				sessions.add(session);
 			}
-			Log.i("Sessions:","Completed, length is " + sessions.size());
+			//Log.i("Sessions:","Completed, length is " + sessions.size());
 		} catch (Exception e) {
 			Log.i("Sessions:",e.toString());
 		}
