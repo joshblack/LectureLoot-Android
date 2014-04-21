@@ -80,7 +80,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 			httpConnection.setRequestProperty("Content-Type", "application/json");
 			httpConnection.connect();
 
-			System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
+			//System.out.println("HTTP Response Code:" + httpConnection.getResponseCode());
 			if(httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				stream = httpConnection.getInputStream();
 			} 
@@ -93,7 +93,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected void onPostExecute(String output) {
-		System.out.println("response:" + output);
+		//System.out.println("response:" + output);
 		returnResponse(output);
 		if(courseListener != null)courseListener.notifyThreadComplete();
 	}

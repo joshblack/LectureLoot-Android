@@ -357,7 +357,11 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		return rootView;
 	}
 
-	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetings) {
+	private ArrayList<Meeting> groupMeetingsDays (ArrayList<Meeting> meetingsIn) {
+		//copy the meetings to a new array to avoid corrupting the origional data
+		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+		for(Meeting m : meetingsIn) meetings.add(new Meeting(m));
+				
 		ArrayList<Meeting> groupedMeetingsDays = new ArrayList<Meeting>();
 		System.out.println("enter groupMeetingDays");
 		Meeting comparedAgainstMeeting = null;
@@ -555,7 +559,8 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 			System.out.println(meetings.toString());
 			System.out.println("building code: " + meetings.get(0).getBuildingCode());
-			meetings = groupMeetingsDays(meetings);
+			//user's meetings array SHOULD NOT be grouped (is breaking validation code)
+			meetings = groupMeetingsDays(new ArrayList<Meeting>(meetings));
 			System.out.println("SET MEETINGS");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
 			System.out.println("SET MEETINGS2");

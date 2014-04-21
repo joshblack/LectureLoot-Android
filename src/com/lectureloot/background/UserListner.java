@@ -124,72 +124,68 @@ public class UserListner extends HttpGetFinishedListener{
 	public void onHttpGetNewCourseReady(String output) {
 		try {
 			JSONTokener tokener = new JSONTokener(output);
-			JSONArray array = null;
-			array = (JSONArray) tokener.nextValue();
-			JSONObject jsonCourse;
-			for(int i = 0; i < array.length(); i++) {
-				jsonCourse = array.getJSONObject(i);
-				Course course = new Course(jsonCourse.getInt("id"),
-						jsonCourse.getString("deptCode"),
-						jsonCourse.getString("courseNumber"),
-						jsonCourse.getString("courseTitle"),
-						jsonCourse.getString("sectionNumber"),
-						jsonCourse.getString("credits"),
-						jsonCourse.getString("instructor"),
-						jsonCourse.getString("semester"),
-						jsonCourse.getString("year"));
-				user.getCourses().add(course);				
-				final int id = course.getCourseId();
-				final Course finalCourse = course;
-				
-				//spawn worker thread to grab the meetings (can't use Async Task because of thread limit)
-				Thread thread = new Thread(new Runnable(){
-					public void run(){
-						notifyThreadStart();
-						//synchronously get the meetings (avoid starting too many threads)
-						URL url;
-						try {
-							url = new URL("http://lectureloot.eu1.frbit.net/api/v1/courses/" + id + "/meetings");
-							HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-							urlConnection.setRequestMethod("GET");
-							urlConnection.setRequestProperty("Authorization", user.getAuthToken()); //HEADER for access token
-							BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-							onHttpGetMeetingsReady(in.readLine());
-							
-							//Post the new course why not
-							String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + user.getUserId() + "/courses?course_id=" + id;
-							HttpPostCourses coursesPost = new HttpPostCourses(user.getAuthToken());	
-						
-							//check response, remove course if it failed.
-							HttpPostCoursesFinishedListener listener = new HttpPostCoursesFinishedListener(){								
-								public void onHttpPostCoursesReady(String output){
-									//check if course was added (remove it if not)
-									try {
-										JSONTokener tokener = new JSONTokener(output);
-										JSONObject jsonReturn = (JSONObject) tokener.nextValue();
-										if(jsonReturn.get("message").equals("Success, the class has been added to the user"))
-											return;	//all is good, we're done here
-									} catch (JSONException e) {
-										Log.i("New Course",e.toString());
-									}
-									user.getCourses().remove(finalCourse);	//remove the course if not added correctly
+			JSONObject jsonCourse = (JSONObject) tokener.nextValue();
+
+			Course course = new Course(jsonCourse.getInt("id"),
+					jsonCourse.getString("deptCode"),
+					jsonCourse.getString("courseNumber"),
+					jsonCourse.getString("courseTitle"),
+					jsonCourse.getString("sectionNumber"),
+					jsonCourse.getString("credits"),
+					jsonCourse.getString("instructor"),
+					jsonCourse.getString("semester"),
+					jsonCourse.getString("year"));
+			user.getCourses().add(course);				
+			final int id = course.getCourseId();
+			final Course finalCourse = course;
+
+			//spawn worker thread to grab the meetings (can't use Async Task because of thread limit)
+			Thread thread = new Thread(new Runnable(){
+				public void run(){
+					notifyThreadStart();
+					//synchronously get the meetings (avoid starting too many threads)
+					URL url;
+					try {
+						url = new URL("http://lectureloot.eu1.frbit.net/api/v1/courses/" + id + "/meetings");
+						HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+						urlConnection.setRequestMethod("GET");
+						urlConnection.setRequestProperty("Authorization", user.getAuthToken()); //HEADER for access token
+						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						onHttpGetMeetingsReady(in.readLine());
+
+						//Post the new course why not
+						String coursesUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + user.getUserId() + "/courses?course_id=" + id;
+						HttpPostCourses coursesPost = new HttpPostCourses(user.getAuthToken());	
+
+						//check response, remove course if it failed.
+						HttpPostCoursesFinishedListener listener = new HttpPostCoursesFinishedListener(){								
+							public void onHttpPostCoursesReady(String output){
+								//check if course was added (remove it if not)
+								try {
+									JSONTokener tokener = new JSONTokener(output);
+									JSONObject jsonReturn = (JSONObject) tokener.nextValue();
+									if(jsonReturn.get("message").equals("Success, the class has been added to the user"))
+										return;	//all is good, we're done here
+								} catch (JSONException e) {
+									Log.i("New Course",e.toString());
 								}
-							};
-							coursesPost.setHttpPostCoursesFinishedListener(listener);
-							coursesPost.execute(new String[] {coursesUrl});
-							listener.waitForThreads();	//wait for update before reloading data
-						} catch (Exception e) {
-							Log.i("Meeting Load:",e.toString());
-						}
-						threads.remove(this);
-						notifyThreadComplete();
+								user.getCourses().remove(finalCourse);	//remove the course if not added correctly
+							}
+						};
+						coursesPost.setHttpPostCoursesFinishedListener(listener);
+						coursesPost.execute(new String[] {coursesUrl});
+						listener.waitForThreads();	//wait for update before reloading data
+					} catch (Exception e) {
+						Log.i("Meeting Load:",e.toString());
 					}
-				});
-				threads.add(thread);	//track thread to prevent garbage collection
-				thread.start();
-			}
+					threads.remove(this);
+					notifyThreadComplete();
+				}
+			});
+			threads.add(thread);	//track thread to prevent garbage collection
+			thread.start();
 		} catch (Exception e) {
-			Log.i("CourseLoad:",e.toString() + " - " + output);
+			Log.i("New Course:",e.toString() + " - " + output);
 		}
 	}
 	
@@ -236,7 +232,7 @@ public class UserListner extends HttpGetFinishedListener{
 						);
 				sessions.add(session);
 			}
-			Log.i("Sessions:","Completed, length is " + sessions.size());
+			//Log.i("Sessions:","Completed, length is " + sessions.size());
 		} catch (Exception e) {
 			Log.i("Sessions:",e.toString());
 		}

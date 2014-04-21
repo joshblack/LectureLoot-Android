@@ -44,7 +44,7 @@ public abstract class HttpGetFinishedListener {
 	public void notifyThreadComplete(){
 		/* function will decrease the thread count and notify evreybody waiting on lock */
 			threadCount--;
-			Log.i("Threads:","Thread Count" + threadCount);
+			//Log.i("Threads:","Thread Count" + threadCount);
 			synchronized(this){
 				notifyAll();
 			}
