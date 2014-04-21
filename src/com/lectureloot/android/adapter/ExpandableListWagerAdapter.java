@@ -74,7 +74,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		
 		((Wager)getChild(groupPosition, childPosition)).setTotalMeetings(wagerMeetings); 	 // setting total Meetings
 		final int wagerUnitValue =((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting();	//getting Meetings from Wagers
-		
+		final int wagerPointsLost =((Wager)getChild(groupPosition, childPosition)).getCurrentWagerLost();	//getting points lost from Wagers
+
 		
 		final int newTotalWager = wagerMeetings*wagerUnitValue;								// Getting new TotalWager
 		
@@ -182,7 +183,9 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						
 						String userId = user.getUserId();
-						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wager/"+wagerId +"/" +
+								"edit?user_id =" + userId + "&session_id =" + wagerSessionId +"&wagerUnitValue ="+wagerUnitValue
+								+"&wagerTotalValue ="+newTotalWager+"&pointsLost ="+wagerPointsLost;
 						String authToken = user.getAuthToken();
 						HttpPutWagers getter = new HttpPutWagers(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
