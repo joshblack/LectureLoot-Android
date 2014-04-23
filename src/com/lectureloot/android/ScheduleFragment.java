@@ -170,7 +170,8 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 				Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
 				dialogButton.setOnClickListener(new OnClickListener() {
-
+						private Thread workerThread;
+					
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
@@ -184,7 +185,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 
 						//get section number from text view
-						String sectionNumStr = sectionNumView.getText().toString();
+						final String sectionNumStr = sectionNumView.getText().toString();
 						System.out.println(sectionNumStr);
 						boolean sameCourseFlag = false;
 
@@ -273,8 +274,16 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							coursesPost.setHttpPostCoursesFinishedListener(listener);
 
 							//							coursesPost.execute(new String[] {coursesUrl});
-							user.addCourse(sectionNumStr, listAdapter);
-
+							workerThread = new Thread( new Runnable(){
+								public void run(){
+									user.addCourse(sectionNumStr, listAdapter,true);
+									listAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+									workerThread = null;
+								}
+							});
+							workerThread.start();
+							
+							
 
 							//update locally
 							//							int newCourseId = courseId;
@@ -321,7 +330,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							//							for(int i = 0; i < Integer.MAX_VALUE; i++);
 //							Toast.makeText(getActivity(), "Course Added", Toast.LENGTH_LONG).show();
 
-							listAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+						
 
 							//							prepareListData();
 							////							listAdapter = new ExpandableListCourseAdapter(getActivity(), prepareDataHeader(), prepareDataChild());
