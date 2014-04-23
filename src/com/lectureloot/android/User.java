@@ -636,7 +636,7 @@ public class User {
 				user.mSessions.containsAll(mSessions)	&& mSessions.containsAll(user.mSessions));
 	}
 	
-	public void addCourse(String section, ExpandableListCourseAdapter adapter){
+	public void addCourse(String section, ExpandableListCourseAdapter adapter, boolean block){
 		if(section.length() <= 3) return; //invalid request
 		
 		//load the courses from the server
@@ -645,6 +645,8 @@ public class User {
 		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, adapter);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});		
+		
+		if(block) listner.waitForThreads();
 	}
 	
 	/* GETTERS */
