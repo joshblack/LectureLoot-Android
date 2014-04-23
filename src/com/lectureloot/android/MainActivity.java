@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					Intent loginIntent = new Intent(this, LoginActivity.class);
 					loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(loginIntent);
-				} else {	//validate the itegrity of the file
+				} /*else {	//validate the itegrity of the file
 					final FragmentActivity thisActivity = this; 
 					workThread  = new Thread(new Runnable(){
 						public void run(){
@@ -62,7 +62,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 						}
 					});
 					workThread.start();
-				}
+				}*/
 		}
 			
 		//----------Load Main-------------
@@ -174,8 +174,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		super.onDestroy();
 
-		if(mCurrentUser != null)
-			mCurrentUser.writeToFile();
+		if(User.getInstance().loaded())
+			User.getInstance().writeToFile();
 		Log.i("Main Activity:","Stopped");
 	}
 	

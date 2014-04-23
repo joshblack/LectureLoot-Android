@@ -384,16 +384,16 @@ public class User {
 					return true;
 				}
 			} catch (JSONException e) {
-				Log.i("Login:", "Login Failed");		//DEBUG
+				Log.i("Login:", e.toString());		//DEBUG
 			} catch (ClassCastException e){
 				Log.w("Login:",e.toString());
 			}finally {
 				urlConnection.disconnect();
 			}
 		} catch (MalformedURLException e) {
-			Log.i("Login:", "Login Failed");		//DEBUG
+			Log.i("Login:", e.toString());		//DEBUG
 		} catch (IOException e) {
-			Log.i("Login:", "Login Failed");		//DEBUG
+			Log.i("Login:", e.toString());		//DEBUG
 		}
 		return false;
 	}
@@ -577,6 +577,7 @@ public class User {
 		if(!user.doLogin(mEmail,mPassword)){
 			clearData(true, true, true, false); //delete user specific files only
 			Log.i("Validate Data","Bad Login");
+			mInstance = null;
 			return false;
 		}
 		

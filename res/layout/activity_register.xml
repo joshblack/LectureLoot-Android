@@ -22,7 +22,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="First"
+        android:text="First Name"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" >
 
@@ -44,7 +44,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Last"
+        android:text="Last Name"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" >
 
@@ -105,7 +105,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textVisiblePassword"
-        android:text="Password"
+        android:text="Re-enter Password"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" >
 
