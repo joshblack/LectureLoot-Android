@@ -26,6 +26,7 @@ import com.lectureloot.background.UserListner;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class User {
@@ -625,7 +626,7 @@ public class User {
 				user.mLastName.equals(mLastName) 	&& user.mAuthToken.equals(mAuthToken) 		&&
 				user.mEmail.equals(mEmail)		 	&& user.mPassword.equals(mPassword) 		&&
 				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints));
-		if(data){
+		if(!data){
 			Log.i("Equals:","User Data is bad");
 			return false;
 		}
@@ -637,17 +638,19 @@ public class User {
 				user.mSessions.containsAll(mSessions)	&& mSessions.containsAll(user.mSessions));
 	}
 	
-	public void addCourse(String section, ExpandableListCourseAdapter adapter, boolean block){
-		if(section.length() <= 3) return; //invalid request
-		
+	public String addCourse(String section, boolean block){
+		if(section.length() <= 3) return "Error: Invalid Section";
+			
 		//load the courses from the server
 		UserListner listner = new UserListner(this);
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/course/" + section + "/section";
-		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, adapter);
+		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, null);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});		
 		
-		if(block) listner.waitForThreads();
+		if(!block) return null;	//no valid result
+		listner.waitForThreads();	//wait otherwise
+		return listner.getResult();
 	}
 	
 	/* GETTERS */

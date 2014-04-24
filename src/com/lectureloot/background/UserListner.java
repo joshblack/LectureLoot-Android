@@ -13,10 +13,12 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.lectureloot.android.Course;
 import com.lectureloot.android.HttpGetFinishedListener;
 import com.lectureloot.android.HttpPostCoursesFinishedListener;
+import com.lectureloot.android.MainActivity;
 import com.lectureloot.android.Meeting;
 import com.lectureloot.android.Sessions;
 import com.lectureloot.android.User;
@@ -25,6 +27,7 @@ import com.lectureloot.android.Wager;
 public class UserListner extends HttpGetFinishedListener{
 	private User user;
 	private ArrayList<Thread> threads;
+	private String result;
 
 	public UserListner(User user){
 		this.user = user;
@@ -164,10 +167,14 @@ public class UserListner extends HttpGetFinishedListener{
 								try {
 									JSONTokener tokener = new JSONTokener(output);
 									JSONObject jsonReturn = (JSONObject) tokener.nextValue();
-									if(jsonReturn.get("message").equals("Success, the class has been added to the user"))
+									if(jsonReturn.get("message").equals("Success, the class has been added to the user")){
+										result = null;
 										return;	//all is good, we're done here
+									}
+									else result = (String) jsonReturn.get("message");	//no error for correctly added course
 								} catch (JSONException e) {
 									Log.i("New Course",e.toString());
+									result = "Error: Course not Added";
 								}
 								user.getCourses().remove(finalCourse);	//remove the course if not added correctly
 							}
@@ -177,15 +184,17 @@ public class UserListner extends HttpGetFinishedListener{
 						listener.waitForThreads();	//wait for update before reloading data
 					} catch (Exception e) {
 						Log.i("Meeting Load:",e.toString());
+						result = "Error: Course not Added";
 					}
-					threads.remove(this);
 					notifyThreadComplete();
+					threads.remove(this);
 				}
 			});
 			threads.add(thread);	//track thread to prevent garbage collection
 			thread.start();
 		} catch (Exception e) {
 			Log.i("New Course:",e.toString() + " - " + output);
+			result = "Error: Invalid Section";
 		}
 	}
 	
@@ -237,5 +246,9 @@ public class UserListner extends HttpGetFinishedListener{
 			Log.i("Sessions:",e.toString());
 		}
 		user.setSessions(sessions);
+	}
+
+	public String getResult(){
+		return result;
 	}
 }
