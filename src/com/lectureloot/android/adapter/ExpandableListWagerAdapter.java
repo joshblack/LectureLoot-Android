@@ -85,18 +85,14 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 			convertView = infalInflater.inflate(R.layout.wager_list_items, null);
 		}
 
-		//TextView wagerSessionCode = (TextView) convertView.findViewById(R.id.wagerSessionCode);
 		TextView wagerPerMeeting = (TextView) convertView.findViewById(R.id.wagerPerMeeting);
 		TextView totalWager = (TextView) convertView.findViewById(R.id.totalWager);
 		TextView LostWager = (TextView) convertView.findViewById(R.id.WagerLost);
 		
-		
-		//final String wagerSessionCodeText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode());
 		final String wagerPerMeetingText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getWagerPerMeeting());
 		final String totalWagerText = String.valueOf(((Wager)getChild(groupPosition,childPosition)).getTotalWager());
 		final String LostWagerText = String.valueOf(((Wager)getChild(groupPosition, childPosition)).getCurrentWagerLost());
 		
-		//wagerSessionCode.setText("  " + wagerSessionCodeText); // wagerSessionCode --- wagerSessionCodeText
 		wagerPerMeeting.setText("  " + wagerPerMeetingText);
 		totalWager.setText("  " + totalWagerText);
 		LostWager.setText("  " + LostWagerText);
@@ -192,7 +188,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						String authToken = user.getAuthToken();
 						HttpPutWagers wagerPut = new HttpPutWagers(authToken);
-						//	getter.setHttpDeleteCoursesFinishedListener(this);
 						wagerPut.execute(new String[] {wagersUrl});
 						
 						
@@ -216,9 +211,8 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						String userId = user.getUserId();
 						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/" + userId + "/wagers/" + wagerId;
 						String authToken = user.getAuthToken();
-						HttpDeleteWagers getter = new HttpDeleteWagers(authToken);
-						//	getter.setHttpDeleteCoursesFinishedListener(this);
-						getter.execute(new String[] {wagersUrl});
+						HttpDeleteWagers wagerDelete = new HttpDeleteWagers(authToken);
+						wagerDelete.execute(new String[] {wagersUrl});
 						
 						System.out.println("Here");
 						ArrayList<Wager> wagers = user.getWagers();
@@ -238,21 +232,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						_listDataHeader = frg.prepareDataHeader();
 						_listDataChild = frg.prepareDataChild();
 						notifyDataSetChanged();
-						
-						System.out.println("I survived");
-						
-//						ArrayList<Wager> wagers = new ArrayList<Wager>();
-//						wagers = user.getWagers();
-//						
-//						System.out.println(wagers.toString());
-//						
-//						for(Wager wager : wagers){
-//							if(wagerId == wager.getWagerId())
-//								wagers.remove(wager);
-//						}
-//
-//						System.out.println(wagers.toString());
-//						user.setWagers(wagers);
 						
 						Toast.makeText(_context, "Wager has been deleted", Toast.LENGTH_SHORT).show();
 						dialog.dismiss();
