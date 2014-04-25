@@ -68,7 +68,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		final int wagerId = ((Wager)getChild(groupPosition,childPosition)).getWagerId();	 // getting wagerId for currect wager
 		
 		final int wagerSessionId = ((Wager)getChild(groupPosition,childPosition)).getWagerSessionCode();	// get sessionId for wager
-		
 		ArrayList<Meeting> meetings = user.getMeetings();  									 // getting Meetings arraylist
 		final int wagerMeetings = meetings.size();						// finding the size of arrayList to get total Meetings	
 		
@@ -76,12 +75,9 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		final int wagerUnitValue =((Wager)getChild(groupPosition, childPosition)).getWagerPerMeeting();	//getting Meetings from Wagers
 		final int wagerPointsLost =((Wager)getChild(groupPosition, childPosition)).getCurrentWagerLost();	//getting points lost from Wagers
 
-		
 		final int newTotalWager = wagerMeetings*wagerUnitValue;								// Getting new TotalWager
 		
 		((Wager)getChild(groupPosition, childPosition)).setTotalWager(newTotalWager);		// setting new Total Wager
-		
-		
 		
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -108,7 +104,6 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
 		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
-		
 		
 		Button editWagerButton;
 		editWagerButton = (Button)convertView.findViewById(R.id.editWagerButton);
@@ -174,22 +169,31 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 						
 						
 						((Wager)getChild(groupPosition,childPosition)).setWagerPerMeeting(tempPerClassWager);
-						System.out.println("new wagerUnitValue: "+ tempPerClassWager);
+
 						ArrayList<Meeting> tempMeetings = user.getMeetings();
 						int size = tempMeetings.size();
 						int nextTotal = size*tempPerClassWager;
-						System.out.println("new wagerTotalvalue: "+ nextTotal);
+
 						((Wager)getChild(groupPosition,childPosition)).setTotalMeetings(nextTotal);
 						
-						
 						String userId = user.getUserId();
-						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wager/"+wagerId +"/" +
-								"edit?user_id =" + userId + "&session_id =" + wagerSessionId +"&wagerUnitValue ="+wagerUnitValue
-								+"&wagerTotalValue ="+newTotalWager+"&pointsLost ="+wagerPointsLost;
+						
+						System.out.println(userId);
+						System.out.println(wagerId);
+						System.out.println(wagerSessionId);
+						System.out.println("new wager value:"+ tempPerClassWager);
+						System.out.println("next total:"+ nextTotal);
+						System.out.println(wagerPointsLost);
+						
+						
+						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/users/"+userId+"/wagers/"+wagerId +"/edit?session_id="
+								+ wagerSessionId +"&wagerUnitValue="+tempPerClassWager+"&wagerTotalValue="
+								+nextTotal+"&pointsLost="+wagerPointsLost;
+						
 						String authToken = user.getAuthToken();
-						HttpPutWagers getter = new HttpPutWagers(authToken);
+						HttpPutWagers wagerPut = new HttpPutWagers(authToken);
 						//	getter.setHttpDeleteCoursesFinishedListener(this);
-						getter.execute(new String[] {wagersUrl});
+						wagerPut.execute(new String[] {wagersUrl});
 						
 						
 						WagerFragment frg = new WagerFragment();

@@ -251,10 +251,7 @@ public class WagerFragment extends Fragment {
 							wagersPost.setHttpPostWagersFinishedListener(listener);
 							wagersPost.execute(new String[] {wagersUrl});
 							
-							
-
-							
-
+	
 							// need sessionsId to be use to add the right wagers						
 							System.out.println("newwagers:   "+ newWagers);
 							System.out.println("Obvious basic print");
