@@ -67,10 +67,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		user = User.getInstance();
 
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.username);
-		//TODO: Set Display name dynamically based on Singleton User Model
-		//String name = user.getName();
-		//System.out.println("HELLO" + user.getName());
-		userDisplay.setText("Justin Rafanan's Schedule");
+		userDisplay.setText("Your Schedule");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
 

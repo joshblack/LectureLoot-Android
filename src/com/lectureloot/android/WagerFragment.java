@@ -61,8 +61,7 @@ public class WagerFragment extends Fragment {
 		user = User.getInstance();
 
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.userWager);
-		//String name = user.getName();
-		userDisplay.setText( /*name +*/ "LectureLoot's Wager");
+		userDisplay.setText("Your Wagers");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
 
