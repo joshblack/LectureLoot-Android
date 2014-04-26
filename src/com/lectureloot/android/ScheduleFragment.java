@@ -57,6 +57,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		this.user = User.getInstance();
 	}
 	@Override
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
@@ -334,24 +335,33 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 		List<Course> oneCourseList = null;
 		int id = Integer.parseInt(courseId);
 		try {
+			
 
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 			ArrayList<Course> courses = user.getCourses();
 			for(Course c : courses){
 				if(c.getCourseId() == id){
-					meetings = c.getMeetings();
+//					meetings = c.getMeetings();
+					ArrayList<Meeting> tempMeetings = user.getMeetings();
+					for(Meeting m : tempMeetings)
+					{
+						if(m.getCourseId()==id)
+						{
+							meetings.add(m);
+						}
+					}
 				}
 			}
-
-
-//			System.out.println(meetings.toString());
-//			System.out.println("building code: " + meetings.get(0).getBuildingCode());
+			
+			
+			System.out.println(meetings.toString());
+			System.out.println("building code: " + meetings.get(0).getBuildingCode());
 			meetings = groupMeetingsDays(meetings);
-//			System.out.println("SET MEETINGS");
+			System.out.println("SET MEETINGS");
 			course = listDataChild.get(Integer.toString(meetings.get(0).getCourseId())).get(0);
-//			System.out.println("SET MEETINGS2");
+			System.out.println("SET MEETINGS2");
 			course.setMeetings(meetings);
-//			System.out.println("SET MEETINGS3");
+			System.out.println("SET MEETINGS3");
 
 			oneCourseList = new ArrayList<Course>();
 			oneCourseList.add(course);
@@ -359,6 +369,7 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 			listDataChild.put(Integer.toString(course.getCourseId()),oneCourseList);
 
 		} catch (Exception e) {
+
 			System.out.println("Exception:" + e.getMessage());
 		}
 	}
