@@ -5,6 +5,13 @@ import java.util.Collections;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.lectureloot.background.HttpPostCheckin;
+
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -198,10 +205,13 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			} else if (day == Calendar.SATURDAY) {
 				dayOfWeek = "S";
 			}
+			dayOfWeek = "F"; //TODO:  remove after testing
 			
 			// Grab the current system time, used for comparison against the user's schedule to see which meeting is most imminent 
 			Time currentTime = new Time(Time.getCurrentTimezone());
 			currentTime.setToNow();
+			
+			currentTime.set(0, 45, 12, currentTime.monthDay, currentTime.month, currentTime.year);
 
 //			System.out.println("Day of Week:" + dayOfWeek);
 //			System.out.println("Current time" + currentTime);
@@ -320,10 +330,11 @@ public class DashboardFragment extends Fragment implements LocationListener{
 						for(Course c : courses) {
 							if(meetings.get(i).getCourseId() == c.getCourseId()) {
 								String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
+								String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
 								mUpcomingMeetingTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
 //								System.out.println("Hour mark: " + Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
 								//							mTimeLeftMinsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
-								mTimeLeftSecsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":" + periodMinute);
+								mTimeLeftSecsTextView.setText(hour +  ":" + periodMinute);
 								currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
 								flag = true;
 							}
@@ -332,7 +343,9 @@ public class DashboardFragment extends Fragment implements LocationListener{
 							// this meeting can be checked into
 							// TODO send checkin POST request to the checkin api down below at the checkin button listener
 							//						mTimeLeftMinsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
-							mTimeLeftSecsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":" +  ((periodToTime.get(validMeetingPeriod).minute >= 10 ) ? Integer.toString(periodToTime.get(validMeetingPeriod).minute) : "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute)));
+							String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
+							String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
+							mTimeLeftSecsTextView.setText(hour + ":" + periodMinute);
 							currentCheckInState = CheckInStates.UserNeedsToCheckIn;
 //							if(getDistanceBetween(latlong, nextMeeting) > tolerance) { 
 //								//							Toast.makeText(getActivity(), "Invalid Location, Try Again", Toast.LENGTH_SHORT).show();
@@ -362,12 +375,67 @@ public class DashboardFragment extends Fragment implements LocationListener{
 
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
 			//handles the click event
+			
+//			private Thread workerThread;
 			@Override
 			public void onClick(View v) {
 				//get the current location
 				// TODO: Hit the checkin endpoint with GPS coordinates and user information to perform a checkin when this button is clicked
 				getLocation();
 				
+				String authToken = user.getAuthToken();
+				authToken = "qfuVF2pkPNT5KGeYVQngRkCPqPGFQ2xjZl0ldRYk";
+				HttpPostCheckin checkinPost = new HttpPostCheckin(authToken);
+				// Listener to handle the POST checkin response
+				HttpPostCheckinFinishedListener listener = new HttpPostCheckinFinishedListener() {
+					@Override
+					public boolean onHttpPostCheckinReady(String output) {
+						boolean checkinSuccessful = true;
+						try {
+							Log.i("Post Checkin: ", "Output" + output);
+							JSONTokener tokener = new JSONTokener(output);
+							JSONObject jsonReturn = (JSONObject) tokener.nextValue();
+							JSONObject message = jsonReturn.getJSONObject("message");
+							try {
+								Object success = message.get("success");
+							} catch (JSONException jsone) {
+								// There is no success message in the return message
+								// This means that the checkin was not successful
+								checkinSuccessful = false;
+								System.out.println("checkinSuccessful: " + String.valueOf(checkinSuccessful));
+								currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+							}
+							try {
+								Object error = message.get("error");
+							} catch (JSONException jsone) {
+								// There is no error message in the return message
+								// This means that the checkin was successful
+								checkinSuccessful = true;
+								System.out.println("checkinSuccessful: " + String.valueOf(checkinSuccessful));
+								currentCheckInState = CheckInStates.UserHasCheckedIn;
+							}
+						} catch (Exception e) {
+							Log.i("Post Checkin", e.toString());
+						}
+						toggleCheckInBackgroundState();
+					return checkinSuccessful;
+					}
+						
+					};
+					checkinPost.setHttpPostCheckinFinishedListener(listener);
+					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin/?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
+					System.out.println(checkinURL);
+					checkinPost.execute(new String[] {checkinURL});
+					
+					
+//				workerThread = new Thread( new Runnable() {
+//					public void run() {
+//						String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + user.getUserId() +  "/checkin/?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
+//						System.out.println(checkinURL);
+//						checkinPost.execute(new String[] {checkinURL});
+						
+//					}
+//				})
 				
 
 //				if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0"))

@@ -10,6 +10,7 @@ import java.net.URLConnection;
 
 import com.lectureloot.android.HttpPostCoursesFinishedListener;
 import com.lectureloot.android.HttpPostWagersFinishedListener;
+import com.lectureloot.android.HttpPostCheckinFinishedListener;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -19,6 +20,7 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	
 	protected HttpPostCoursesFinishedListener courseListener;
 	protected HttpPostWagersFinishedListener wagerListener; 
+	protected HttpPostCheckinFinishedListener checkinListener;
 	protected String authorizationToken;
 	
 	public HttpPost(String authToken) {
@@ -33,6 +35,10 @@ public abstract class HttpPost extends AsyncTask<String, Void, String> {
 	
 	public void setHttpPostWagersFinishedListener(HttpPostWagersFinishedListener listener) {
 		this.wagerListener = listener;
+	}
+	
+	public void setHttpPostCheckinFinishedListener(HttpPostCheckinFinishedListener listener) {
+		this.checkinListener = listener;
 	}
 
 	@Override
