@@ -13,7 +13,7 @@
     <string name="check_in_button">Check In</string>
     <string name="checked_in_button">Checked In</string>
     <string name="pay_attention"> Get off your phone and pay attention</string>
-    <string name="done_for_day">No upcoming classes in the next 8 hours</string>
+    <string name="done_for_day">You don\'t have any more classes today</string>
     <string name="user_total_points">800pts</string>
     <string name="course_code">CAP3032 \nCSE E221</string>
     <string name="time_before_class">15:00</string>
