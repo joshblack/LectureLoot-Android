@@ -347,13 +347,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 							String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
 							mTimeLeftSecsTextView.setText(hour + ":" + periodMinute);
 							currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-//							if(getDistanceBetween(latlong, nextMeeting) > tolerance) { 
-//								//							Toast.makeText(getActivity(), "Invalid Location, Try Again", Toast.LENGTH_SHORT).show();
-//							} else {
-//								//							Toast.makeText(getActivity(), "Check-in Successful", Toast.LENGTH_SHORT).show();
-//								//							mNeedsToCheckInTimer.cancel();
-//								currentCheckInState = CheckInStates.UserHasCheckedIn;
-//							}
 							break;
 						}
 						else {
@@ -402,8 +395,9 @@ public class DashboardFragment extends Fragment implements LocationListener{
 								// There is no success message in the return message
 								// This means that the checkin was not successful
 								checkinSuccessful = false;
-								System.out.println("checkinSuccessful: " + String.valueOf(checkinSuccessful));
 								currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+								Object error = message.get("error");
+								Toast.makeText(getActivity(), "Check In was not successful: " + error.toString(), Toast.LENGTH_LONG).show();
 							}
 							try {
 								Object error = message.get("error");
@@ -411,7 +405,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 								// There is no error message in the return message
 								// This means that the checkin was successful
 								checkinSuccessful = true;
-								System.out.println("checkinSuccessful: " + String.valueOf(checkinSuccessful));
 								currentCheckInState = CheckInStates.UserHasCheckedIn;
 							}
 						} catch (Exception e) {
@@ -423,21 +416,10 @@ public class DashboardFragment extends Fragment implements LocationListener{
 						
 					};
 					checkinPost.setHttpPostCheckinFinishedListener(listener);
-					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin/?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
+					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
 					System.out.println(checkinURL);
 					checkinPost.execute(new String[] {checkinURL});
 					
-					
-//				workerThread = new Thread( new Runnable() {
-//					public void run() {
-//						String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + user.getUserId() +  "/checkin/?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
-//						System.out.println(checkinURL);
-//						checkinPost.execute(new String[] {checkinURL});
-						
-//					}
-//				})
-				
-
 //				if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0"))
 //					System.out.println("mock location false");
 //				else
