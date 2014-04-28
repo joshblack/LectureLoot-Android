@@ -2,6 +2,6 @@ package com.lectureloot.android;
 
 public interface HttpPostCheckinFinishedListener {
 
-	public boolean onHttpPostCheckinReady(String output);
+	public void onHttpPostCheckinReady(String output);
 	
 }

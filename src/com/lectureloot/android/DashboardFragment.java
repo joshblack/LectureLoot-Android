@@ -108,11 +108,411 @@ public class DashboardFragment extends Fragment implements LocationListener{
 
 		//Automatically set the next class information upon load
 
+		determineNextMeetingAndUpdateView();
+		
+
+		mCheckInButton.setOnClickListener(new View.OnClickListener() {
+			//handles the click event
+			
+			@Override
+			public void onClick(View v) {
+				//get the current location
+				getLocation();
+				
+				String authToken = user.getAuthToken();
+				authToken = "qfuVF2pkPNT5KGeYVQngRkCPqPGFQ2xjZl0ldRYk"; // needs to be deleted once the user object has it's own auth token
+				HttpPostCheckin checkinPost = new HttpPostCheckin(authToken);
+				// Listener to handle the POST checkin response
+				HttpPostCheckinFinishedListener listener = new HttpPostCheckinFinishedListener() {
+					@Override
+					public void onHttpPostCheckinReady(String output) {
+						try {
+							Log.i("Post Checkin: ", "Output" + output);
+							JSONTokener tokener = new JSONTokener(output);
+							JSONObject jsonReturn = (JSONObject) tokener.nextValue();
+							JSONObject message = jsonReturn.getJSONObject("message");
+							try {
+								Object success = message.get("success");
+							} catch (JSONException jsone) {
+								// There is no success message in the return message
+								// This means that the checkin was not successful
+								currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+								JSONArray error = (JSONArray) message.get("error");
+								String compiledErrorMessage = "";
+								
+								for(int i = 0; i < error.length(); i++) {
+									compiledErrorMessage = compiledErrorMessage + (String)error.get(i) + ",\n";
+								}
+								compiledErrorMessage = compiledErrorMessage.substring(0,compiledErrorMessage.length()-2); // eliminate the final comma and new line character
+								Toast.makeText(getActivity(), "Check In was not successful: \n" + compiledErrorMessage, 2*Toast.LENGTH_LONG).show();
+							}
+							try {
+								Object error = message.get("error");
+							} catch (JSONException jsone) {
+								// There is no error message in the return message
+								// This means that the checkin was successful
+								currentCheckInState = CheckInStates.UserHasCheckedIn;
+							}
+						} catch (Exception e) {
+							Log.i("Post Checkin", e.toString());
+						}
+						toggleCheckInBackgroundState();
+					}
+						
+					};
+					checkinPost.setHttpPostCheckinFinishedListener(listener);
+					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
+					System.out.println(checkinURL);
+					checkinPost.execute(new String[] {checkinURL});
+					
+//				if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0"))
+//					System.out.println("mock location false");
+//				else
+//					System.out.println("mock location true");
+				boolean response = false;
+				// compare latLong with next upcoming meeting
+				//				"lat":29.64631,
+				//				   "lng":-82.34788
+				//				center: 29.65003, -82.3494
+				//				furthest: 29.648685, -82.347619
+
+				// sort user's meetings based on day and time, then check for the next meeting based on current day of week and time
+				System.out.println("Checkin button test");
+
+				//compare with the ideal location
+				//TODO
+
+
+				//				if(response){
+				//					Toast.makeText(getActivity(), "Check-in Successful", Toast.LENGTH_SHORT).show();
+				//					mNeedsToCheckInTimer.cancel();
+				//					currentCheckInState = CheckInStates.UserHasCheckedIn;
+				//					toggleCheckInBackgroundState();
+				//				}
+				//				else{
+				//					Toast.makeText(getActivity(), "Invalid Location, Try Again", Toast.LENGTH_SHORT).show();
+				//				}				
+			}
+		});
+
+		mUserPointsTextView = (TextView)v.findViewById(R.id.user_points);
+		String userTotalPoints = String.valueOf(user.getPoints());
+		mUserPointsTextView.setText(userTotalPoints + "pts");
+
+
+//		refreshUpcomingMeetingViews();
+// took out the countdown timers for now, thought that displaying the start time is simpler to implement for the time being, 
+		// decided to leave this code here in case we want to add the timers back in later down the road
+		//		mNeedsToCheckInTimer = new CountDownTimer(mUpcomingMeeting.getTimeInMillis(), CHECKIN_INTERVAL){
+		//			//changes the time per second of how long the user has to check in
+		//
+		//			@Override
+		//			public void onFinish() {
+		//				mTimeLeftSecsTextView.setText(":(");
+		//				toggleCheckInBackgroundState();
+		//			}
+		//
+		//			@Override
+		//			public void onTick(long millisUntilFinished) {
+		//				int seconds=(int) (millisUntilFinished/1000)%60;
+		//				long minutes=((millisUntilFinished-seconds)/1000)/60;
+		//				if(seconds < 10)
+		//					mTimeLeftSecsTextView.setText(minutes+":0"+seconds);
+		//				else
+		//					mTimeLeftSecsTextView.setText(minutes+":"+seconds);
+		//			}
+		//			
+		//		};
+		//		
+		//		mUpcomingMeetingTimer = new CountDownTimer(mUpcomingMeeting.getTimeInMillis(), UPCOMING_MEETING_INTERVAL){
+		//			//displays the time left until the user's next class
+		//			
+		//			@Override
+		//			public void onFinish() {
+		//				//dont do anything here
+		//				//because if the time is within 15 mins, it goes to the other check in state
+		//			}
+		//
+		//			@Override
+		//			public void onTick(long millisUntilFinished) {
+		//				long minutes = (millisUntilFinished/1000)/60 + 1;
+		//				if(minutes < 15){
+		//					currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+		//					toggleCheckInBackgroundState(); //this will stop this timer.
+		//				}
+		//				else if(minutes > 119){
+		//					mTimeLeftMinsTextView.setText((millisUntilFinished/1000/60/60+1)+" hours");
+		//				}
+		//				else if(minutes > 59){
+		//					mTimeLeftMinsTextView.setText("1 hour");
+		//				}
+		//				else{
+		//					mTimeLeftMinsTextView.setText(minutes +" mins");
+		//				}
+		//				
+		//			}
+		//			
+		//		};
+
+		//refresh all the values of the current view, like upcoming meeting, stats, and the times
+
+		return v;
+
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		determineNextMeetingAndUpdateView();
+	}
+
+	private void getLocation(){
+		//define the criteria for selecting the location provider
+		Criteria criteria = new Criteria();
+		mProvider = mLocationManager.getBestProvider(criteria, false);
+		Location location = mLocationManager.getLastKnownLocation(mProvider);
+
+		//initialize the location fields
+		if(location != null){
+			//the phone has found a location
+			Log.d("getLocation", "Provider "+mProvider+", has been selected");
+			onLocationChanged(location);
+			Log.d("getLocation", "Lat: "+latlong.getLatitude()+"; Long: "+latlong.getLongitude());
+
+		}
+		else{
+			//TODO display to the user that it is null
+			Log.d("getLocation", "location is null");
+			Toast.makeText(getActivity(), "Your location can't be determined", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void refreshUpcomingMeetingViews(){
+		mUpcomingMeeting = testMeetings[currentMeeting];
+
+		long secs = mUpcomingMeeting.getTimeInMillis();
+//		check what the currentCheckInState should be based on the time 
+				if(secs <= (15*1000*60)){
+					//the user needs to check in
+					currentCheckInState = CheckInStates.UserNeedsToCheckIn;
+				}
+				else if(secs >= 8*1000*60*60){
+					//if the user doesn't have a meeting in the next 8 hours
+					currentCheckInState = CheckInStates.UserIsDoneForTheDay;
+				}
+				else if(secs == 0){
+					currentCheckInState = CheckInStates.UserHasCheckedIn;
+				}
+				else {
+					//the user has an upcoming meeting but doesn't need to check in yet
+					currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
+				}
+		currentMeeting++;
+	}
+
+
+	private void toggleCheckInBackgroundState(){
+
+		switch(currentCheckInState){
+		case UserNeedsToCheckIn:
+			mUserNeedsToCheckInLayout.setVisibility(View.VISIBLE);
+			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
+			mUserCheckedInLayout.setVisibility(View.GONE);
+			mUserIsDoneLayout.setVisibility(View.GONE);
+
+			//start or end the timer
+			//				mUpcomingMeetingTimer.cancel();
+			//				mNeedsToCheckInTimer.start();
+			break;
+
+		case UserHasUpcomingMeeting:
+			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
+			mUserHasUpcomingMeetingLayout.setVisibility(View.VISIBLE);
+			mUserCheckedInLayout.setVisibility(View.GONE);
+			mUserIsDoneLayout.setVisibility(View.GONE);
+
+			//start or end the timer
+			//				mUpcomingMeetingTimer.start();
+			//				mNeedsToCheckInTimer.cancel();
+			break;
+
+		case UserHasCheckedIn:
+			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
+			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
+			mUserCheckedInLayout.setVisibility(View.VISIBLE);
+			mUserIsDoneLayout.setVisibility(View.GONE);
+
+			//make sure the timers are off
+			//				mUpcomingMeetingTimer.cancel();
+			//				mNeedsToCheckInTimer.cancel();
+			break;
+
+		case UserIsDoneForTheDay:
+			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
+			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
+			mUserCheckedInLayout.setVisibility(View.GONE);
+			mUserIsDoneLayout.setVisibility(View.VISIBLE);
+
+			//make sure the timers are off
+			//				mUpcomingMeetingTimer.cancel();
+			//				mNeedsToCheckInTimer.cancel();
+			break;
+		}
+	}
+
+//	private double getDistanceBetween(Location first, Location second) 
+//	{
+//		double distance = 0;
+//
+//		distance = (Math.sqrt((Math.pow(first.getLatitude()-second.getLatitude(),2) + Math.pow(first.getLongitude() - second.getLongitude(),2))));
+//
+//		return distance;
+//	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		//we dont want this called multiple times. 
+		//but I can change this back should we need like take the average or something
+		latlong = location;
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		Toast.makeText(getActivity(), "Disabled Location " + provider,
+				Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		mLocationManager.removeUpdates(this);
+	}
+	
+	private String determineCurrentDayOfWeek(){
+		String dayOfWeek = "";
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+		if (day == Calendar.SUNDAY) {
+			dayOfWeek = "N";
+		} else if (day == Calendar.MONDAY) {
+			dayOfWeek = "M";
+		} else if (day == Calendar.TUESDAY) {
+			dayOfWeek = "T";
+		} else if (day == Calendar.WEDNESDAY) {
+			dayOfWeek = "W";
+		} else if (day == Calendar.THURSDAY) {
+			dayOfWeek = "R";
+		} else if (day == Calendar.FRIDAY) {
+			dayOfWeek = "F";
+		} else if (day == Calendar.SATURDAY) {
+			dayOfWeek = "S";
+		}
+		
+		return dayOfWeek;
+	}
+	
+	private HashMap<String,Time> generatePeriodToTimeMapping(Time currentTime) {
+		
+		HashMap<String,Time> periodToTime = new HashMap<String,Time>();
+		
+		Time periodTime = new Time();
+		periodTime.set(0, 25, 7, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("1", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 30, 8, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("2", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 35, 9, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("3", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 40, 10, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("4", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 45, 11, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("5", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 50, 12, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("6", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 55, 13, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("7", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 0, 15, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("8", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 5, 16, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("9", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 10, 17, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("10", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 15, 18, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("11", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 20, 19, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("E1", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 20, 20, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("E2", periodTime);
+		
+		periodTime = new Time();
+		periodTime.set(0, 20, 21, currentTime.monthDay, currentTime.month, currentTime.year);
+		periodToTime.put("E3", periodTime);
+		
+		return periodToTime;
+	}
+	
+	private String validatePeriod(String period) {
+		String validMeetingPeriod = period;
+		validMeetingPeriod = validMeetingPeriod.trim();
+		switch (validMeetingPeriod.length()) {
+		case 4:
+			if(validMeetingPeriod.charAt(0) == 'E') { // E1E3
+				validMeetingPeriod = validMeetingPeriod.substring(0,2); // E1
+			} else if (validMeetingPeriod.charAt(1) == '-') { // 9-11
+				validMeetingPeriod = validMeetingPeriod.substring(0,1); // 9
+			} else { // 11E1
+				validMeetingPeriod = validMeetingPeriod.substring(0,2); // 11
+			}
+		case 3: // 7-8
+			validMeetingPeriod = validMeetingPeriod.substring(0,1); // 7
+		case 2: // 11
+		case 1: // 8
+		}
+		
+		return validMeetingPeriod;
+		
+	}
+	private void determineNextMeetingAndUpdateView(){
 		try {
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>(); // currently loading test data since user.getMeetings() and user.getCourses() are not giving appropriate results
-//			meetings = user.getMeetings();
+//			meetings.addAll(user.getMeetings());
 			ArrayList<Course> courses = new ArrayList<Course>(); 		
-//			courses = user.getCourses();
+//			courses.addAll(user.getCourses());
 
 			// Beginning of test data creation:
 					Course course = new Course();
@@ -189,95 +589,14 @@ public class DashboardFragment extends Fragment implements LocationListener{
 //			}
 
 			// Determine what the current day of the week is:
-			String dayOfWeek = "";
-			Calendar calendar = Calendar.getInstance();
-			int day = calendar.get(Calendar.DAY_OF_WEEK);
-
-			if (day == Calendar.SUNDAY) {
-				dayOfWeek = "N";
-			} else if (day == Calendar.MONDAY) {
-				dayOfWeek = "M";
-			} else if (day == Calendar.TUESDAY) {
-				dayOfWeek = "T";
-			} else if (day == Calendar.WEDNESDAY) {
-				dayOfWeek = "W";
-			} else if (day == Calendar.THURSDAY) {
-				dayOfWeek = "R";
-			} else if (day == Calendar.FRIDAY) {
-				dayOfWeek = "F";
-			} else if (day == Calendar.SATURDAY) {
-				dayOfWeek = "S";
-			}
-//			dayOfWeek = "F"; //TODO:  remove after testing
+			String dayOfWeek = determineCurrentDayOfWeek();
 			
 			// Grab the current system time, used for comparison against the user's schedule to see which meeting is most imminent 
 			Time currentTime = new Time(Time.getCurrentTimezone());
 			currentTime.setToNow();
-			
-//			currentTime.set(0, 45, 12, currentTime.monthDay, currentTime.month, currentTime.year);
-
-//			System.out.println("Day of Week:" + dayOfWeek);
-//			System.out.println("Current time" + currentTime);
-
 
 			// Create a HashMap pairing for Periods and Time Objects
-			HashMap<String,Time> periodToTime = new HashMap<String,Time>();
-
-			Time periodTime = new Time();
-			periodTime.set(0, 25, 7, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("1", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 30, 8, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("2", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 35, 9, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("3", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 40, 10, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("4", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 45, 11, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("5", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 50, 12, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("6", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 55, 13, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("7", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 0, 15, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("8", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 5, 16, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("9", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 10, 17, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("10", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 15, 18, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("11", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 20, 19, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("E1", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 20, 20, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("E2", periodTime);
-
-			periodTime = new Time();
-			periodTime.set(0, 20, 21, currentTime.monthDay, currentTime.month, currentTime.year);
-			periodToTime.put("E3", periodTime);
+			HashMap<String,Time> periodToTime = generatePeriodToTimeMapping(currentTime);
 
 			// Get the User's Location (GPS Coordinates) - stored in latlong
 			getLocation();
@@ -289,12 +608,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			else
 				System.out.println("mock location true");
 
-			// Calculate how far away the user can be from their meetings' GPS coordinates
-//			double tolerance = (Math.sqrt((Math.pow(29.648685-29.65003,2) + Math.pow(-82.347619 + 82.3494,2))));
-			
-//			Location nextMeeting = new Location(latlong);
-//			nextMeeting.setLatitude(29.64631); //test data for Reitz
-//			nextMeeting.setLongitude(-82.34788); // test data for Reitz
 
 			boolean flag = false; // flag used for checking whether any class has been found to be in range of the current time for the user
 
@@ -302,23 +615,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			for(int i = 0; i < meetings.size(); i++) {
 
 				// Form valid periods for those meetings that have multiple periods listed
-				String validMeetingPeriod = meetings.get(i).getPeriod();
-				validMeetingPeriod = validMeetingPeriod.trim();
-				switch (validMeetingPeriod.length()) {
-				case 4:
-					if(validMeetingPeriod.charAt(0) == 'E') { // E1E3
-						validMeetingPeriod = validMeetingPeriod.substring(0,2); // E1
-					} else if (validMeetingPeriod.charAt(1) == '-') { // 9-11
-						validMeetingPeriod = validMeetingPeriod.substring(0,1); // 9
-					} else { // 11E1
-						validMeetingPeriod = validMeetingPeriod.substring(0,2); // 11
-					}
-				case 3: // 7-8
-					validMeetingPeriod = validMeetingPeriod.substring(0,1); // 7
-				case 2: // 11
-				case 1: // 8
-				}
-
+				String validMeetingPeriod = validatePeriod(meetings.get(i).getPeriod());
 
 				if(!(meetings.get(i).getMeetingDay().equalsIgnoreCase(dayOfWeek))) {
 					// inside here is for when the meeting we are currently checking is before the current day (because we have sorted the meetings already) meaning this meeting has already happened
@@ -326,19 +623,11 @@ public class DashboardFragment extends Fragment implements LocationListener{
 					// inside here is for when the meeting we are checking occurs today at some time
 					if(!(currentTime.toMillis(true) - periodToTime.get((validMeetingPeriod)).toMillis(true) > lateAmountPermitted*60*1000 )) {
 						// inside here is for when the meeting we are currently checking against has not yet passed the current time, meaning is it the next meeting needing to be checked into
-//						System.out.println(currentTime.toMillis(true));
-//						System.out.println("Time difference in Seconds: " + (currentTime.toMillis(true) - periodToTime.get((validMeetingPeriod)).toMillis(true))/1000);
-//						System.out.println("Late Amount Permitted in Seconds: " + (lateAmountPermitted*60));
-//						System.out.println("Early Amount Permitted in Seconds:" + (-1 * earlyAmountPermitted * 60 * 1000)/1000);
-						System.out.println("This meeting will occur later today:" + Integer.toString(meetings.get(i).getMeetingId()));
 						for(Course c : courses) {
 							if(meetings.get(i).getCourseId() == c.getCourseId()) {
 								String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
 								String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
 								mUpcomingMeetingOutOfRangeTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
-								System.out.println("Test inside");
-								//								System.out.println("Hour mark: " + Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
-								//							mTimeLeftMinsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
 								mTimeLeftMinsTextView.setText(hour +  ":" + periodMinute);
 								currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
 								flag = true;
@@ -346,8 +635,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 						}
 						if(  currentTime.toMillis(true) - periodToTime.get((validMeetingPeriod)).toMillis(true)  > -1 * earlyAmountPermitted * 60 * 1000  ) {
 							// this meeting can be checked into
-							// TODO send checkin POST request to the checkin api down below at the checkin button listener
-							//						mTimeLeftMinsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
 							String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
 							String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
 							mTimeLeftSecsTextView.setText(hour + ":" + periodMinute);
@@ -356,6 +643,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 						}
 						else {
 							// it's too early to check into this meeting now, but it is still the next meeting that will need to be checked into, when the time is right
+							currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
 						}
 					} else {
 						// inside here is for when we have passed the checkin time for the meeting we are currently looking at
@@ -367,303 +655,11 @@ public class DashboardFragment extends Fragment implements LocationListener{
 				}
 			}
 
+			toggleCheckInBackgroundState();
 		} catch (Exception e) {
 			// Added the try catch block to handle issues with the User object not being able to load it's meetings and courses appropriately 
-		}
-
-		mCheckInButton.setOnClickListener(new View.OnClickListener() {
-			//handles the click event
-			
-//			private Thread workerThread;
-			@Override
-			public void onClick(View v) {
-				//get the current location
-				// TODO: Hit the checkin endpoint with GPS coordinates and user information to perform a checkin when this button is clicked
-				getLocation();
-				
-				String authToken = user.getAuthToken();
-				authToken = "qfuVF2pkPNT5KGeYVQngRkCPqPGFQ2xjZl0ldRYk";
-				HttpPostCheckin checkinPost = new HttpPostCheckin(authToken);
-				// Listener to handle the POST checkin response
-				HttpPostCheckinFinishedListener listener = new HttpPostCheckinFinishedListener() {
-					@Override
-					public boolean onHttpPostCheckinReady(String output) {
-						boolean checkinSuccessful = true;
-						try {
-							Log.i("Post Checkin: ", "Output" + output);
-							JSONTokener tokener = new JSONTokener(output);
-							JSONObject jsonReturn = (JSONObject) tokener.nextValue();
-							JSONObject message = jsonReturn.getJSONObject("message");
-							try {
-								Object success = message.get("success");
-							} catch (JSONException jsone) {
-								// There is no success message in the return message
-								// This means that the checkin was not successful
-								checkinSuccessful = false;
-								currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-								JSONArray error = (JSONArray) message.get("error");
-//								ArrayList<String> errorMessages = new ArrayList<String>();
-								String compiledErrorMessage = "";
-								
-								for(int i = 0; i < error.length(); i++) {
-//									errorMessages.add((String)error.get(i));
-									compiledErrorMessage = compiledErrorMessage + (String)error.get(i) + ",\n";
-								}
-								compiledErrorMessage = compiledErrorMessage.substring(0,compiledErrorMessage.length()-2);
-								Toast.makeText(getActivity(), "Check In was not successful: \n" + compiledErrorMessage, 2*Toast.LENGTH_LONG).show();
-							}
-							try {
-								Object error = message.get("error");
-							} catch (JSONException jsone) {
-								// There is no error message in the return message
-								// This means that the checkin was successful
-								checkinSuccessful = true;
-								currentCheckInState = CheckInStates.UserHasCheckedIn;
-							}
-						} catch (Exception e) {
-							Log.i("Post Checkin", e.toString());
-						}
-						toggleCheckInBackgroundState();
-					return checkinSuccessful;
-					}
-						
-					};
-					checkinPost.setHttpPostCheckinFinishedListener(listener);
-					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
-					System.out.println(checkinURL);
-					checkinPost.execute(new String[] {checkinURL});
-					
-//				if(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).equals("0"))
-//					System.out.println("mock location false");
-//				else
-//					System.out.println("mock location true");
-				boolean response = false;
-				// compare latLong with next upcoming meeting
-				//				"lat":29.64631,
-				//				   "lng":-82.34788
-				//				center: 29.65003, -82.3494
-				//				furthest: 29.648685, -82.347619
-
-				// sort user's meetings based on day and time, then check for the next meeting based on current day of week and time
-				System.out.println("Checkin button test");
-
-				//compare with the ideal location
-				//TODO
-
-
-				//				if(response){
-				//					Toast.makeText(getActivity(), "Check-in Successful", Toast.LENGTH_SHORT).show();
-				//					mNeedsToCheckInTimer.cancel();
-				//					currentCheckInState = CheckInStates.UserHasCheckedIn;
-				//					toggleCheckInBackgroundState();
-				//				}
-				//				else{
-				//					Toast.makeText(getActivity(), "Invalid Location, Try Again", Toast.LENGTH_SHORT).show();
-				//				}				
-			}
-		});
-
-		mUserPointsTextView = (TextView)v.findViewById(R.id.user_points);
-		String userTotalPoints = String.valueOf(user.getPoints());
-		mUserPointsTextView.setText(userTotalPoints + "pts");
-
-
-		refreshUpcomingMeetingViews();
-
-		//		mNeedsToCheckInTimer = new CountDownTimer(mUpcomingMeeting.getTimeInMillis(), CHECKIN_INTERVAL){
-		//			//changes the time per second of how long the user has to check in
-		//
-		//			@Override
-		//			public void onFinish() {
-		//				mTimeLeftSecsTextView.setText(":(");
-		//				toggleCheckInBackgroundState();
-		//			}
-		//
-		//			@Override
-		//			public void onTick(long millisUntilFinished) {
-		//				int seconds=(int) (millisUntilFinished/1000)%60;
-		//				long minutes=((millisUntilFinished-seconds)/1000)/60;
-		//				if(seconds < 10)
-		//					mTimeLeftSecsTextView.setText(minutes+":0"+seconds);
-		//				else
-		//					mTimeLeftSecsTextView.setText(minutes+":"+seconds);
-		//			}
-		//			
-		//		};
-		//		
-		//		mUpcomingMeetingTimer = new CountDownTimer(mUpcomingMeeting.getTimeInMillis(), UPCOMING_MEETING_INTERVAL){
-		//			//displays the time left until the user's next class
-		//			
-		//			@Override
-		//			public void onFinish() {
-		//				//dont do anything here
-		//				//because if the time is within 15 mins, it goes to the other check in state
-		//			}
-		//
-		//			@Override
-		//			public void onTick(long millisUntilFinished) {
-		//				long minutes = (millisUntilFinished/1000)/60 + 1;
-		//				if(minutes < 15){
-		//					currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-		//					toggleCheckInBackgroundState(); //this will stop this timer.
-		//				}
-		//				else if(minutes > 119){
-		//					mTimeLeftMinsTextView.setText((millisUntilFinished/1000/60/60+1)+" hours");
-		//				}
-		//				else if(minutes > 59){
-		//					mTimeLeftMinsTextView.setText("1 hour");
-		//				}
-		//				else{
-		//					mTimeLeftMinsTextView.setText(minutes +" mins");
-		//				}
-		//				
-		//			}
-		//			
-		//		};
-
-		//refresh all the values of the current view, like upcoming meeting, stats, and the times
-		toggleCheckInBackgroundState();
-
-		return v;
-
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		toggleCheckInBackgroundState();
-	}
-
-	private void getLocation(){
-		//define the criteria for selecting the location provider
-		Criteria criteria = new Criteria();
-		mProvider = mLocationManager.getBestProvider(criteria, false);
-		Location location = mLocationManager.getLastKnownLocation(mProvider);
-
-		//initialize the location fields
-		if(location != null){
-			//the phone has found a location
-			Log.d("getLocation", "Provider "+mProvider+", has been selected");
-			onLocationChanged(location);
-			Log.d("getLocation", "Lat: "+latlong.getLatitude()+"; Long: "+latlong.getLongitude());
-
-		}
-		else{
-			//TODO display to the user that it is null
-			Log.d("getLocation", "location is null");
+			Log.e("Determine Next Meeting", e.toString());
 		}
 	}
-
-	private void refreshUpcomingMeetingViews(){
-		mUpcomingMeeting = testMeetings[currentMeeting];
-
-		long secs = mUpcomingMeeting.getTimeInMillis();
-		//check what the currentCheckInState should be based on the time 
-		//		if(secs <= (15*1000*60)){
-		//			//the user needs to check in
-		//			currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-		//		}
-		//		else if(secs >= 8*1000*60*60){
-		//			//if the user doesn't have a meeting in the next 8 hours
-		//			currentCheckInState = CheckInStates.UserIsDoneForTheDay;
-		//		}
-		//		else if(secs == 0){
-		//			currentCheckInState = CheckInStates.UserHasCheckedIn;
-		//		}
-		//		else {
-		//			//the user has an upcoming meeting but doesn't need to check in yet
-		//			currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
-		//		}
-		currentMeeting++;
-	}
-
-
-	private void toggleCheckInBackgroundState(){
-
-		switch(currentCheckInState){
-		case UserNeedsToCheckIn:
-			mUserNeedsToCheckInLayout.setVisibility(View.VISIBLE);
-			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
-			mUserCheckedInLayout.setVisibility(View.GONE);
-			mUserIsDoneLayout.setVisibility(View.GONE);
-
-			//start or end the timer
-			//				mUpcomingMeetingTimer.cancel();
-			//				mNeedsToCheckInTimer.start();
-			break;
-
-		case UserHasUpcomingMeeting:
-			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
-			mUserHasUpcomingMeetingLayout.setVisibility(View.VISIBLE);
-			mUserCheckedInLayout.setVisibility(View.GONE);
-			mUserIsDoneLayout.setVisibility(View.GONE);
-
-			//start or end the timer
-			//				mUpcomingMeetingTimer.start();
-			//				mNeedsToCheckInTimer.cancel();
-			break;
-
-		case UserHasCheckedIn:
-			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
-			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
-			mUserCheckedInLayout.setVisibility(View.VISIBLE);
-			mUserIsDoneLayout.setVisibility(View.GONE);
-
-			//make sure the timers are off
-			//				mUpcomingMeetingTimer.cancel();
-			//				mNeedsToCheckInTimer.cancel();
-			break;
-
-		case UserIsDoneForTheDay:
-			mUserNeedsToCheckInLayout.setVisibility(View.GONE);
-			mUserHasUpcomingMeetingLayout.setVisibility(View.GONE);
-			mUserCheckedInLayout.setVisibility(View.GONE);
-			mUserIsDoneLayout.setVisibility(View.VISIBLE);
-
-			//make sure the timers are off
-			//				mUpcomingMeetingTimer.cancel();
-			//				mNeedsToCheckInTimer.cancel();
-			break;
-		}
-	}
-
-	private double getDistanceBetween(Location first, Location second) 
-	{
-		double distance = 0;
-
-		distance = (Math.sqrt((Math.pow(first.getLatitude()-second.getLatitude(),2) + Math.pow(first.getLongitude() - second.getLongitude(),2))));
-
-		return distance;
-	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		//we dont want this called multiple times. 
-		//but I can change this back should we need like take the average or something
-		latlong = location;
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		Toast.makeText(getActivity(), "Disabled Location " + provider,
-				Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		mLocationManager.removeUpdates(this);
-	}
-
+	
 }
