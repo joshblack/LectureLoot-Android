@@ -46,6 +46,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private TextView mTimeLeftSecsTextView;
 	private TextView mTimeLeftMinsTextView;
 	private TextView mUpcomingMeetingTextView;
+	private TextView mUpcomingMeetingOutOfRangeTextView;
 	private LinearLayout mUserNeedsToCheckInLayout;
 	private LinearLayout mUserCheckedInLayout;
 	private LinearLayout mUserHasUpcomingMeetingLayout;
@@ -97,6 +98,8 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		mUserIsDoneLayout.setVisibility(View.GONE);
 
 		mUpcomingMeetingTextView = (TextView)v.findViewById(R.id.nextMeeting);
+		mUpcomingMeetingOutOfRangeTextView = (TextView)v.findViewById(R.id.nextMeetingOutOfRange);
+		
 		mTimeLeftSecsTextView = (TextView)v.findViewById(R.id.timeLeftSecs);
 		mTimeLeftMinsTextView = (TextView)v.findViewById(R.id.timeLeftMins);
 
@@ -205,13 +208,13 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			} else if (day == Calendar.SATURDAY) {
 				dayOfWeek = "S";
 			}
-			dayOfWeek = "F"; //TODO:  remove after testing
+//			dayOfWeek = "F"; //TODO:  remove after testing
 			
 			// Grab the current system time, used for comparison against the user's schedule to see which meeting is most imminent 
 			Time currentTime = new Time(Time.getCurrentTimezone());
 			currentTime.setToNow();
 			
-			currentTime.set(0, 45, 12, currentTime.monthDay, currentTime.month, currentTime.year);
+//			currentTime.set(0, 45, 12, currentTime.monthDay, currentTime.month, currentTime.year);
 
 //			System.out.println("Day of Week:" + dayOfWeek);
 //			System.out.println("Current time" + currentTime);
@@ -287,7 +290,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 				System.out.println("mock location true");
 
 			// Calculate how far away the user can be from their meetings' GPS coordinates
-			double tolerance = (Math.sqrt((Math.pow(29.648685-29.65003,2) + Math.pow(-82.347619 + 82.3494,2))));
+//			double tolerance = (Math.sqrt((Math.pow(29.648685-29.65003,2) + Math.pow(-82.347619 + 82.3494,2))));
 			
 //			Location nextMeeting = new Location(latlong);
 //			nextMeeting.setLatitude(29.64631); //test data for Reitz
@@ -327,14 +330,16 @@ public class DashboardFragment extends Fragment implements LocationListener{
 //						System.out.println("Time difference in Seconds: " + (currentTime.toMillis(true) - periodToTime.get((validMeetingPeriod)).toMillis(true))/1000);
 //						System.out.println("Late Amount Permitted in Seconds: " + (lateAmountPermitted*60));
 //						System.out.println("Early Amount Permitted in Seconds:" + (-1 * earlyAmountPermitted * 60 * 1000)/1000);
+						System.out.println("This meeting will occur later today:" + Integer.toString(meetings.get(i).getMeetingId()));
 						for(Course c : courses) {
 							if(meetings.get(i).getCourseId() == c.getCourseId()) {
 								String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
 								String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
-								mUpcomingMeetingTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
-//								System.out.println("Hour mark: " + Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
+								mUpcomingMeetingOutOfRangeTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
+								System.out.println("Test inside");
+								//								System.out.println("Hour mark: " + Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
 								//							mTimeLeftMinsTextView.setText(Integer.toString(periodToTime.get(validMeetingPeriod).hour%12) + ":");
-								mTimeLeftSecsTextView.setText(hour +  ":" + periodMinute);
+								mTimeLeftMinsTextView.setText(hour +  ":" + periodMinute);
 								currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
 								flag = true;
 							}
@@ -396,8 +401,16 @@ public class DashboardFragment extends Fragment implements LocationListener{
 								// This means that the checkin was not successful
 								checkinSuccessful = false;
 								currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-								Object error = message.get("error");
-								Toast.makeText(getActivity(), "Check In was not successful: " + error.toString(), Toast.LENGTH_LONG).show();
+								JSONArray error = (JSONArray) message.get("error");
+//								ArrayList<String> errorMessages = new ArrayList<String>();
+								String compiledErrorMessage = "";
+								
+								for(int i = 0; i < error.length(); i++) {
+//									errorMessages.add((String)error.get(i));
+									compiledErrorMessage = compiledErrorMessage + (String)error.get(i) + ",\n";
+								}
+								compiledErrorMessage = compiledErrorMessage.substring(0,compiledErrorMessage.length()-2);
+								Toast.makeText(getActivity(), "Check In was not successful: \n" + compiledErrorMessage, 2*Toast.LENGTH_LONG).show();
 							}
 							try {
 								Object error = message.get("error");

@@ -5,28 +5,25 @@
     android:background="#FF454545"
     android:orientation="vertical" >
 
-    
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFF0000"
-        android:layout_weight=".05" />
-        
+        android:layout_weight=".05"
+        android:background="#FFFF0000" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="12dp"
-        >
+        android:padding="12dp" >
 
         <ImageView
             android:id="@+id/user_profile_pic"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_marginTop="4dp"
-            
             android:src="@drawable/user_circle" />
 
         <LinearLayout
@@ -38,29 +35,24 @@
                 android:id="@+id/user_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                
                 android:text="@string/user_total_points"
                 android:textColor="#FFFFFFFF"
                 android:textSize="70sp" />
-
         </LinearLayout>
     </LinearLayout>
-    
+
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFF0000"
-        android:layout_weight=".05" />
+        android:layout_weight=".05"
+        android:background="#FFFF0000" />
 
-
-        
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFF0000"
-        android:layout_weight=".05" />
-        
-    
+        android:layout_weight=".05"
+        android:background="#FFFF0000" />
+
     <LinearLayout
         android:id="@+id/needs_to_check_in_layout"
         android:layout_width="match_parent"
@@ -78,14 +70,14 @@
             android:background="#FFFF5555"
             android:gravity="center_vertical|center_horizontal"
             android:height="48dp"
+            android:onClick="OnClick"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:text="@string/check_in_button"
             android:textAlignment="gravity"
             android:textColor="#FFFFFFFF"
-            android:onClick="OnClick"
             android:textSize="24sp" />
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -99,10 +91,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:gravity="bottom|left"
+                android:paddingBottom="10dp"
                 android:text="@string/course_code"
                 android:textColor="#FFFFFFFF"
-                android:textSize="24sp"
-                android:paddingBottom="10dp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/timeLeftSecs"
@@ -114,35 +106,34 @@
                 android:textColor="#FFFF5555"
                 android:textSize="56sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
     </LinearLayout>
-    
-	<LinearLayout
-	    android:id="@+id/has_checked_in_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="150dp"
-	    android:background="#2239b54a"
-	    android:orientation="vertical"
-	    android:paddingLeft="16dp"
-	    android:paddingRight="16dp"
-	    android:paddingTop="16dp" >
 
-         <Button
-             android:id="@+id/checked_in_button"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="#39b54a"
-             android:clickable="false"
-             android:gravity="center_vertical|center_horizontal"
-             android:height="48dp"
-             android:longClickable="false"
-             android:paddingLeft="12dp"
-             android:paddingRight="12dp"
-             android:text="@string/checked_in_button"
-             android:textAlignment="gravity"
-             android:textColor="#FFFFFFFF"
-             android:textSize="24sp" />
+    <LinearLayout
+        android:id="@+id/has_checked_in_layout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#2239b54a"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" >
+
+        <Button
+            android:id="@+id/checked_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#39b54a"
+            android:clickable="false"
+            android:gravity="center_vertical|center_horizontal"
+            android:height="48dp"
+            android:longClickable="false"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="@string/checked_in_button"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFFFF"
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -155,65 +146,77 @@
                 android:id="@+id/pay_attention"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                
                 android:gravity="bottom|center"
+                android:paddingBottom="10dp"
                 android:text="@string/pay_attention"
                 android:textColor="#FFFFFFFF"
-                android:textSize="24sp"
-                android:paddingBottom="10dp" />
-
-
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
-    
-	<LinearLayout
-	    android:id="@+id/has_upcoming_meeting_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="150dp"
-	    android:background="#22FFFFFF"
-	    android:orientation="vertical"
-	    android:paddingLeft="16dp"
-	    android:paddingRight="16dp"
-	    android:paddingTop="16dp" >
+
+    <LinearLayout
+        android:id="@+id/has_upcoming_meeting_layout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#22FFFFFF"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:baselineAligned="true"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:weightSum="1" >
-
-            <TextView
-                android:id="@+id/nextMeeting"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="bottom|left"
-                android:paddingBottom="10dp"
-                android:text="@string/course_code"
-                android:textColor="#FFFFFFFF"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/timeLeftMins"
+			<TextView
+			    android:id="@+id/nextMeetingLabel"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:gravity="center"
+			    android:padding="10dp"
+			    android:text="Next Meeting:"
+			    android:textColor="#FFFFFFFF"
+			    android:textSize="30sp"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom|right"
-                android:text="@string/time_before_class"
-                android:textColor="#FFFFFFFF"
-                android:textSize="62sp" />
+                android:baselineAligned="true"
+                android:orientation="horizontal"
+                android:weightSum="1" >
 
+                <TextView
+                    android:id="@+id/nextMeetingOutOfRange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|left"
+                    android:paddingBottom="10dp"
+                    android:text="@string/course_code"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/timeLeftMins"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|right"
+                    android:text="@string/time_before_class"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="62sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-    
-	<LinearLayout
-	    android:id="@+id/is_done_for_day_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="150dp"
-	    android:background="#22FFFFFF"
-	    android:orientation="vertical"
-	    android:paddingLeft="16dp"
-	    android:paddingRight="16dp"
-	    android:paddingTop="16dp" >
+
+    <LinearLayout
+        android:id="@+id/is_done_for_day_layout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#22FFFFFF"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -226,12 +229,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom|center"
+                android:paddingBottom="10dp"
                 android:text="@string/done_for_day"
                 android:textColor="#FFFFFFFF"
-                android:textSize="24sp"
-                android:paddingBottom="10dp" />
-
-
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 
