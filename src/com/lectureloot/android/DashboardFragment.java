@@ -17,7 +17,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.AudioRecord.OnRecordPositionUpdateListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,13 +65,14 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	}
 	private CheckInStates currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
 
-	private Meeting[] testMeetings = {
-			new Meeting(16*1000*60),//30 mins from now
-			new Meeting(15*1000*60),
-			new Meeting(50*1000*60),
-			new Meeting(120*1000*60)
-	};
-	int currentMeeting = 1;
+//	private Meeting[] testMeetings = {
+//			new Meeting(16*1000*60),//30 mins from now
+//			new Meeting(15*1000*60),
+//			new Meeting(50*1000*60),
+//			new Meeting(120*1000*60)
+//	};
+//	int currentMeeting = 1;
+	private HashMap<String,Time> periodToTime = generatePeriodToTimeMapping();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,9 +106,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		mCheckInButton = (Button)v.findViewById(R.id.check_in_button);
 
 		//Automatically set the next class information upon load
-
 		determineNextMeetingAndUpdateView();
-		
 
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
 			//handles the click event
@@ -169,29 +166,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 //					System.out.println("mock location false");
 //				else
 //					System.out.println("mock location true");
-				boolean response = false;
-				// compare latLong with next upcoming meeting
-				//				"lat":29.64631,
-				//				   "lng":-82.34788
-				//				center: 29.65003, -82.3494
-				//				furthest: 29.648685, -82.347619
-
-				// sort user's meetings based on day and time, then check for the next meeting based on current day of week and time
-				System.out.println("Checkin button test");
-
-				//compare with the ideal location
-				//TODO
-
-
-				//				if(response){
-				//					Toast.makeText(getActivity(), "Check-in Successful", Toast.LENGTH_SHORT).show();
-				//					mNeedsToCheckInTimer.cancel();
-				//					currentCheckInState = CheckInStates.UserHasCheckedIn;
-				//					toggleCheckInBackgroundState();
-				//				}
-				//				else{
-				//					Toast.makeText(getActivity(), "Invalid Location, Try Again", Toast.LENGTH_SHORT).show();
-				//				}				
 			}
 		});
 
@@ -282,35 +256,10 @@ public class DashboardFragment extends Fragment implements LocationListener{
 
 		}
 		else{
-			//TODO display to the user that it is null
 			Log.d("getLocation", "location is null");
 			Toast.makeText(getActivity(), "Your location can't be determined", Toast.LENGTH_SHORT).show();
 		}
 	}
-
-	private void refreshUpcomingMeetingViews(){
-		mUpcomingMeeting = testMeetings[currentMeeting];
-
-		long secs = mUpcomingMeeting.getTimeInMillis();
-//		check what the currentCheckInState should be based on the time 
-				if(secs <= (15*1000*60)){
-					//the user needs to check in
-					currentCheckInState = CheckInStates.UserNeedsToCheckIn;
-				}
-				else if(secs >= 8*1000*60*60){
-					//if the user doesn't have a meeting in the next 8 hours
-					currentCheckInState = CheckInStates.UserIsDoneForTheDay;
-				}
-				else if(secs == 0){
-					currentCheckInState = CheckInStates.UserHasCheckedIn;
-				}
-				else {
-					//the user has an upcoming meeting but doesn't need to check in yet
-					currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
-				}
-		currentMeeting++;
-	}
-
 
 	private void toggleCheckInBackgroundState(){
 
@@ -361,15 +310,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		}
 	}
 
-//	private double getDistanceBetween(Location first, Location second) 
-//	{
-//		double distance = 0;
-//
-//		distance = (Math.sqrt((Math.pow(first.getLatitude()-second.getLatitude(),2) + Math.pow(first.getLongitude() - second.getLongitude(),2))));
-//
-//		return distance;
-//	}
-
 	@Override
 	public void onLocationChanged(Location location) {
 		//we dont want this called multiple times. 
@@ -399,6 +339,11 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		mLocationManager.removeUpdates(this);
 	}
 	
+	/**
+	 * Determines what the current day of the week today is
+	 * @param none
+	 * @return String dayOfWeek - String of length 1 denoting the current day of the week (N,M,T,W,R,F or S)
+	 */
 	private String determineCurrentDayOfWeek(){
 		String dayOfWeek = "";
 		Calendar calendar = Calendar.getInstance();
@@ -419,11 +364,17 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		} else if (day == Calendar.SATURDAY) {
 			dayOfWeek = "S";
 		}
-		
 		return dayOfWeek;
 	}
 	
-	private HashMap<String,Time> generatePeriodToTimeMapping(Time currentTime) {
+	/**
+	 * Creates a HashMap that contains mappings of Periods to Time Objects based on UF Schedule
+	 * @param currentTime - A Time object created on the same day as today, used to get the monthDay, month and year components
+	 * @return periodToTime - HashMap with the designated mappings
+	 */
+	private HashMap<String,Time> generatePeriodToTimeMapping() {
+		Time currentTime = new Time(Time.getCurrentTimezone());
+		currentTime.setToNow();
 		
 		HashMap<String,Time> periodToTime = new HashMap<String,Time>();
 		
@@ -485,7 +436,13 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		
 		return periodToTime;
 	}
-	
+
+	/**
+	 * Finds the starting period of a specific meeting's period string
+	 * Specifically designed to deal with period strings containing a range of periods (E1E3, 7-8, etc.)
+	 * @param period - the period string from the given meeting needing validation
+	 * @return validMeetingPeriod - String containing the starting period of the given period input
+	 */
 	private String validatePeriod(String period) {
 		String validMeetingPeriod = period;
 		validMeetingPeriod = validMeetingPeriod.trim();
@@ -503,10 +460,12 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		case 2: // 11
 		case 1: // 8
 		}
-		
 		return validMeetingPeriod;
-		
 	}
+	
+	/**
+	 * Grabs the User's meetings, determines which meeting is next for that user, and updates the dashboard accordingly
+	 */
 	private void determineNextMeetingAndUpdateView(){
 		try {
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>(); // currently loading test data since user.getMeetings() and user.getCourses() are not giving appropriate results
@@ -555,7 +514,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 					meeting4.setBuildingCode("LIT");
 					meeting4.setRoomNumber("109");
 					meeting4.setMeetingDay("M");
-					meeting4.setPeriod("7");
+					meeting4.setPeriod("9");
 					meeting4.setCourseId(1);
 			
 					meetings.add(meeting4);	//add to arrayList
@@ -596,7 +555,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			currentTime.setToNow();
 
 			// Create a HashMap pairing for Periods and Time Objects
-			HashMap<String,Time> periodToTime = generatePeriodToTimeMapping(currentTime);
+//			HashMap<String,Time> periodToTime = generatePeriodToTimeMapping();
 
 			// Get the User's Location (GPS Coordinates) - stored in latlong
 			getLocation();
@@ -627,6 +586,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 							if(meetings.get(i).getCourseId() == c.getCourseId()) {
 								String periodMinute = ((periodToTime.get(validMeetingPeriod).minute) < 10 ? "0" + Integer.toString(periodToTime.get(validMeetingPeriod).minute) : Integer.toString(periodToTime.get(validMeetingPeriod).minute));
 								String hour = Integer.toString(((periodToTime.get(validMeetingPeriod).hour%12) == 0) ? 12 : periodToTime.get(validMeetingPeriod).hour%12);
+								mUpcomingMeetingTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
 								mUpcomingMeetingOutOfRangeTextView.setText(c.getCoursePrefix() + c.getCourseNum() + "\n" + meetings.get(i).getBuildingCode() + " " + meetings.get(i).getRoomNumber());
 								mTimeLeftMinsTextView.setText(hour +  ":" + periodMinute);
 								currentCheckInState = CheckInStates.UserHasUpcomingMeeting;
