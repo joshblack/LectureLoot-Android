@@ -61,8 +61,7 @@ public class WagerFragment extends Fragment {
 		user = User.getInstance();
 
 		TextView userDisplay = (TextView)rootView.findViewById(R.id.userWager);
-		//String name = user.getName();
-		userDisplay.setText( /*name +*/ "LectureLoot's Wager");
+		userDisplay.setText("Your Wagers");
 		userDisplay.setTypeface(null, Typeface.BOLD_ITALIC);
 		userDisplay.setTextSize(25);
 
@@ -76,12 +75,6 @@ public class WagerFragment extends Fragment {
 			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
 			stringSessions.add(formatModel);
 		}
-
-//		System.out.println("User Sessions: "+user.getSessions());
-//		System.out.println(tempSessions);
-//		System.out.println("Date Strings: "+stringSessions);
-
-
 
 		// get the listview
 		wagerExpListView = (ExpandableListView) rootView.findViewById(R.id.wager_lvExp);
@@ -141,10 +134,6 @@ public class WagerFragment extends Fragment {
 					}
 				});
 
-			
-//				String[] wagerDates = {"2/3/2014 - 2/7/2014","2/10/2014 - 2/14/2014","2/17/2014 - 2/21/2014","2/24/2014 - 2/28/2014",
-//						"3/3/2014 - 3/7/2014","3/10/2014 - 3/14/2014","3/17/2014 - 3/21/2014"};
-
 				final Spinner wagerDateSpinner = (Spinner)dialog.findViewById(R.id.wagerDates);
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringSessions); 
 				wagerDateSpinner.setAdapter(adapter);
@@ -198,7 +187,7 @@ public class WagerFragment extends Fragment {
 							}
 							else
 							{
-								//							System.out.println("True");
+								// still need to revise if LectureLoot needs this else
 							}
 						}
 
@@ -215,11 +204,10 @@ public class WagerFragment extends Fragment {
 							String wagersUrl ="http://lectureloot.eu1.frbit.net//api/v1/users/" + user.getUserId() + "/wagers?session_id="+sessionId+"&wagerUnitValue="
 									+tempPerClassWager+"&wagerTotalValue="+newTotalWager+"&pointsLost=0";
 
-							//						String wagersUrl = "http://lectureloot.eu1.frbit.net/api/v1/wagers?user_id="+4+
-							//								"&session_id="+9+"&wagerUnitValue="+5+"&wagerTotalValue="+25+"&pointsLost="+0;
+
 							ArrayList<Wager> wagers = user.getWagers();
 							int countWager = wagers.size();
-							countWager++; // problem with getting the correct wagerID, since there are more wagers than array spots
+							countWager++; 
 							Wager newWager = new Wager(-1, sessionId, tempPerClassWager,newTotalWager, 0);
 							ArrayList<Wager> newWagers = new  ArrayList<Wager>();
 							
@@ -251,10 +239,7 @@ public class WagerFragment extends Fragment {
 							wagersPost.setHttpPostWagersFinishedListener(listener);
 							wagersPost.execute(new String[] {wagersUrl});
 							
-							
-
-							
-
+	
 							// need sessionsId to be use to add the right wagers						
 							System.out.println("newwagers:   "+ newWagers);
 							System.out.println("Obvious basic print");
