@@ -1,7 +1,10 @@
 package com.lectureloot.android;	
 
+import java.util.ArrayList;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -16,6 +19,11 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -128,22 +136,35 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.action_report_cancelled_meeting:
-			//notify
-			Toast.makeText(this, "Class Cancelled Button clicked", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent();
-			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-			Notification noti = new Notification.Builder(this)
-			.setTicker("Get Your Ass to Class!")
-			.setContentTitle("You have class in 15 minutes")
-			.setContentText("Clock's ticking...")
-			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(pIntent).getNotification();
-			noti.flags=Notification.FLAG_AUTO_CANCEL;
-			noti.sound = Uri.parse("android.resource://"
-					+ this.getPackageName() + "/" + R.raw.coin);
-			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			notificationManager.notify(0, noti);
-
+			//get user courses for spinner
+			ArrayList<Course> userCourses = mCurrentUser.getCourses();
+			ArrayList<String> stringOfCourses = new ArrayList<String>();
+			for(Course c : userCourses){
+					stringOfCourses.add(c.getCourseTitle());
+			}
+			//set dialog
+			final Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.dialog_class_cancelled);
+			dialog.setTitle("Class Cancellation");
+			//set spinner
+			final Spinner cancelableClassesSpinner = (Spinner)dialog.findViewById(R.id.classesToBeCancelled);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,stringOfCourses); 
+			cancelableClassesSpinner.setAdapter(adapter);
+			//set confirmation button
+			Button confirmCancellationButton;
+			confirmCancellationButton = (Button)dialog.findViewById(R.id.dialogConfirmCancellation);
+			confirmCancellationButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(mContext, "Class Cancelled Reported", Toast.LENGTH_SHORT).show();
+					dialog.dismiss();
+				}
+			});
+			
+			dialog.show();
+			
+			
 			return true;
 		case R.id.action_logout:
 			mCurrentUser.clearData(true,true,true,true);

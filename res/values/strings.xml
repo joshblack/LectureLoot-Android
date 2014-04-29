@@ -35,5 +35,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="action_logout">Logout</string>
     <string name="action_report_cancelled_meeting">Class Cancelled?</string>
+    <string name="classCancelledText">Choose cancelled class:</string>
+    <string name="classCancellationConfirmation">Confirm</string>
 
 </resources>
