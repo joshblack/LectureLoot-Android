@@ -2,20 +2,19 @@ package com.lectureloot.android;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.lectureloot.android.adapter.TabsPagerAdapter;
@@ -125,29 +124,44 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		switch(item.getItemId()){
 		case R.id.action_settings:
 			//bring up settings
-			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
+			Intent settingsIntent = new Intent(mContext,SettingsActivity.class);
+			startActivity(settingsIntent);
 			return true;
 		case R.id.action_report_cancelled_meeting:
 			//notify
-			Toast.makeText(this, "Class Cancelled Button clicked", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent();
-			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-			Notification noti = new Notification.Builder(this)
-			.setTicker("Get Your Ass to Class!")
-			.setContentTitle("You have class in 15 minutes")
-			.setContentText("Clock's ticking...")
-			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentIntent(pIntent).getNotification();
-			noti.flags=Notification.FLAG_AUTO_CANCEL;
-			noti.sound = Uri.parse("android.resource://"
-					+ this.getPackageName() + "/" + R.raw.coin);
-			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-			notificationManager.notify(0, noti);
-
+			Toast.makeText(this, "Class Cancelled Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.action_logout:
 			mCurrentUser.clearData(true,true,true,true);
-			Toast.makeText(this, "Logout Button Clicked", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "Logout Button Clicked", Toast.LENGTH_SHORT).show();
+			final Dialog logoutDialog = new Dialog(this);
+			logoutDialog.setContentView(R.layout.dialog_logout);
+			logoutDialog.setTitle("Are you sure?");
+
+			logoutDialog.show();
+			
+			Button confirmLogoutYesButton = (Button)logoutDialog.findViewById(R.id.dialogLogoutConfirmButton);
+			confirmLogoutYesButton.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					logoutDialog.dismiss();
+					// TODO: open intent to login dialog
+					Intent loginIntent = new Intent(mContext, LoginActivity.class);
+					startActivity(loginIntent);
+				}
+			});
+			
+			Button confirmLogoutNoButton = (Button)logoutDialog.findViewById(R.id.dialogLogoutDenyButton);
+			confirmLogoutNoButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					logoutDialog.dismiss();
+				}
+				
+			});
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
