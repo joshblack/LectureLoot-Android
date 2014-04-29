@@ -16,7 +16,6 @@
 
     <application
         android:allowBackup="true"
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
@@ -41,6 +40,10 @@
         <activity
             android:name="com.lectureloot.android.RegisterActivity"
             android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.SettingsActivity"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 
