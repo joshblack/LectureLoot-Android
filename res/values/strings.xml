@@ -35,7 +35,10 @@
     <string name="title_activity_register">Register</string>
     <string name="action_logout">Logout</string>
     <string name="action_report_cancelled_meeting">Class Cancelled?</string>
+    <string name="classCancelledText">Choose cancelled class:</string>
+    <string name="classCancellationConfirmation">Confirm</string>
     <string name="dialog_confirm_logout_text">Do you really want to log out?</string>
     <string name="title_activity_settings">Settings</string>
+
 
 </resources>
