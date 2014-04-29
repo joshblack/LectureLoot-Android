@@ -469,74 +469,74 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private void determineNextMeetingAndUpdateView(){
 		try {
 			ArrayList<Meeting> meetings = new ArrayList<Meeting>(); // currently loading test data since user.getMeetings() and user.getCourses() are not giving appropriate results
-//			meetings.addAll(user.getMeetings());
+			meetings.addAll(user.getMeetings());
 			ArrayList<Course> courses = new ArrayList<Course>(); 		
-//			courses.addAll(user.getCourses());
+			courses.addAll(user.getCourses());
 
 			// Beginning of test data creation:
-					Course course = new Course();
-					course.setCourseId(1);
-					course.setCoursePrefix("CEN");
-					course.setCourseNum("3031");
-					courses.add(course);
-					
-					Meeting meeting = new Meeting();
-					meeting.setMeetingId(1);
-					meeting.setBuildingCode("LIT");
-					meeting.setRoomNumber("109");
-					meeting.setMeetingDay("R");
-					meeting.setPeriod("E2");
-					meeting.setCourseId(1);
-			
-					meetings.add(meeting);	//add to arrayList
-			
-					Meeting meeting2 = new Meeting();
-					meeting2.setMeetingId(2);
-					meeting2.setBuildingCode("LIT");
-					meeting2.setRoomNumber("109");
-					meeting2.setMeetingDay("W");
-					meeting2.setPeriod("6");
-					meeting2.setCourseId(1);
-			
-					meetings.add(meeting2);	//add to arrayList
-					Meeting meeting3 = new Meeting();
-					meeting3.setMeetingId(1);
-					meeting3.setBuildingCode("LIT");
-					meeting3.setRoomNumber("109");
-					meeting3.setMeetingDay("W");
-					meeting3.setPeriod("7-8");
-					meeting3.setCourseId(1);
-			
-					meetings.add(meeting3);	//add to arrayList
-			
-					Meeting meeting4 = new Meeting();
-					meeting4.setMeetingId(2);
-					meeting4.setBuildingCode("LIT");
-					meeting4.setRoomNumber("109");
-					meeting4.setMeetingDay("M");
-					meeting4.setPeriod("9");
-					meeting4.setCourseId(1);
-			
-					meetings.add(meeting4);	//add to arrayList
-					Meeting meeting5 = new Meeting();
-					meeting5.setMeetingId(1);
-					meeting5.setBuildingCode("LIT");
-					meeting5.setRoomNumber("109");
-					meeting5.setMeetingDay("N");
-					meeting5.setPeriod("E3");
-					meeting5.setCourseId(1);
-			
-					meetings.add(meeting5);	//add to arrayList
-			
-					Meeting meeting6 = new Meeting();
-					meeting6.setMeetingId(2);
-					meeting6.setBuildingCode("LIT");
-					meeting6.setRoomNumber("109");
-					meeting6.setMeetingDay("F");
-					meeting6.setPeriod("6");
-					meeting6.setCourseId(1);
-			
-					meetings.add(meeting6);	//add to arrayList
+//					Course course = new Course();
+//					course.setCourseId(1);
+//					course.setCoursePrefix("CEN");
+//					course.setCourseNum("3031");
+//					courses.add(course);
+//					
+//					Meeting meeting = new Meeting();
+//					meeting.setMeetingId(1);
+//					meeting.setBuildingCode("LIT");
+//					meeting.setRoomNumber("109");
+//					meeting.setMeetingDay("R");
+//					meeting.setPeriod("E2");
+//					meeting.setCourseId(1);
+//			
+//					meetings.add(meeting);	//add to arrayList
+//			
+//					Meeting meeting2 = new Meeting();
+//					meeting2.setMeetingId(2);
+//					meeting2.setBuildingCode("LIT");
+//					meeting2.setRoomNumber("109");
+//					meeting2.setMeetingDay("W");
+//					meeting2.setPeriod("6");
+//					meeting2.setCourseId(1);
+//			
+//					meetings.add(meeting2);	//add to arrayList
+//					Meeting meeting3 = new Meeting();
+//					meeting3.setMeetingId(1);
+//					meeting3.setBuildingCode("LIT");
+//					meeting3.setRoomNumber("109");
+//					meeting3.setMeetingDay("W");
+//					meeting3.setPeriod("7-8");
+//					meeting3.setCourseId(1);
+//			
+//					meetings.add(meeting3);	//add to arrayList
+//			
+//					Meeting meeting4 = new Meeting();
+//					meeting4.setMeetingId(2);
+//					meeting4.setBuildingCode("LIT");
+//					meeting4.setRoomNumber("109");
+//					meeting4.setMeetingDay("M");
+//					meeting4.setPeriod("9");
+//					meeting4.setCourseId(1);
+//			
+//					meetings.add(meeting4);	//add to arrayList
+//					Meeting meeting5 = new Meeting();
+//					meeting5.setMeetingId(1);
+//					meeting5.setBuildingCode("LIT");
+//					meeting5.setRoomNumber("109");
+//					meeting5.setMeetingDay("N");
+//					meeting5.setPeriod("E3");
+//					meeting5.setCourseId(1);
+//			
+//					meetings.add(meeting5);	//add to arrayList
+//			
+//					Meeting meeting6 = new Meeting();
+//					meeting6.setMeetingId(2);
+//					meeting6.setBuildingCode("LIT");
+//					meeting6.setRoomNumber("109");
+//					meeting6.setMeetingDay("T");
+//					meeting6.setPeriod("7");
+//					meeting6.setCourseId(1);
+//			
+//					meetings.add(meeting6);	//add to arrayList
 					
 			// End of Test Data creation
 					
