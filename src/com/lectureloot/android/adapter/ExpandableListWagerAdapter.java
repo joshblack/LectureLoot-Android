@@ -1,6 +1,9 @@
 package com.lectureloot.android.adapter;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,6 +103,10 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 		wagerPerMeeting.setTextColor(Color.parseColor("#FFFFFF"));
 		totalWager.setTextColor(Color.parseColor("#FFFFFF"));
 		LostWager.setTextColor(Color.parseColor("#FFFFFF"));
+		
+/******************************
+ *    Edit Wager Button       *
+ ******************************/		
 		
 		Button editWagerButton;
 		editWagerButton = (Button)convertView.findViewById(R.id.editWagerButton);
@@ -202,6 +209,10 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 					}
 				});
 
+/********************************
+ *    Confirm Delete Button     *
+ ********************************/				
+				
 				Button dialogDeleteButton = (Button) dialog.findViewById(R.id.DeleteWagerButton);
 				dialogDeleteButton.setOnClickListener(new OnClickListener() {
 
@@ -267,9 +278,25 @@ public class ExpandableListWagerAdapter extends BaseExpandableListAdapter {
 
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
+		
+		user = User.getInstance();
 
+/*********************************************************
+ * Formatting yyyy-MM-dd dates into MMM dd,yyyy dates    *
+ * e.g. 2014-02-14 turns to Feb 14, 2014                 *
+ *********************************************************/		
+		
+		Format dateFormatter;
 		int wagerSessionCodeText = (int)((Wager)getChild(groupPosition, 0)).getWagerSessionCode();
-		String wagerSessionCodeString = String.valueOf(wagerSessionCodeText);		
+		Date sessionStartDate = user.getSessions().get(wagerSessionCodeText-1).getStartDate();
+		Date sessionEndDate = user.getSessions().get(wagerSessionCodeText-1).getEndDate();
+		dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+		String startOfWeek = dateFormatter.format(sessionStartDate);
+		String endOfWeek = dateFormatter.format(sessionEndDate);
+		String weekOf = startOfWeek + " - " + endOfWeek;
+		String wagerSessionCodeString = String.valueOf(weekOf);
+		
+		
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) this._context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

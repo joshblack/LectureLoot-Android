@@ -3,6 +3,8 @@ package com.lectureloot.android;
 
 
 import java.io.IOException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,12 +69,14 @@ public class WagerFragment extends Fragment {
 
 		// get all the session information formated and ready before anything start
 		final ArrayList<String> stringSessions = new ArrayList<String>();		// new ArrayLisy for formated date strings
+		Format addDateFormat;
 		ArrayList<Sessions> tempSessions = user.getSessions();			// ArrayList copy of User's sessions
 		String formatModel;												// String used to format the dates
 		System.out.println("Date Strings: "+stringSessions);
 		for(Sessions s : tempSessions)
 		{
-			formatModel = s.getStartDate() + " - " + s.getEndDate() ;
+			addDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+			formatModel = addDateFormat.format(s.getStartDate());
 			stringSessions.add(formatModel);
 		}
 

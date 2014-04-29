@@ -9,15 +9,6 @@
     android:paddingTop="8dp" >
 
     <TextView
-        android:id="@+id/wagerSessionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Session Number:"
-        android:textColor="#FFFFFF"
-        android:textSize="17sp" />
-
-    <TextView
         android:id="@+id/wagerSessionCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
