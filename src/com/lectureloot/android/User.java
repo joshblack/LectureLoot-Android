@@ -385,16 +385,16 @@ public class User {
 					return true;
 				}
 			} catch (JSONException e) {
-				Log.i("Login:", "Login Failed");		//DEBUG
+				Log.i("Login:", e.toString());		//DEBUG
 			} catch (ClassCastException e){
 				Log.w("Login:",e.toString());
 			}finally {
 				urlConnection.disconnect();
 			}
 		} catch (MalformedURLException e) {
-			Log.i("Login:", "Login Failed");		//DEBUG
+			Log.i("Login:", e.toString());		//DEBUG
 		} catch (IOException e) {
-			Log.i("Login:", "Login Failed");		//DEBUG
+			Log.i("Login:", e.toString());		//DEBUG
 		}
 		return false;
 	}
@@ -578,6 +578,7 @@ public class User {
 		if(!user.doLogin(mEmail,mPassword)){
 			clearData(true, true, true, false); //delete user specific files only
 			Log.i("Validate Data","Bad Login");
+			mInstance = null;
 			return false;
 		}
 		
@@ -625,7 +626,7 @@ public class User {
 				user.mLastName.equals(mLastName) 	&& user.mAuthToken.equals(mAuthToken) 		&&
 				user.mEmail.equals(mEmail)		 	&& user.mPassword.equals(mPassword) 		&&
 				user.mPoints == mPoints 			&& user.mWageredPoints == mWageredPoints));
-		if(data){
+		if(!data){
 			Log.i("Equals:","User Data is bad");
 			return false;
 		}
@@ -637,15 +638,19 @@ public class User {
 				user.mSessions.containsAll(mSessions)	&& mSessions.containsAll(user.mSessions));
 	}
 	
-	public void addCourse(String section, ExpandableListCourseAdapter adapter){
-		if(section.length() <= 3) return; //invalid request
-		
+	public String addCourse(String section, boolean block){
+		if(section.length() <= 3) return "Error: Invalid Section";
+			
 		//load the courses from the server
 		UserListner listner = new UserListner(this);
 		String courseUrl = "http://lectureloot.eu1.frbit.net/api/v1/course/" + section + "/section";
-		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, adapter);
+		HttpGetNewCourse courseTask = new HttpGetNewCourse(mAuthToken, null);
 		courseTask.setHttpGetFinishedListener(listner);
 		courseTask.execute(new String[] {courseUrl});		
+		
+		if(!block) return null;	//no valid result
+		listner.waitForThreads();	//wait otherwise
+		return listner.getResult();
 	}
 	
 	/* GETTERS */

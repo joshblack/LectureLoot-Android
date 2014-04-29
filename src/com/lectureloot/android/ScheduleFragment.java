@@ -13,9 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -52,6 +56,11 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	private User user;
 //	private int courseId = -69; // used to setup Course Post with courseId
 
+	private final Handler toaster = new Handler() {
+		 public void handleMessage(Message msg) {
+	      	Toast.makeText(getActivity(),(String)msg.obj, Toast.LENGTH_SHORT).show();
+	     }
+	 };
 
 	public ScheduleFragment() {
 		this.user = User.getInstance();
@@ -99,14 +108,17 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 
 				Button dialogButton = (Button) dialog.findViewById(R.id.dialogAddButton);
 				dialogButton.setOnClickListener(new OnClickListener() {
-
+						private Thread workerThread;
+					
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 
 						//get section number from text view
-						String sectionNumStr = sectionNumView.getText().toString();
-//						System.out.println(sectionNumStr);
+
+						final String sectionNumStr = sectionNumView.getText().toString();
+						System.out.println(sectionNumStr);
+
 						boolean sameCourseFlag = false;
 
 
@@ -145,9 +157,28 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 							};
 							coursesPost.setHttpPostCoursesFinishedListener(listener);
 
-//							coursesPost.execute(new String[] {coursesUrl});
-							user.addCourse(sectionNumStr, listAdapter);
 
+							//							coursesPost.execute(new String[] {coursesUrl});
+							workerThread = new Thread( new Runnable(){
+								public void run(){
+									String result = user.addCourse(sectionNumStr,true);
+									if(result != null){	//display error message if valid
+										Message msg = toaster.obtainMessage();
+										msg.obj = result;
+										toaster.sendMessage(msg);
+									}else{ //otherwise add the course
+										getActivity().runOnUiThread(new Runnable(){
+											//this is stupid (have to run reloadItems() on main thread)
+											public void run() {
+												listAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+											}
+										});
+									}
+									workerThread = null;
+								}
+							});
+							workerThread.start();
+							
 
 							dialog.dismiss();
 
