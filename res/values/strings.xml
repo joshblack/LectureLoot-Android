@@ -29,13 +29,16 @@
     <string name="sectionNumHint">e.g. 5842</string>
     <string name="settings_notification">Example Notification</string>
     <string name="dialog_drop_course_text">Are you sure you want to drop this course?</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_splash">Loading...</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
     <string name="action_logout">Logout</string>
     <string name="action_report_cancelled_meeting">Class Cancelled?</string>
     <string name="classCancelledText">Choose cancelled class:</string>
     <string name="classCancellationConfirmation">Confirm</string>
+    <string name="dialog_confirm_logout_text">Do you really want to log out?</string>
+    <string name="title_activity_settings">Settings</string>
+
 
 </resources>
