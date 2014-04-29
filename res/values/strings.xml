@@ -33,5 +33,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_report_cancelled_meeting">Class Cancelled?</string>
 
 </resources>

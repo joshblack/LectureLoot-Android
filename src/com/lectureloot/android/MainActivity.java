@@ -127,13 +127,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			//bring up settings
 			Toast.makeText(this, "Settings Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
-		case R.id.action_stats:
-			mCurrentUser.clearData(true,true,true,true);
-			//bring up statistics
-			Toast.makeText(this, "Statistics Button Clicked", Toast.LENGTH_SHORT).show();
-			return true;
-		case R.id.test_notification:
+		case R.id.action_report_cancelled_meeting:
 			//notify
+			Toast.makeText(this, "Class Cancelled Button clicked", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent();
 			PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 			Notification noti = new Notification.Builder(this)
@@ -148,6 +144,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			notificationManager.notify(0, noti);
 
+			return true;
+		case R.id.action_logout:
+			mCurrentUser.clearData(true,true,true,true);
+			Toast.makeText(this, "Logout Button Clicked", Toast.LENGTH_SHORT).show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
