@@ -7,7 +7,7 @@ import android.util.Log;
 import com.lectureloot.background.HttpGetBuilding;
 import com.lectureloot.background.MeetingListner;
 
-public class Meeting {
+public class Meeting implements Comparable<Meeting>{
 	
 	private int meetingId;
 	private int courseId;
@@ -21,6 +21,61 @@ public class Meeting {
 	
 	public Meeting(){
 		
+	}
+	
+	public int compareTo(Meeting comparedAgainst) {
+		String meetingDays = "MTWRFSN";
+		String periods = "1234567891011E1E2E3";
+		String thisMeetingPeriodValid = this.period.trim();
+		// Need to grab the first period of the period field if there is a range of periods being represented (E1E3)
+		switch(thisMeetingPeriodValid.length()) {
+		case 4:
+			if (thisMeetingPeriodValid.charAt(0) == 'E') {
+				thisMeetingPeriodValid = thisMeetingPeriodValid.substring(0,2);
+			} else if (thisMeetingPeriodValid.charAt(1) == '-') {
+				thisMeetingPeriodValid = thisMeetingPeriodValid.substring(0,1);
+			} else {
+				thisMeetingPeriodValid = thisMeetingPeriodValid.substring(0,2);
+			}
+			
+		case 3:
+			thisMeetingPeriodValid = thisMeetingPeriodValid.substring(0,1);
+		case 2:
+		case 1:
+		}
+		
+		String comparedMeetingPeriodValid = comparedAgainst.getPeriod().trim();
+		// Need to grab the first period of the period field if there is a range of periods being represented (E1E3)
+		switch(comparedMeetingPeriodValid.length()) {
+		case 4:
+			if (comparedMeetingPeriodValid.charAt(0) == 'E') {
+				comparedMeetingPeriodValid = comparedMeetingPeriodValid.substring(0,2);
+			} else if (comparedMeetingPeriodValid.charAt(1) == '-') {
+				comparedMeetingPeriodValid = comparedMeetingPeriodValid.substring(0,1);
+			} else {
+				comparedMeetingPeriodValid = comparedMeetingPeriodValid.substring(0,2);
+			}
+			
+		case 3:
+			comparedMeetingPeriodValid = comparedMeetingPeriodValid.substring(0,1);
+		case 2:
+		case 1:
+		}
+		
+		
+		if(meetingDays.indexOf(this.meetingDay.trim().toUpperCase()) > meetingDays.indexOf(comparedAgainst.meetingDay.trim().toUpperCase())) {
+			return 1;
+		} else if (meetingDays.indexOf(this.meetingDay) == meetingDays.indexOf(comparedAgainst.meetingDay)){
+			if(periods.indexOf(thisMeetingPeriodValid.trim().toUpperCase()) > periods.indexOf(comparedMeetingPeriodValid.trim().toUpperCase())) {
+				return 1;
+			} else if (periods.indexOf(thisMeetingPeriodValid.trim().toUpperCase()) < periods.indexOf(comparedMeetingPeriodValid.trim().toUpperCase())){
+				return -1;
+			} else {
+				return 0;
+			}
+		} else {
+			return -1;
+		}
 	}
 	
 	//this can be deleted later
@@ -150,6 +205,19 @@ public class Meeting {
 				Log.w("ResolveMeetings:",e.toString());
 			}	//ignore extra meetings
 		}
+	}
+	
+	public String toString() {
+		String result = "";
+		
+		result += "courseId: " + this.getCourseId() + ", ";
+		result += "meetingId: " + this.getMeetingId() + ", ";
+		result += "meetingDay: \"" + this.getMeetingDay() + "\", ";
+		result += "period: \"" + this.getPeriod() + "\", ";
+		result += "building: \"" + this.getBuildingCode() + "\", ";
+		result += "roomNumber: \"" + this.getRoomNumber() + "\"";
+		
+		return result;
 	}
 
 }
