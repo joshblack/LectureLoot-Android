@@ -36,7 +36,7 @@
         android:background="#FFFFFFFF"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:text="example@email.com"
+        android:text="josh@ufl.edu"
         android:textColor="#FF000000"
         android:textColorHint="#aa000000" >
 
