@@ -143,7 +143,6 @@ public class DashboardFragment extends Fragment implements LocationListener{
 				getLocation();
 				
 				String authToken = user.getAuthToken();
-				authToken = "qfuVF2pkPNT5KGeYVQngRkCPqPGFQ2xjZl0ldRYk"; // needs to be deleted once the user object has it's own auth token
 				HttpPostCheckin checkinPost = new HttpPostCheckin(authToken);
 				// Listener to handle the POST checkin response
 				HttpPostCheckinFinishedListener listener = new HttpPostCheckinFinishedListener() {
@@ -184,7 +183,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 						
 					};
 					checkinPost.setHttpPostCheckinFinishedListener(listener);
-					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + /* user.getUserId() */"11" +  "/checkin?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
+					String checkinURL = "http://lectureloot.eu1.frbit.net/api/v1/users/" + user.getUserId()+  "/checkin?latitude=" + Double.toString(latlong.getLatitude()) + "&longitude=" + Double.toString(latlong.getLongitude());
 					System.out.println(checkinURL);
 					checkinPost.execute(new String[] {checkinURL});
 					
@@ -283,7 +282,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		}
 		else{
 			Log.d("getLocation", "location is null");
-			Toast.makeText(getActivity(), "Your location can't be determined", Toast.LENGTH_SHORT).show();
+		//	Toast.makeText(getActivity(), "GPS is not enabled.", Toast.LENGTH_SHORT).show();
 		}
 	}
 
