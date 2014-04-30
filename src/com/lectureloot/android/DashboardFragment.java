@@ -1,10 +1,18 @@
 package com.lectureloot.android;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,12 +23,14 @@ import com.lectureloot.background.HttpPostCheckin;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -132,6 +142,37 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		        startActivityForResult(i, LOAD_IMAGE_RESULTS);
 			}
 		});
+		
+		//get user profile picture using gravatar
+		String userEmail = user.getEmail();
+		userEmail = userEmail.trim().toLowerCase();
+		final String hash = MD5Util.md5Hex(userEmail);
+//		
+//		new AsyncTask<String, Void, Bitmap>() {
+//		    @Override
+//		    protected Bitmap doInBackground(String... params) {
+//		        final String baseUrl = "http://www.gravatar.com/avatar/";
+//		        final String url = baseUrl + hash;
+//		 
+//		        HttpURLConnection httpURLConnection = null;
+//		        try {
+//		            httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
+//		            final InputStream is = httpURLConnection.getInputStream();
+//		            return BitmapFactory.decodeStream(is, null, new BitmapFactory.Options());
+//		        } catch (Exception e) {
+//		            e.printStackTrace();
+//		        } finally {
+//		            httpURLConnection.disconnect();
+//		        }
+//		        return null;
+//		    }
+//		 
+//		    @Override
+//		    protected void onPostExecute(Bitmap bitmap) {
+//		        mProfilePicture.setImageBitmap(bitmap);
+//		    }
+//		}.execute("email_address@test.com", "512");
+		
 		
 		
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
