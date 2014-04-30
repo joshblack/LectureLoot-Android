@@ -13,10 +13,14 @@ import org.json.JSONTokener;
 import com.lectureloot.background.HttpPostCheckin;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -24,11 +28,14 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.provider.MediaStore;
 import android.provider.Settings;
 
 public class DashboardFragment extends Fragment implements LocationListener{
@@ -38,7 +45,10 @@ public class DashboardFragment extends Fragment implements LocationListener{
 	private Location latlong;
 	private String mProvider;
 	private User user;
+  
+    private static int LOAD_IMAGE_RESULTS = 1;
 
+	private ImageView mProfilePicture;
 	private Button mCheckInButton;
 	private TextView mUserPointsTextView;
 	private TextView mTimeLeftSecsTextView;
@@ -107,7 +117,23 @@ public class DashboardFragment extends Fragment implements LocationListener{
 
 		//Automatically set the next class information upon load
 		determineNextMeetingAndUpdateView();
-
+		
+		mProfilePicture = (ImageView)v.findViewById(R.id.user_profile_pic);
+		//handles changing profile picture
+		mProfilePicture.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity(), "Choose Profile Picture", 2*Toast.LENGTH_LONG).show();
+		        // Create the Intent for Image Gallery.
+		        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		         
+		        // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
+		        startActivityForResult(i, LOAD_IMAGE_RESULTS);
+			}
+		});
+		
+		
 		mCheckInButton.setOnClickListener(new View.OnClickListener() {
 			//handles the click event
 			
@@ -621,5 +647,31 @@ public class DashboardFragment extends Fragment implements LocationListener{
 			Log.e("Determine Next Meeting", e.toString());
 		}
 	}
+	
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         
+		int RESULT_OK = getActivity().RESULT_OK;
+		// Here we need to check if the activity that was triggers was the Image Gallery.
+        // If it is the requestCode will match the LOAD_IMAGE_RESULTS value.
+        // If the resultCode is RESULT_OK and there is some data we know that an image was picked.
+        if (requestCode == LOAD_IMAGE_RESULTS && resultCode == RESULT_OK   && data != null) {
+            // Let's read picked image data - its URI
+            Uri pickedImage = data.getData();
+            // Let's read picked image path using content resolver
+            String[] filePath = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getActivity().getContentResolver().query(pickedImage, filePath, null, null, null);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+             
+            // Now we need to set the GUI ImageView data with data read from the picked file.
+            mProfilePicture.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+             
+            // At the end remember to close the cursor or you will end with the RuntimeException!
+            cursor.close();
+        }
+    }
+
 	
 }
