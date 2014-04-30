@@ -45,6 +45,34 @@
             android:name="com.lectureloot.android.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+         <activity
+            android:name="com.lectureloot.android.AccountSettingsActivity"
+            android:label="@string/title_activity_account_settings" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.PaymentInformationActivity"
+            android:label="@string/title_activity_payment_information" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.NotificationsSettingsActivity"
+            android:label="@string/title_activity_notifications_settings" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.TutorialActivity"
+            android:label="@string/title_activity_tutorial" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.FAQActivity"
+            android:label="@string/title_activity_FAQ" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.ReportIssueActivity"
+            android:label="@string/title_activity_report_issue" >
+        </activity>
+        <activity
+            android:name="com.lectureloot.android.TermsOfServiceActivity"
+            android:label="@string/title_activity_terms_of_service" >
+        </activity>
     </application>
 
 </manifest>

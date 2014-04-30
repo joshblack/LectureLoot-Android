@@ -177,7 +177,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 				@Override
 				public void onClick(View v) {
 					logoutDialog.dismiss();
-					// TODO: open intent to login dialog
+					
 					Intent loginIntent = new Intent(mContext, LoginActivity.class);
 					startActivity(loginIntent);
 				}
