@@ -29,10 +29,14 @@ public class ReportIssueActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(mContext, "Your issue has been submitted to the LectureLoot Team", Toast.LENGTH_LONG).show();
-				Intent settingsActivityIntent = new Intent(mContext, SettingsActivity.class);
-				settingsActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(settingsActivityIntent);
+				if(issueEditText.length() != 0){
+					Toast.makeText(mContext, "Your issue has been submitted to the LectureLoot Team", Toast.LENGTH_LONG).show();
+					Intent settingsActivityIntent = new Intent(mContext, SettingsActivity.class);
+					settingsActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(settingsActivityIntent);
+				} else {
+					Toast.makeText(mContext, "Your description can't be empty.", Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 		
