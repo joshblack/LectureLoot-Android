@@ -257,7 +257,7 @@ public class DashboardFragment extends Fragment implements LocationListener{
 		}
 		else{
 			Log.d("getLocation", "location is null");
-			Toast.makeText(getActivity(), "Your location can't be determined", Toast.LENGTH_SHORT).show();
+		//	Toast.makeText(getActivity(), "GPS is not enabled.", Toast.LENGTH_SHORT).show();
 		}
 	}
 
