@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mContext = this;	//get application context
 		
 		mCurrentUser = User.getInstance();
-		mCurrentUser.clearData(true, true, true, true);	//DEBUG: Wipe all the Data
+		//mCurrentUser.clearData(true, true, true, true);	//DEBUG: Wipe all the Data
 		
 		//if the user doesn't exist yet, and no file is found, load the data
 		if(!mCurrentUser.loaded()){
