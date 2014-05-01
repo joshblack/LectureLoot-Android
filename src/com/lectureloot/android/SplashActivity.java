@@ -9,8 +9,15 @@ import android.view.Menu;
 public class SplashActivity extends Activity {	
 	private Thread workThread = new Thread(new Runnable(){
 		public void run(){
-			User.getInstance().loadUserData(false);
-			finish();
+			/* Check Use Cases:
+			 * If the user isn't logged in yet, don't load, but don't exit either
+			 * If the user was already loaded, don't do it again
+			 * Otherwise, load the user data	*/
+			User user = User.getInstance();
+			if(user.loggedIn()){
+				if(!user.loaded()) user.loadUserData(false);
+				finish();
+			}
 		}
 	});
 	
@@ -18,7 +25,8 @@ public class SplashActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash1);
-		Log.i("Splash:","Created Splash Screen");
+		
+		if((User.DEBUG_MODE & 1) != 0) Log.i("Load Debug:","Created Splash Screen");
 	}
 
 	@Override
@@ -30,9 +38,10 @@ public class SplashActivity extends Activity {
 	
 	protected void onResume(){
 		super.onResume();
-		Log.i("Splash:","Getting User Data");
 		
-			workThread.start();
+		if((User.DEBUG_MODE & 1) != 0) Log.i("Load Debug:","Splash: Getting User Data");
+		
+		workThread.start();
 	}
 	
 	@Override

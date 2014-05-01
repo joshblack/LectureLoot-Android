@@ -63,7 +63,8 @@ public class RegisterActivity extends Activity {
 				});
 				thread.start();
 
-				Log.i("LoginActivity:","Attempting Registration, Email:" + email.getText().toString() + " password:" + password.getText().toString());
+				if((User.DEBUG_MODE & 2) != 0)
+					Log.i("Login/Register:","Attempting Registration, Email:" + email.getText().toString() + " password:" + password.getText().toString());
 			}
 		});
 	}

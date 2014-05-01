@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					Intent loginIntent = new Intent(this, LoginActivity.class);
 					loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(loginIntent);
-				} /*else {	//validate the itegrity of the file
+				} /*else {	//validate the itegrity of the file, not even caring anymore
 					final FragmentActivity thisActivity = this; 
 					workThread  = new Thread(new Runnable(){
 						public void run(){
@@ -68,6 +68,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 					workThread.start();
 				}*/
 		}
+		
+		if((User.DEBUG_MODE & 1) != 0) Log.i("Load Debug:","Proceeding with Program");
 			
 		//----------Load Main-------------
 		setContentView(R.layout.activity_main);
