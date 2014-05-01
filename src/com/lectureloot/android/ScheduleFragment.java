@@ -418,4 +418,8 @@ public class ScheduleFragment extends Fragment implements OnItemSelectedListener
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 	}
+	
+	public void refreshList(){
+		listAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+	}
 }
