@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -114,6 +115,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	}
 
+	@Override
+	public void onResume(){
+		super.onResume();
+		
+		((ScheduleFragment) getSupportFragmentManager().findFragmentByTag("Schedule_Fragment")).refreshList();
+		((WagerFragment) getSupportFragmentManager().findFragmentByTag("Wager_Fragment")).refreshList();
+		mViewPager.setCurrentItem(1, false);
+	}
+	
 	
 	
 	@Override

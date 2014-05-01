@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#FF454545" 
     android:orientation="vertical"
+    android:tag = "Wager_Fragment"
     >
     
  <TextView

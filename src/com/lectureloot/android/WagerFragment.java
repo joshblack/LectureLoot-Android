@@ -364,4 +364,7 @@ public class WagerFragment extends Fragment {
 		}
 	}
 
+	public void refreshList(){
+		wagerListAdapter.reloadItems(prepareDataHeader(), prepareDataChild());
+	}
 }
