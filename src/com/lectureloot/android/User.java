@@ -528,6 +528,7 @@ public class User {
 		if(courseData) MainActivity.mContext.deleteFile("courseList.dat");	//clear the course data
 		if(sessionData) MainActivity.mContext.deleteFile("sessions.dat");	//clear the user's data
 		loadedFlag = false;
+		loginFlag = false;
 	}
 
 	public void loadUserData(boolean forceUpdate){
