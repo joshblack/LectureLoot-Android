@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 public class User {
 	public static final String URL_BASE = "http://lectureloot.eu1.frbit.net/api/v1";	
+	public static final int DEBUG_MODE = 3;	//debug mode for program
 	private static User mInstance = null;
 	private boolean loadedFlag;
 	public  boolean loginFlag;
@@ -482,8 +484,10 @@ public class User {
 			String urlParamaters = "emailAddress=" + email + "&password=" + password + "&firstName=" + first + "&lastName=" + last + "&pointBalance=0";
 			url = new URL(URL_BASE + "/users?" + urlParamaters);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestMethod("POST");          
+            urlConnection.setRequestMethod("POST");      
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.connect();
+            Log.i("Register:","Response was " + urlConnection.getResponseCode());
 			try {
 				BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 				JSONTokener tokener = new JSONTokener(in.readLine());
@@ -523,6 +527,7 @@ public class User {
 		if(meetingData) MainActivity.mContext.deleteFile("meetingList.dat");	//clear the user's data
 		if(courseData) MainActivity.mContext.deleteFile("courseList.dat");	//clear the course data
 		if(sessionData) MainActivity.mContext.deleteFile("sessions.dat");	//clear the user's data
+		loadedFlag = false;
 	}
 
 	public void loadUserData(boolean forceUpdate){

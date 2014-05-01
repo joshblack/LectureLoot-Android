@@ -22,7 +22,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends Activity {
-
+	private boolean done;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,13 +68,14 @@ public class LoginActivity extends Activity {
 				
 				//Throw to register screen and end this activity
 				Intent intent = new Intent(thisActivity, RegisterActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivityForResult(intent,1);
+				startActivityForResult(intent,1324);
 			}
 		});
 
+		done = false;
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -86,10 +88,12 @@ public class LoginActivity extends Activity {
 		//do nothing (Back button is disabled)
 	}
 	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//kill the activity if registration was successfull
-		if (requestCode == 1) 
+		if((User.DEBUG_MODE & 2) != 0) Log.i("Login/Register","Passback Values: " + requestCode + " " + resultCode);
+		if (requestCode == 1324) 
 		     if(resultCode == RESULT_OK)      
-		         finish();          
+		         this.finish();          
 	}
 }
