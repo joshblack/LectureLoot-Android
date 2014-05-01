@@ -52,7 +52,7 @@ public class RegisterActivity extends Activity {
 								first.getText().toString(),last.getText().toString())){
 							//tell the login function that we're done here
 							Intent returnIntent = new Intent();
-							setResult(RESULT_OK, returnIntent);        
+							setResult(RESULT_OK, returnIntent);    
 							finish();	//kill the activity
 						} else {	//toast otherwise
 							Message msg = toaster.obtainMessage();
