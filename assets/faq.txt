@@ -1,0 +1,38 @@
+Frequently Asked Questions
+
+Question:	
+How often can I wager?
+
+Answer:		
+Each user can place a wager once a week, each wager lasting for the entire week and applicable to their entire course schedule.
+
+Question:	
+What happens if one of my classes gets cancelled?
+
+Answer:		
+If one of your classes is cancelled, you can report the cancelled class by accessing the Class Cancelled Dialog from the Action Menu, notifying LectureLoot that you class has been cancelled.  If a majority of users in that class report it cancelled, we will make amends.
+
+Question:	
+How do I make money?
+
+Answer:		
+LectureLoot enables you to make money when you attend all of your classes each week.  With 100% attendance, you will then receive a portion of the money lost by those users who missed class during that week, along with getting your original wager back from that week.
+
+Question:	
+What happens if I drop a course during the semester?
+
+Answer:		
+If you have to drop a course during the semester, LectureLoot will require proof that you have actually dropped the course from the University in order for us remove the course from your schedule.
+
+Question:	
+How does payment work?
+
+Answer:		
+We will be using Stripe for all payment processing.
+
+Question:	
+What if I have bad reception in my classroom?
+
+Answer:		
+LectureLoot will attempt to access your GPS coordinates via both GPS and WiFi-relative location services native to your device.  LectureLoot also has a forgiving range of locations surrounding each classroom so that you can checkin just outside of your classroom just incase the reception in your building is not sufficient.
+
