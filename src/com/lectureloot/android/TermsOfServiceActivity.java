@@ -1,9 +1,15 @@
 package com.lectureloot.android;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
 import android.widget.TextView;
 
 
@@ -11,27 +17,30 @@ public class TermsOfServiceActivity extends Activity {
 	private TextView tosTextView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_terms_of_service);
 
 		tosTextView = (TextView) findViewById(R.id.terms_of_service_text_view);
-		tosTextView.setText("TERMS OF SERVICE \n1. ACCEPTANCE OF TERMS \n2. CHANGES \n3. ELIGIBILITY \n4. REGISTRATION" + 
-				"\n5. PRIVACY \n6. TRANSACTIONS\n7. PACTS\n8. FEES AND PAYMENTS\n9. FORUMS\n10. USER RULES AND CONDUCT"+
-				"\n11. CONTENT\n12. THIRD PARTY SITES\n13. PARTICIPATION IN PROMOTIONS OF AFFILIATES\n14. PROPRIETARY RIGHTS"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n15. LICENSE TO GYMPACT\n16. TERMINATION\n17. DISCLAIMER OF ALL WARRANTIES\n18. LIMITATION OF LIABILITY\n19. INDEMNIFICATION\n20. INTERNATIONAL USE"+
-				"\n21. DISPUTES; CHOICE OF LAW AND ARBITRATION\n22. INTEGRATION AND SEVERABILITY\n23. GENERAL PROVISIONS\n24. COPYRIGHT AND TRADEMARK NOTICES\n25. PROCEDURE FOR CLAIMS OF COPYRIGHT INFRINGEMENT");
-	}
+		String tos="";
 
+		AssetManager assetManager = getResources().getAssets();
+		InputStream inputStream = null;
+
+		try {
+			inputStream = assetManager.open("tos.txt");
+			if ( inputStream != null) {
+				//		            	tosTextView.setText("It worked");
+				String line = null;
+				java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
+				while(s.hasNext())
+				{
+					tos+=(s.next());
+					tos+=("\n");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		tosTextView.setText(tos);
+	}
 }
